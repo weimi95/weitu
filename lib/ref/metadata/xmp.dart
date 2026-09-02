@@ -83,6 +83,9 @@ class XmpNamespaces {
   static const xmpRights = 'http://ns.adobe.com/xap/1.0/rights/';
   static const xmpTPg = 'http://ns.adobe.com/xap/1.0/t/pg/';
   static const xperiaCamera = 'http://xmlns.sony.net/xperia/camera/1.0/';
+
+  // weitu custom namespace (notes written by the Weitu gallery app)
+  static const weitu = 'urn:weitu:meta:1.0/';
 }
 
 class XmpElements {
@@ -95,6 +98,7 @@ class XmpElements {
   static const dcTitle = 'title';
   static const msPhotoRating = 'Rating';
   static const xmpRating = 'Rating';
+  static const weituNote = 'note';
 }
 
 class XmpAttributes {

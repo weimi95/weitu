@@ -7,12 +7,15 @@ import 'package:aves/model/media/panorama.dart';
 import 'package:aves/model/metadata/catalog.dart';
 import 'package:aves/model/metadata/overlay.dart';
 import 'package:aves/model/multipage.dart';
+import 'package:aves/ref/metadata/xmp.dart';
 import 'package:aves/services/common/channel.dart';
 import 'package:aves/services/common/service_policy.dart';
 import 'package:aves/services/common/services.dart';
 import 'package:aves/services/metadata/xmp.dart';
 import 'package:aves/utils/time_utils.dart';
+import 'package:aves/utils/xmp_utils.dart';
 import 'package:aves_model/aves_model.dart';
+import 'package:xml/xml.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -33,6 +36,9 @@ abstract class MetadataFetchService {
   Future<List<Map<String, dynamic>>?> getIptc(AvesEntry entry);
 
   Future<AvesXmp?> getXmp(AvesEntry entry);
+
+  // returns the Weitu gallery note (XMP / weitu:note) parsed from the XMP document, if any
+  Future<String?> getXmpNote(AvesEntry entry);
 
   Future<bool> hasContentResolverProp(String prop);
 
@@ -222,6 +228,19 @@ class PlatformMetadataFetchService implements MetadataFetchService {
       await _processPlatformException(entry, e, stack);
     }
     return null;
+  }
+
+  @override
+  Future<String?> getXmpNote(AvesEntry entry) async {
+    final xmp = await getXmp(entry);
+    if (xmp?.xmpString == null) return null;
+    try {
+      final doc = XmlDocument.parse(xmp!.xmpString!);
+      final descriptions = doc.findAllElements(XmpElements.rdfDescription, namespace: XmpNamespaces.rdf).toList();
+      return XMP.getString(descriptions, XmpElements.weituNote, namespace: XmpNamespaces.weitu);
+    } catch (_) {
+      return null;
+    }
   }
 
   final Map<String, bool> _contentResolverProps = {};

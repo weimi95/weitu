@@ -14,6 +14,7 @@ class XMP {
     XmpNamespaces.gCamera: 'GCamera',
     XmpNamespaces.microsoftPhoto: 'MicrosoftPhoto',
     XmpNamespaces.rdf: 'rdf',
+    XmpNamespaces.weitu: 'weitu',
     XmpNamespaces.x: 'x',
     XmpNamespaces.xmp: 'xmp',
     XmpNamespaces.xmpGImg: 'xmpGImg',

@@ -315,6 +315,25 @@ extension ExtraAvesEntryMetadataEdition on AvesEntry {
     return dataTypes;
   }
 
+  // write:
+  // - XMP / weitu:note (custom namespace, Weitu gallery notes)
+  Future<Set<EntryDataType>> editNote(String? note) async {
+    final dataTypes = <EntryDataType>{};
+    final metadata = <MetadataType, dynamic>{};
+
+    if (isXmpEditionSupported) {
+      metadata[MetadataType.xmp] = await _editXmp((descriptions) {
+        return editNoteXmp(descriptions, note);
+      });
+    }
+
+    final newFields = await metadataEditService.editMetadata(this, metadata);
+    if (newFields.isNotEmpty) {
+      dataTypes.add(EntryDataType.catalog);
+    }
+    return dataTypes;
+  }
+
   // remove:
   // - trailer video
   // - XMP / Container:Directory
@@ -404,6 +423,17 @@ extension ExtraAvesEntryMetadataEdition on AvesEntry {
     );
 
     return modified;
+  }
+
+  @visibleForTesting
+  static bool editNoteXmp(List<XmlNode> descriptions, String? note) {
+    return XMP.setAttribute(
+      descriptions,
+      XmpElements.weituNote,
+      note,
+      namespace: XmpNamespaces.weitu,
+      strat: XmpEditStrategy.always,
+    );
   }
 
   @visibleForTesting
