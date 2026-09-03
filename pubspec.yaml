@@ -1,6 +1,6 @@
 name: aves
-description: A visual media gallery and metadata explorer app.
-repository: https://github.com/deckerst/aves
+description: 微图相册(WeiTu) - a visual media gallery and metadata explorer app.
+repository: https://github.com/weimi95/weitu
 publish_to: none
 
 # version bump checklist:
