@@ -1,6 +1,6 @@
 {
-    "appName": "微图相册管家",
-    "welcomeMessage": "欢迎使用 微图相册管家",
+    "appName": "微图相册",
+    "welcomeMessage": "欢迎使用 微图相册",
     "welcomeOptional": "可选",
     "welcomeTermsToggle": "我同意这些使用条款和条件",
     "itemCount": "{count, plural, other{{count} 项}}",

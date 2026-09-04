@@ -1,6 +1,6 @@
 ## Terms of Service
 
-“微图相册管家” is a local gallery and media manager forked from the open-source Aves project, allowing you to access and manage your local photos and videos.
+“微图相册” is a local gallery and media manager forked from the open-source Aves project, allowing you to access and manage your local photos and videos.
 
 The app is designed for legal, authorized and acceptable purposes.
 
@@ -18,7 +18,7 @@ __Optionally, with your consent, the app collects anonymous error and diagnostic
 
 ## Contact
 
-Developer: 微图相册管家
+Developer: 微图相册
 
 Website: [https://github.com/weimi95/weitu](https://github.com/weimi95/weitu)
 

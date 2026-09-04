@@ -222,7 +222,7 @@ class _AppDrawerState extends State<AppDrawer> with WidgetsBindingObserver {
                             fontWeight: FontWeight.w300,
                             letterSpacing: canHaveLetterSpacing(context.localeName) ? 1 : 0,
                             // fontFeatures removed: Chinese app name does not need small-caps,
-                            // and '微图相册管家' should render as-is.
+                            // and '微图相册' should render as-is.
                           ),
                         ),
                       ],
