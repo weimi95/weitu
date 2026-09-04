@@ -1,46 +1,31 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/deckerst/aves/develop/aves_logo.svg" alt='Aves logo' width="200" />
-
-## Aves
+## 微图相册管家 Weitu
 
 ![Version badge][Version badge]
 ![Build badge][Build badge]
 
-Aves is a gallery and metadata explorer app. It is built for Android, with Flutter.
+微图相册管家（Weitu）是一款面向 Android 的本地相册与媒体资源管理应用，基于 Flutter 构建，由 [Aves](https://github.com/deckerst/aves) 二次开发而来，针对国内使用环境做了去 Google 化改造。
 
-[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-      alt='Get it on Google Play'
-      height="80">](https://play.google.com/store/apps/details?id=com.weitu.gallery&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)
-[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"
-      alt='Get it on IzzyOnDroid'
-      height="80">](https://apt.izzysoft.de/fdroid/index/apk/com.weitu.gallery)
-[<img src="https://raw.githubusercontent.com/deckerst/common/main/assets/obtainium-badge-english.png"
-      alt='Get it on Obtainium'
-      height="80">](https://apps.obtainium.imranr.dev/redirect.html?r=obtainium://add/https://github.com/deckerst/aves)
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-      alt='Get it on F-Droid'
-      height="80">](https://f-droid.org/packages/com.weitu.gallery.libre)
 [<img src="https://raw.githubusercontent.com/deckerst/common/main/assets/get-it-on-github.png"
-      alt='Get it on GitHub'
-      height="80">](https://github.com/deckerst/aves/releases/latest)
+      alt='从 GitHub 获取'
+      height="80">](https://github.com/weimi95/weitu/releases/latest)
 
-
-[Compare versions](https://github.com/deckerst/aves/wiki/App-Versions)
-      
 <div align="left">
 
-## Features
+## 功能特性
 
-Aves can handle all sorts of images and videos, including your typical JPEGs and MP4s, but also more exotic things like **multi-page TIFFs, SVGs, old AVIs and more**!
+微图相册管家可管理各类图片与视频，既涵盖常见的 JPEG、MP4，也支持更特殊的格式，如 **多页 TIFF、SVG、老式 AVI 等**！
 
-It scans your media collection to identify **motion photos**, **panoramas** (aka photo spheres), **360° videos**, as well as **GeoTIFF** files.
+它会扫描你的媒体库，识别 **动态照片（Motion Photo）**、**全景照片（Photo Sphere）**、**360° 视频**，以及 **GeoTIFF** 文件。
 
-**Navigation and search** is an important part of Aves. The goal is for users to easily flow from albums to photos to tags to maps, etc.
+**浏览与检索** 是微图的核心能力，目标是让你能在相册、照片、标签、地图之间顺畅切换。
 
-Aves integrates with Android (including Android TV) with features such as **widgets**, **app shortcuts**, **screen saver** and **global search** handling. It also works as a **media viewer and picker**.
+微图深度集成 Android（含 Android TV），支持 **桌面小组件**、**应用快捷方式**、**屏保** 与 **全局搜索**，同时可作为 **媒体查看器与选择器** 使用。
 
-## Screenshots
+## 截图
+
+以下为应用界面示意（界面设计沿用 Aves）：
 
 <div align="center">
 
@@ -70,72 +55,55 @@ Aves integrates with Android (including Android TV) with features such as **widg
 
 <div align="left">
 
-## Changelog
+## 更新日志
 
-The list of changes for past and future releases is available [here](https://github.com/deckerst/aves/blob/develop/CHANGELOG.md).
+历史与计划中的变更见 [CHANGELOG](https://github.com/weimi95/weitu/blob/develop/CHANGELOG.md)。
 
-## Permissions
+## 权限说明
 
-Aves requires a few permissions to do its job:
-- **read contents of shared storage**: the app only accesses media files, and modifying them requires explicit access grants from the user,
-- **read locations from media collection**: necessary to display the media coordinates, and to group them by country (via reverse geocoding),
-- **have network access**: necessary for the map view, and most likely for precise reverse geocoding too,
-- **view network connections**: checking for connection states allows Aves to gracefully degrade features that depend on internet.
+微图相册管家需要以下权限才能正常工作：
+- **读取共享存储内容**：仅访问媒体文件；修改文件需用户显式授权。
+- **读取媒体中的位置信息**：用于展示媒体坐标，并按国家/地区归类（反向地理编码）。
+- **网络访问**：用于地图视图（已去除 Google 地图依赖，地图以基础模式呈现）及反向地理编码。
+- **查看网络连接**：用于检测网络状态，优雅降级依赖网络的功能。
 
-## Contributing
+## 参与贡献
 
-### Issues
+### 问题反馈
 
-[Bug reports](https://github.com/deckerst/aves/issues/new?assignees=&labels=type%3Abug&template=bug_report.yml&title=) and [feature requests](https://github.com/deckerst/aves/issues/new?assignees=&labels=type%3Afeature&template=feature_request.yml&title=) are welcome, but read the [guidelines](https://github.com/deckerst/aves/issues/234) first. If you have questions, check out the [discussions](https://github.com/deckerst/aves/discussions).
+欢迎提交 [Bug 报告](https://github.com/weimi95/weitu/issues/new?assignees=&labels=type%3Abug&template=bug_report.yml&title=) 与 [功能建议](https://github.com/weimi95/weitu/issues/new?assignees=&labels=type%3Afeature&template=feature_request.yml&title=)。提问可前往 [Discussions](https://github.com/weimi95/weitu/discussions)。
 
-### Code
+### 代码
 
-At this stage this project does *not* accept PRs.
+当前阶段本项目 **暂不接收外部 PR**。
 
-### Translations
+## 构建与运行
 
-Translations are powered by [Weblate](https://hosted.weblate.org/engage/aves/) and the effort of wonderfully generous volunteers.
-<a href="https://hosted.weblate.org/engage/aves/">
-<img src="https://hosted.weblate.org/widgets/aves/-/multi-auto.svg" alt="Translation status" />
-</a>
+构建前请先配置签名：创建 `<app dir>/android/key.properties`，参考 [key_template.properties](https://github.com/weimi95/weitu/blob/develop/android/key_template.properties)。
 
-If you want to translate this app in your language and share the result, [there is a guide](https://github.com/deckerst/aves/wiki/Contributing-to-Translations).
-
-### Donations
-
-Some users have expressed the wish to financially support the project. Thanks! ❤️
-
-[<img src="https://raw.githubusercontent.com/deckerst/common/main/assets/paypal-badge-cropped.png"
-      alt='Donate with PayPal'
-      height="40">](https://www.paypal.com/donate/?hosted_button_id=RWKQ4J7D8USX6)
-[<img src="https://liberapay.com/assets/widgets/donate.svg"
-      alt='Donate using Liberapay'
-      height="40">](https://liberapay.com/deckerst/donate)
-
-## Project Setup
-
-Before running or building the app, update the dependencies for the desired flavor:
-```
-# scripts/apply_flavor_play.sh
-```
-
-To build the project, create a file named `<app dir>/android/key.properties`. It should contain a reference to a keystore for app signing, and other necessary credentials. See [key_template.properties](https://github.com/deckerst/aves/blob/develop/android/key_template.properties) for the expected keys.
-
-To run the app:
+运行：
 ```
 # ./flutterw run -t lib/main_play.dart --flavor play
 ```
 
-To debug the app Kotlin code, if attaching the debugger from Android Studio fails:
-1) open `android` folder in Android Studio,
-2) `Edit Configurations...`,
-3) select configuration `app`,
-4) select tab `Debugger`
-5) select tab `LLDB Post Attach Commands`
-6) add:
+调试 Kotlin 代码时，若 Android Studio 无法附加调试器：
+1) 在 Android Studio 中打开 `android` 目录，
+2) `Edit Configurations...`，
+3) 选择 `app` 配置，
+4) 切到 `Debugger` 标签，
+5) 切到 `LLDB Post Attach Commands` 标签，
+6) 添加：
 ```
 process handle SIGSEGV --pass true --stop false --notify true
 ```
 
-[Version badge]: https://img.shields.io/github/v/release/deckerst/aves?include_prereleases&sort=semver
-[Build badge]: https://img.shields.io/github/actions/workflow/status/deckerst/aves/quality-check.yml?branch=develop
+## 致谢
+
+微图相册管家（Weitu）是基于 [Aves](https://github.com/deckerst/aves)（作者 deckerst）的二次开发版本。
+
+与原项目相比，微图相册管家做了 **去 Google 化** 改造：移除了 Firebase / Crashlytics 数据上报、Google 地图服务等依赖，默认以本地 / 基础模式运行，更适合国内网络环境直接使用。
+
+感谢 deckerst 及 Aves 的所有贡献者打造了这款优秀的开源相册应用，也感谢各位翻译与测试志愿者。本项目遵循原项目的开源许可，详见 [LICENSE](LICENSE)。
+
+[Version badge]: https://img.shields.io/github/v/release/weimi95/weitu?include_prereleases&sort=semver
+[Build badge]: https://img.shields.io/github/actions/workflow/status/weimi95/weitu/build-apk.yml?branch=develop
