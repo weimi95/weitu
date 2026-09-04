@@ -1,7 +1,7 @@
-package deckers.thibault.aves
+package com.weitu.gallery
 
 import android.content.Intent
-import deckers.thibault.aves.model.FieldMap
+import com.weitu.gallery.model.FieldMap
 
 class ScreenSaverSettingsActivity : MainActivity() {
     override fun extractIntentData(intent: Intent?): FieldMap {

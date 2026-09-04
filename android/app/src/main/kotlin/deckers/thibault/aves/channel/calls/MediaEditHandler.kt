@@ -1,16 +1,16 @@
-package deckers.thibault.aves.channel.calls
+package com.weitu.gallery.channel.calls
 
 import android.content.ContextWrapper
 import android.util.Log
 import androidx.core.net.toUri
-import deckers.thibault.aves.channel.calls.Coresult.Companion.safe
-import deckers.thibault.aves.channel.calls.Coresult.Companion.safeSuspend
-import deckers.thibault.aves.model.FieldMap
-import deckers.thibault.aves.model.NameConflictStrategy
-import deckers.thibault.aves.model.provider.ImageProvider.ImageOpCallback
-import deckers.thibault.aves.model.provider.ImageProviderFactory.getProvider
-import deckers.thibault.aves.utils.LogUtils
-import deckers.thibault.aves.utils.StorageUtils.ensureTrailingSeparator
+import com.weitu.gallery.channel.calls.Coresult.Companion.safe
+import com.weitu.gallery.channel.calls.Coresult.Companion.safeSuspend
+import com.weitu.gallery.model.FieldMap
+import com.weitu.gallery.model.NameConflictStrategy
+import com.weitu.gallery.model.provider.ImageProvider.ImageOpCallback
+import com.weitu.gallery.model.provider.ImageProviderFactory.getProvider
+import com.weitu.gallery.utils.LogUtils
+import com.weitu.gallery.utils.StorageUtils.ensureTrailingSeparator
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler

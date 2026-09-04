@@ -1,4 +1,4 @@
-package deckers.thibault.aves.utils
+package com.weitu.gallery.utils
 
 import kotlin.math.log2
 import kotlin.math.pow

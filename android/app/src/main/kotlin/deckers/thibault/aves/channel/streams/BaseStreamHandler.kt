@@ -1,9 +1,9 @@
-package deckers.thibault.aves.channel.streams
+package com.weitu.gallery.channel.streams
 
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import deckers.thibault.aves.utils.MemoryUtils
+import com.weitu.gallery.utils.MemoryUtils
 import io.flutter.plugin.common.EventChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

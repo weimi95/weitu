@@ -1,11 +1,11 @@
-package deckers.thibault.aves
+package com.weitu.gallery
 
 import android.content.Intent
 import android.net.Uri
 import androidx.core.net.toUri
-import deckers.thibault.aves.channel.calls.AppAdapterHandler
-import deckers.thibault.aves.model.FieldMap
-import deckers.thibault.aves.utils.getParcelableExtraCompat
+import com.weitu.gallery.channel.calls.AppAdapterHandler
+import com.weitu.gallery.model.FieldMap
+import com.weitu.gallery.utils.getParcelableExtraCompat
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 

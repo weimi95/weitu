@@ -1,4 +1,4 @@
-package deckers.thibault.aves.metadata
+package com.weitu.gallery.metadata
 
 import com.caverock.androidsvg.SVG
 import java.io.BufferedInputStream

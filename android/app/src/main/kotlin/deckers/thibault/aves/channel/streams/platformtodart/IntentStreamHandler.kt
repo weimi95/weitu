@@ -1,7 +1,7 @@
-package deckers.thibault.aves.channel.streams.platformtodart
+package com.weitu.gallery.channel.streams.platformtodart
 
-import deckers.thibault.aves.channel.streams.BaseStreamHandler
-import deckers.thibault.aves.utils.LogUtils
+import com.weitu.gallery.channel.streams.BaseStreamHandler
+import com.weitu.gallery.utils.LogUtils
 
 class IntentStreamHandler : BaseStreamHandler() {
     fun notifyNewIntent(intentData: MutableMap<String, Any?>?) = success(intentData)

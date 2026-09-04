@@ -1,4 +1,4 @@
-package deckers.thibault.aves.metadata
+package com.weitu.gallery.metadata
 
 object GeoTiffKeys {
     // not a standard tag

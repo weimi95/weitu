@@ -1,4 +1,4 @@
-package deckers.thibault.aves.decoding
+package com.weitu.gallery.decoding
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -11,17 +11,17 @@ import android.os.Build
 import android.util.Log
 import androidx.core.graphics.createBitmap
 import com.bumptech.glide.Glide
-import deckers.thibault.aves.channel.streams.darttoplatform.ByteSink
-import deckers.thibault.aves.glide.AvesAppGlideModule
-import deckers.thibault.aves.glide.MultiPageImage
-import deckers.thibault.aves.utils.BitmapRegionDecoderCompat
-import deckers.thibault.aves.utils.BitmapUtils
-import deckers.thibault.aves.utils.BitmapUtils.describe
-import deckers.thibault.aves.utils.LogUtils
-import deckers.thibault.aves.utils.MathUtils
-import deckers.thibault.aves.utils.MemoryUtils
-import deckers.thibault.aves.utils.MimeTypes
-import deckers.thibault.aves.utils.StorageUtils
+import com.weitu.gallery.channel.streams.darttoplatform.ByteSink
+import com.weitu.gallery.glide.AvesAppGlideModule
+import com.weitu.gallery.glide.MultiPageImage
+import com.weitu.gallery.utils.BitmapRegionDecoderCompat
+import com.weitu.gallery.utils.BitmapUtils
+import com.weitu.gallery.utils.BitmapUtils.describe
+import com.weitu.gallery.utils.LogUtils
+import com.weitu.gallery.utils.MathUtils
+import com.weitu.gallery.utils.MemoryUtils
+import com.weitu.gallery.utils.MimeTypes
+import com.weitu.gallery.utils.StorageUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayInputStream

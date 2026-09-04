@@ -1,4 +1,4 @@
-package deckers.thibault.aves.model.provider
+package com.weitu.gallery.model.provider
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

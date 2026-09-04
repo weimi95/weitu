@@ -1,4 +1,4 @@
-package deckers.thibault.aves.channel.calls
+package com.weitu.gallery.channel.calls
 
 import android.annotation.SuppressLint
 import android.app.LocaleConfig
@@ -17,9 +17,9 @@ import androidx.core.net.toUri
 import androidx.core.performance.DefaultDevicePerformance
 import androidx.core.text.util.LocalePreferences
 import com.google.android.material.color.DynamicColors
-import deckers.thibault.aves.channel.calls.Coresult.Companion.safe
-import deckers.thibault.aves.model.FieldMap
-import deckers.thibault.aves.utils.MemoryUtils
+import com.weitu.gallery.channel.calls.Coresult.Companion.safe
+import com.weitu.gallery.model.FieldMap
+import com.weitu.gallery.utils.MemoryUtils
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler

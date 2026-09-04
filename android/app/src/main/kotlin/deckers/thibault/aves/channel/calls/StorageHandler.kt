@@ -1,14 +1,14 @@
-package deckers.thibault.aves.channel.calls
+package com.weitu.gallery.channel.calls
 
 import android.content.Context
 import android.os.Build
 import android.os.storage.StorageManager
-import deckers.thibault.aves.channel.calls.Coresult.Companion.safe
-import deckers.thibault.aves.model.FieldMap
-import deckers.thibault.aves.utils.FileUtils.getFolderSize
-import deckers.thibault.aves.utils.PermissionManager
-import deckers.thibault.aves.utils.StorageUtils
-import deckers.thibault.aves.utils.StorageUtils.getVolumePaths
+import com.weitu.gallery.channel.calls.Coresult.Companion.safe
+import com.weitu.gallery.model.FieldMap
+import com.weitu.gallery.utils.FileUtils.getFolderSize
+import com.weitu.gallery.utils.PermissionManager
+import com.weitu.gallery.utils.StorageUtils
+import com.weitu.gallery.utils.StorageUtils.getVolumePaths
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler

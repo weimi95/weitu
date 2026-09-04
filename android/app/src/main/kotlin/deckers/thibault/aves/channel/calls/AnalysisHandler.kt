@@ -1,4 +1,4 @@
-package deckers.thibault.aves.channel.calls
+package com.weitu.gallery.channel.calls
 
 import android.app.ActivityManager
 import android.content.Context
@@ -12,9 +12,9 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import deckers.thibault.aves.AnalysisWorker
-import deckers.thibault.aves.utils.FlutterUtils
-import deckers.thibault.aves.utils.LogUtils
+import com.weitu.gallery.AnalysisWorker
+import com.weitu.gallery.utils.FlutterUtils
+import com.weitu.gallery.utils.LogUtils
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.CoroutineScope

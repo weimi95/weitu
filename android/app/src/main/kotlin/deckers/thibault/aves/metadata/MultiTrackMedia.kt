@@ -1,4 +1,4 @@
-package deckers.thibault.aves.metadata
+package com.weitu.gallery.metadata
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -8,9 +8,9 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import deckers.thibault.aves.utils.LogUtils
-import deckers.thibault.aves.utils.MimeTypes
-import deckers.thibault.aves.utils.StorageUtils
+import com.weitu.gallery.utils.LogUtils
+import com.weitu.gallery.utils.MimeTypes
+import com.weitu.gallery.utils.StorageUtils
 
 object MultiTrackMedia {
     private val LOG_TAG = LogUtils.createTag<MultiTrackMedia>()

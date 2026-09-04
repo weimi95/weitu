@@ -1,4 +1,4 @@
-package deckers.thibault.aves.model.provider
+package com.weitu.gallery.model.provider
 
 import android.app.Activity
 import android.content.Context
@@ -6,11 +6,11 @@ import android.content.ContextWrapper
 import android.net.Uri
 import android.util.Log
 import android.webkit.MimeTypeMap
-import deckers.thibault.aves.model.EntryFields
-import deckers.thibault.aves.model.FieldMap
-import deckers.thibault.aves.model.SourceEntry
-import deckers.thibault.aves.utils.FileUtils.getFileSize
-import deckers.thibault.aves.utils.LogUtils
+import com.weitu.gallery.model.EntryFields
+import com.weitu.gallery.model.FieldMap
+import com.weitu.gallery.model.SourceEntry
+import com.weitu.gallery.utils.FileUtils.getFileSize
+import com.weitu.gallery.utils.LogUtils
 import java.io.File
 
 internal class FileImageProvider : ImageProvider() {

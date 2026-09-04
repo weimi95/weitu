@@ -1,4 +1,4 @@
-package deckers.thibault.aves.channel.calls
+package com.weitu.gallery.channel.calls
 
 import android.content.BroadcastReceiver
 import android.content.ComponentName
@@ -12,10 +12,10 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.net.toUri
 import androidx.media.session.MediaButtonReceiver
-import deckers.thibault.aves.channel.calls.Coresult.Companion.safe
-import deckers.thibault.aves.channel.calls.Coresult.Companion.safeSuspend
-import deckers.thibault.aves.channel.streams.platformtodart.MediaCommandStreamHandler
-import deckers.thibault.aves.utils.FlutterUtils
+import com.weitu.gallery.channel.calls.Coresult.Companion.safe
+import com.weitu.gallery.channel.calls.Coresult.Companion.safeSuspend
+import com.weitu.gallery.channel.streams.platformtodart.MediaCommandStreamHandler
+import com.weitu.gallery.utils.FlutterUtils
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler

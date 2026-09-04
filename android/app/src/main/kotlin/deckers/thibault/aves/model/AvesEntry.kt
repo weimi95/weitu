@@ -1,4 +1,4 @@
-package deckers.thibault.aves.model
+package com.weitu.gallery.model
 
 import android.content.ContentResolver
 import android.net.Uri

@@ -1,4 +1,4 @@
-package deckers.thibault.aves.metadata
+package com.weitu.gallery.metadata
 
 /*
 Exif tags missing from `metadata-extractor`

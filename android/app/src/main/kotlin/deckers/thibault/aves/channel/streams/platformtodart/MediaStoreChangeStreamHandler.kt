@@ -1,12 +1,12 @@
-package deckers.thibault.aves.channel.streams.platformtodart
+package com.weitu.gallery.channel.streams.platformtodart
 
 import android.content.Context
 import android.database.ContentObserver
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
-import deckers.thibault.aves.channel.streams.BaseStreamHandler
-import deckers.thibault.aves.utils.LogUtils
+import com.weitu.gallery.channel.streams.BaseStreamHandler
+import com.weitu.gallery.utils.LogUtils
 
 class MediaStoreChangeStreamHandler(private val context: Context) : BaseStreamHandler() {
     private val contentObserver = object : ContentObserver(null) {

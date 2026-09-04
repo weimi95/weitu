@@ -1,3 +1,3 @@
-package deckers.thibault.aves.model
+package com.weitu.gallery.model
 
 typealias FieldMap = MutableMap<String, Any?>

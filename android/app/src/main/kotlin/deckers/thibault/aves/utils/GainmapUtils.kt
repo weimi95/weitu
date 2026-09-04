@@ -1,4 +1,4 @@
-package deckers.thibault.aves.utils
+package com.weitu.gallery.utils
 
 import android.graphics.Bitmap
 import android.os.Build

@@ -1,9 +1,9 @@
-package deckers.thibault.aves
+package com.weitu.gallery
 
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
-import deckers.thibault.aves.model.FieldMap
+import com.weitu.gallery.model.FieldMap
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 

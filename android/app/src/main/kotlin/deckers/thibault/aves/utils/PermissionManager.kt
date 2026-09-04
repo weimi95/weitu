@@ -1,4 +1,4 @@
-package deckers.thibault.aves.utils
+package com.weitu.gallery.utils
 
 import android.app.Activity
 import android.content.Context
@@ -13,10 +13,10 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.RequiresApi
-import deckers.thibault.aves.MainActivity
-import deckers.thibault.aves.PendingStorageAccessResultHandler
-import deckers.thibault.aves.model.FieldMap
-import deckers.thibault.aves.utils.StorageUtils.PathSegments
+import com.weitu.gallery.MainActivity
+import com.weitu.gallery.PendingStorageAccessResultHandler
+import com.weitu.gallery.model.FieldMap
+import com.weitu.gallery.utils.StorageUtils.PathSegments
 import java.io.File
 import java.util.Locale
 import java.util.concurrent.CompletableFuture

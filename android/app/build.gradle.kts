@@ -8,7 +8,7 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-val packageName = "deckers.thibault.aves"
+val packageName = "com.weitu.gallery"
 
 // Keys
 
@@ -37,7 +37,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "deckers.thibault.aves"
+    namespace = "com.weitu.gallery"
     compileSdk = 37
     ndkVersion = flutter.ndkVersion
 

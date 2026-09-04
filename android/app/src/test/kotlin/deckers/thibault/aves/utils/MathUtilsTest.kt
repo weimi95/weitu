@@ -1,6 +1,6 @@
-package deckers.thibault.aves.utils
+package com.weitu.gallery.utils
 
-import deckers.thibault.aves.utils.MathUtils.highestPowerOf2
+import com.weitu.gallery.utils.MathUtils.highestPowerOf2
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

@@ -1,12 +1,12 @@
-package deckers.thibault.aves.metadata.xmp
+package com.weitu.gallery.metadata.xmp
 
 import android.content.Context
 import android.net.Uri
 import com.adobe.internal.xmp.XMPMeta
-import deckers.thibault.aves.metadata.Metadata
-import deckers.thibault.aves.metadata.xmp.XMP.countPropPathArrayItems
-import deckers.thibault.aves.metadata.xmp.XMP.getSafeStructField
-import deckers.thibault.aves.utils.indexOfBytes
+import com.weitu.gallery.metadata.Metadata
+import com.weitu.gallery.metadata.xmp.XMP.countPropPathArrayItems
+import com.weitu.gallery.metadata.xmp.XMP.getSafeStructField
+import com.weitu.gallery.utils.indexOfBytes
 import java.io.DataInputStream
 
 class GoogleDeviceContainer {

@@ -1,7 +1,7 @@
-package deckers.thibault.aves.channel.streams.platformtodart
+package com.weitu.gallery.channel.streams.platformtodart
 
-import deckers.thibault.aves.channel.streams.BaseStreamHandler
-import deckers.thibault.aves.utils.LogUtils
+import com.weitu.gallery.channel.streams.BaseStreamHandler
+import com.weitu.gallery.utils.LogUtils
 
 class WindowChangeStreamHandler : BaseStreamHandler() {
     fun notifyCutoutInsetsChange() = success(mapOf(KEY_CODE to CODE_CUTOUT_INSETS))

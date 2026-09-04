@@ -1,4 +1,4 @@
-package deckers.thibault.aves.glide
+package com.weitu.gallery.glide
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -20,10 +20,10 @@ import com.bumptech.glide.signature.ObjectKey
 import com.caverock.androidsvg.SVG
 import com.caverock.androidsvg.SVGParseException
 import com.caverock.androidsvg.utils.SVGAndroidRenderer
-import deckers.thibault.aves.metadata.SVGParserBufferedInputStream
-import deckers.thibault.aves.metadata.SvgHelper.IMAGE_BASE64_SIZE_DANGER_THRESHOLD
-import deckers.thibault.aves.metadata.SvgHelper.normalizeSize
-import deckers.thibault.aves.utils.StorageUtils
+import com.weitu.gallery.metadata.SVGParserBufferedInputStream
+import com.weitu.gallery.metadata.SvgHelper.IMAGE_BASE64_SIZE_DANGER_THRESHOLD
+import com.weitu.gallery.metadata.SvgHelper.normalizeSize
+import com.weitu.gallery.utils.StorageUtils
 import kotlin.math.ceil
 
 @GlideModule

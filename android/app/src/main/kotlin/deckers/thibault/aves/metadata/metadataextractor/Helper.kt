@@ -1,4 +1,4 @@
-package deckers.thibault.aves.metadata.metadataextractor
+package com.weitu.gallery.metadata.metadataextractor
 
 import android.util.Log
 import com.drew.imaging.FileType
@@ -25,14 +25,14 @@ import com.drew.metadata.file.FileTypeDirectory
 import com.drew.metadata.iptc.IptcReader
 import com.drew.metadata.png.PngDirectory
 import com.drew.metadata.xmp.XmpReader
-import deckers.thibault.aves.metadata.DngTags
-import deckers.thibault.aves.metadata.ExifGeoTiffTags
-import deckers.thibault.aves.metadata.ExifTags
-import deckers.thibault.aves.metadata.GeoTiffKeys
-import deckers.thibault.aves.metadata.Metadata
-import deckers.thibault.aves.metadata.metadataextractor.mpf.MpfReader
-import deckers.thibault.aves.utils.LogUtils
-import deckers.thibault.aves.utils.MathUtils.round
+import com.weitu.gallery.metadata.DngTags
+import com.weitu.gallery.metadata.ExifGeoTiffTags
+import com.weitu.gallery.metadata.ExifTags
+import com.weitu.gallery.metadata.GeoTiffKeys
+import com.weitu.gallery.metadata.Metadata
+import com.weitu.gallery.metadata.metadataextractor.mpf.MpfReader
+import com.weitu.gallery.utils.LogUtils
+import com.weitu.gallery.utils.MathUtils.round
 import java.io.BufferedInputStream
 import java.io.IOException
 import java.io.InputStream

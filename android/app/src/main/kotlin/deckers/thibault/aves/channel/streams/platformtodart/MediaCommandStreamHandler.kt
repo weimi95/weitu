@@ -1,8 +1,8 @@
-package deckers.thibault.aves.channel.streams.platformtodart
+package com.weitu.gallery.channel.streams.platformtodart
 
 import android.support.v4.media.session.MediaSessionCompat
-import deckers.thibault.aves.channel.streams.BaseStreamHandler
-import deckers.thibault.aves.utils.LogUtils
+import com.weitu.gallery.channel.streams.BaseStreamHandler
+import com.weitu.gallery.utils.LogUtils
 
 class MediaCommandStreamHandler : BaseStreamHandler() {
     val callback = object : MediaSessionCompat.Callback() {

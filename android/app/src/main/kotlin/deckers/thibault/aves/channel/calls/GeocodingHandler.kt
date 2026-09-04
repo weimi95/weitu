@@ -1,10 +1,10 @@
-package deckers.thibault.aves.channel.calls
+package com.weitu.gallery.channel.calls
 
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
-import deckers.thibault.aves.channel.calls.Coresult.Companion.safe
-import deckers.thibault.aves.utils.getFromLocationCompat
+import com.weitu.gallery.channel.calls.Coresult.Companion.safe
+import com.weitu.gallery.utils.getFromLocationCompat
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler

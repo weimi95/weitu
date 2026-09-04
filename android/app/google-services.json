@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:100907092477:android:883192cb81028ac9ec7194",
         "android_client_info": {
-          "package_name": "deckers.thibault.aves"
+          "package_name": "com.weitu.gallery"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "100907092477-ml1c4hr4l24ekg7l7nqid06n03kek6c8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "deckers.thibault.aves",
+            "package_name": "com.weitu.gallery",
             "certificate_hash": "1395888aacca42247286fdd2aba2d4047fe6cdad"
           }
         }
@@ -38,7 +38,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:100907092477:android:f3d6f758d2ed896aec7194",
         "android_client_info": {
-          "package_name": "deckers.thibault.aves.debug"
+          "package_name": "com.weitu.gallery.debug"
         }
       },
       "oauth_client": [],
@@ -57,7 +57,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:100907092477:android:92d0e4e5e6c971b4ec7194",
         "android_client_info": {
-          "package_name": "deckers.thibault.aves.profile"
+          "package_name": "com.weitu.gallery.profile"
         }
       },
       "oauth_client": [],

@@ -1,4 +1,4 @@
-package deckers.thibault.aves.utils
+package com.weitu.gallery.utils
 
 inline fun <reified T : Throwable> Exception.anyCauseIs(): Boolean {
     var cause: Throwable? = this

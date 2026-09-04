@@ -1,4 +1,4 @@
-package deckers.thibault.aves.channel.streams.darttoplatform
+package com.weitu.gallery.channel.streams.darttoplatform
 
 import android.app.Activity
 import android.content.Intent
@@ -7,16 +7,16 @@ import android.os.Build
 import android.os.TransactionTooLargeException
 import android.util.Log
 import androidx.core.net.toUri
-import deckers.thibault.aves.MainActivity
-import deckers.thibault.aves.PendingStorageAccessResultHandler
-import deckers.thibault.aves.channel.calls.AppAdapterHandler
-import deckers.thibault.aves.channel.streams.BaseStreamHandler
-import deckers.thibault.aves.utils.LogUtils
-import deckers.thibault.aves.utils.MimeTypes
-import deckers.thibault.aves.utils.PermissionManager
-import deckers.thibault.aves.utils.StorageUtils
-import deckers.thibault.aves.utils.StorageUtils.ensureTrailingSeparator
-import deckers.thibault.aves.utils.anyCauseIs
+import com.weitu.gallery.MainActivity
+import com.weitu.gallery.PendingStorageAccessResultHandler
+import com.weitu.gallery.channel.calls.AppAdapterHandler
+import com.weitu.gallery.channel.streams.BaseStreamHandler
+import com.weitu.gallery.utils.LogUtils
+import com.weitu.gallery.utils.MimeTypes
+import com.weitu.gallery.utils.PermissionManager
+import com.weitu.gallery.utils.StorageUtils
+import com.weitu.gallery.utils.StorageUtils.ensureTrailingSeparator
+import com.weitu.gallery.utils.anyCauseIs
 import kotlinx.coroutines.launch
 
 // starting activity to get a result (e.g. storage access via native dialog)

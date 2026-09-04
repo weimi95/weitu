@@ -1,4 +1,4 @@
-package deckers.thibault.aves.utils
+package com.weitu.gallery.utils
 
 import android.os.Build
 import java.io.File

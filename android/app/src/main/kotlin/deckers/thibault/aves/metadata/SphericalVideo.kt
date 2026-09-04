@@ -1,8 +1,8 @@
-package deckers.thibault.aves.metadata
+package com.weitu.gallery.metadata
 
 import android.util.Log
 import android.util.Xml
-import deckers.thibault.aves.utils.LogUtils
+import com.weitu.gallery.utils.LogUtils
 import org.xmlpull.v1.XmlPullParser
 import java.io.ByteArrayInputStream
 

@@ -1,4 +1,4 @@
-package deckers.thibault.aves.glide
+package com.weitu.gallery.glide
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -22,13 +22,13 @@ import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.module.LibraryGlideModule
 import com.bumptech.glide.signature.ObjectKey
-import deckers.thibault.aves.metadata.MediaMetadataRetrieverHelper.getSafeFloat
-import deckers.thibault.aves.metadata.MediaMetadataRetrieverHelper.getSafeInt
-import deckers.thibault.aves.metadata.MediaMetadataRetrieverHelper.getSafeLong
-import deckers.thibault.aves.utils.BitmapUtils
-import deckers.thibault.aves.utils.LogUtils
-import deckers.thibault.aves.utils.MemoryUtils
-import deckers.thibault.aves.utils.StorageUtils.openMetadataRetriever
+import com.weitu.gallery.metadata.MediaMetadataRetrieverHelper.getSafeFloat
+import com.weitu.gallery.metadata.MediaMetadataRetrieverHelper.getSafeInt
+import com.weitu.gallery.metadata.MediaMetadataRetrieverHelper.getSafeLong
+import com.weitu.gallery.utils.BitmapUtils
+import com.weitu.gallery.utils.LogUtils
+import com.weitu.gallery.utils.MemoryUtils
+import com.weitu.gallery.utils.StorageUtils.openMetadataRetriever
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

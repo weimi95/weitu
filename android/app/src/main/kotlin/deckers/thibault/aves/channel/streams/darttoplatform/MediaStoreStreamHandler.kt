@@ -1,9 +1,9 @@
-package deckers.thibault.aves.channel.streams.darttoplatform
+package com.weitu.gallery.channel.streams.darttoplatform
 
 import android.content.Context
-import deckers.thibault.aves.channel.streams.BaseStreamHandler
-import deckers.thibault.aves.model.provider.MediaStoreImageProvider
-import deckers.thibault.aves.utils.LogUtils
+import com.weitu.gallery.channel.streams.BaseStreamHandler
+import com.weitu.gallery.model.provider.MediaStoreImageProvider
+import com.weitu.gallery.utils.LogUtils
 import kotlinx.coroutines.launch
 
 class MediaStoreStreamHandler(private val context: Context, arguments: Any?) : BaseStreamHandler() {

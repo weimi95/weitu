@@ -1,15 +1,15 @@
-package deckers.thibault.aves.metadata
+package com.weitu.gallery.metadata
 
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import deckers.thibault.aves.metadata.xmp.XMP
-import deckers.thibault.aves.utils.FileDescriptorException
-import deckers.thibault.aves.utils.LogUtils
-import deckers.thibault.aves.utils.MimeTypes
-import deckers.thibault.aves.utils.StorageUtils
-import deckers.thibault.aves.utils.toByteArray
-import deckers.thibault.aves.utils.toHex
+import com.weitu.gallery.metadata.xmp.XMP
+import com.weitu.gallery.utils.FileDescriptorException
+import com.weitu.gallery.utils.LogUtils
+import com.weitu.gallery.utils.MimeTypes
+import com.weitu.gallery.utils.StorageUtils
+import com.weitu.gallery.utils.toByteArray
+import com.weitu.gallery.utils.toHex
 import org.mp4parser.BasicContainer
 import org.mp4parser.Box
 import org.mp4parser.BoxParser

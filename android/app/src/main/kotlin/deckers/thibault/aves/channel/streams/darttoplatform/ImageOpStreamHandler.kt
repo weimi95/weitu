@@ -1,19 +1,19 @@
-package deckers.thibault.aves.channel.streams.darttoplatform
+package com.weitu.gallery.channel.streams.darttoplatform
 
 import android.app.Activity
 import android.util.Log
 import androidx.core.net.toUri
-import deckers.thibault.aves.channel.calls.MediaEditHandler.Companion.cancelledOps
-import deckers.thibault.aves.channel.streams.BaseStreamHandler
-import deckers.thibault.aves.model.AvesEntry
-import deckers.thibault.aves.model.FieldMap
-import deckers.thibault.aves.model.NameConflictStrategy
-import deckers.thibault.aves.model.provider.ImageProvider.ImageOpCallback
-import deckers.thibault.aves.model.provider.ImageProviderFactory.getProvider
-import deckers.thibault.aves.model.provider.MediaStoreImageProvider
-import deckers.thibault.aves.utils.LogUtils
-import deckers.thibault.aves.utils.StorageUtils
-import deckers.thibault.aves.utils.StorageUtils.ensureTrailingSeparator
+import com.weitu.gallery.channel.calls.MediaEditHandler.Companion.cancelledOps
+import com.weitu.gallery.channel.streams.BaseStreamHandler
+import com.weitu.gallery.model.AvesEntry
+import com.weitu.gallery.model.FieldMap
+import com.weitu.gallery.model.NameConflictStrategy
+import com.weitu.gallery.model.provider.ImageProvider.ImageOpCallback
+import com.weitu.gallery.model.provider.ImageProviderFactory.getProvider
+import com.weitu.gallery.model.provider.MediaStoreImageProvider
+import com.weitu.gallery.utils.LogUtils
+import com.weitu.gallery.utils.StorageUtils
+import com.weitu.gallery.utils.StorageUtils.ensureTrailingSeparator
 import kotlinx.coroutines.launch
 
 class ImageOpStreamHandler(private val activity: Activity, private val arguments: Any?) : BaseStreamHandler() {

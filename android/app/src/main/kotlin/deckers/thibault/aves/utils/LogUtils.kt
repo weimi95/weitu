@@ -1,4 +1,4 @@
-package deckers.thibault.aves.utils
+package com.weitu.gallery.utils
 
 object LogUtils {
     const val LOG_TAG_MAX_LENGTH = 23

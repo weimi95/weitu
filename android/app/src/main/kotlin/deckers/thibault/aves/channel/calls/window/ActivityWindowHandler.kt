@@ -1,4 +1,4 @@
-package deckers.thibault.aves.channel.calls.window
+package com.weitu.gallery.channel.calls.window
 
 import android.app.Activity
 import android.content.ClipData
@@ -16,10 +16,10 @@ import android.view.View
 import android.view.WindowManager
 import androidx.core.graphics.createBitmap
 import androidx.core.net.toUri
-import deckers.thibault.aves.channel.calls.AppAdapterHandler.Companion.getShareableUri
-import deckers.thibault.aves.utils.ContextUtils.devicePixelRatio
-import deckers.thibault.aves.utils.LogUtils
-import deckers.thibault.aves.utils.getDisplayCompat
+import com.weitu.gallery.channel.calls.AppAdapterHandler.Companion.getShareableUri
+import com.weitu.gallery.utils.ContextUtils.devicePixelRatio
+import com.weitu.gallery.utils.LogUtils
+import com.weitu.gallery.utils.getDisplayCompat
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import java.nio.ByteBuffer

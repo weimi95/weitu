@@ -1,4 +1,4 @@
-package deckers.thibault.aves
+package com.weitu.gallery
 
 import android.annotation.SuppressLint
 import android.app.KeyguardManager
@@ -25,43 +25,43 @@ import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import app.loup.streams_channel.StreamsChannel
-import deckers.thibault.aves.channel.calls.AccessibilityHandler
-import deckers.thibault.aves.channel.calls.AnalysisHandler
-import deckers.thibault.aves.channel.calls.AppAdapterHandler
-import deckers.thibault.aves.channel.calls.AppProfileHandler
-import deckers.thibault.aves.channel.calls.Coresult.Companion.safe
-import deckers.thibault.aves.channel.calls.DebugHandler
-import deckers.thibault.aves.channel.calls.DeviceHandler
-import deckers.thibault.aves.channel.calls.EmbeddedDataHandler
-import deckers.thibault.aves.channel.calls.GeocodingHandler
-import deckers.thibault.aves.channel.calls.GlobalSearchHandler
-import deckers.thibault.aves.channel.calls.HomeWidgetHandler
-import deckers.thibault.aves.channel.calls.MediaEditHandler
-import deckers.thibault.aves.channel.calls.MediaFetchObjectHandler
-import deckers.thibault.aves.channel.calls.MediaSessionHandler
-import deckers.thibault.aves.channel.calls.MediaStoreHandler
-import deckers.thibault.aves.channel.calls.MetadataEditHandler
-import deckers.thibault.aves.channel.calls.MetadataFetchHandler
-import deckers.thibault.aves.channel.calls.SecurityHandler
-import deckers.thibault.aves.channel.calls.StorageHandler
-import deckers.thibault.aves.channel.calls.WallpaperHandler
-import deckers.thibault.aves.channel.calls.window.ActivityWindowHandler
-import deckers.thibault.aves.channel.calls.window.WindowHandler
-import deckers.thibault.aves.channel.streams.darttoplatform.ActivityResultStreamHandler
-import deckers.thibault.aves.channel.streams.darttoplatform.ImageByteStreamHandler
-import deckers.thibault.aves.channel.streams.darttoplatform.ImageOpStreamHandler
-import deckers.thibault.aves.channel.streams.darttoplatform.MediaStoreStreamHandler
-import deckers.thibault.aves.channel.streams.platformtodart.AnalysisStreamHandler
-import deckers.thibault.aves.channel.streams.platformtodart.ErrorStreamHandler
-import deckers.thibault.aves.channel.streams.platformtodart.IntentStreamHandler
-import deckers.thibault.aves.channel.streams.platformtodart.MediaCommandStreamHandler
-import deckers.thibault.aves.channel.streams.platformtodart.MediaStoreChangeStreamHandler
-import deckers.thibault.aves.channel.streams.platformtodart.SettingsChangeStreamHandler
-import deckers.thibault.aves.channel.streams.platformtodart.WindowChangeStreamHandler
-import deckers.thibault.aves.model.FieldMap
-import deckers.thibault.aves.utils.LogUtils
-import deckers.thibault.aves.utils.anyCauseIs
-import deckers.thibault.aves.utils.getParcelableExtraCompat
+import com.weitu.gallery.channel.calls.AccessibilityHandler
+import com.weitu.gallery.channel.calls.AnalysisHandler
+import com.weitu.gallery.channel.calls.AppAdapterHandler
+import com.weitu.gallery.channel.calls.AppProfileHandler
+import com.weitu.gallery.channel.calls.Coresult.Companion.safe
+import com.weitu.gallery.channel.calls.DebugHandler
+import com.weitu.gallery.channel.calls.DeviceHandler
+import com.weitu.gallery.channel.calls.EmbeddedDataHandler
+import com.weitu.gallery.channel.calls.GeocodingHandler
+import com.weitu.gallery.channel.calls.GlobalSearchHandler
+import com.weitu.gallery.channel.calls.HomeWidgetHandler
+import com.weitu.gallery.channel.calls.MediaEditHandler
+import com.weitu.gallery.channel.calls.MediaFetchObjectHandler
+import com.weitu.gallery.channel.calls.MediaSessionHandler
+import com.weitu.gallery.channel.calls.MediaStoreHandler
+import com.weitu.gallery.channel.calls.MetadataEditHandler
+import com.weitu.gallery.channel.calls.MetadataFetchHandler
+import com.weitu.gallery.channel.calls.SecurityHandler
+import com.weitu.gallery.channel.calls.StorageHandler
+import com.weitu.gallery.channel.calls.WallpaperHandler
+import com.weitu.gallery.channel.calls.window.ActivityWindowHandler
+import com.weitu.gallery.channel.calls.window.WindowHandler
+import com.weitu.gallery.channel.streams.darttoplatform.ActivityResultStreamHandler
+import com.weitu.gallery.channel.streams.darttoplatform.ImageByteStreamHandler
+import com.weitu.gallery.channel.streams.darttoplatform.ImageOpStreamHandler
+import com.weitu.gallery.channel.streams.darttoplatform.MediaStoreStreamHandler
+import com.weitu.gallery.channel.streams.platformtodart.AnalysisStreamHandler
+import com.weitu.gallery.channel.streams.platformtodart.ErrorStreamHandler
+import com.weitu.gallery.channel.streams.platformtodart.IntentStreamHandler
+import com.weitu.gallery.channel.streams.platformtodart.MediaCommandStreamHandler
+import com.weitu.gallery.channel.streams.platformtodart.MediaStoreChangeStreamHandler
+import com.weitu.gallery.channel.streams.platformtodart.SettingsChangeStreamHandler
+import com.weitu.gallery.channel.streams.platformtodart.WindowChangeStreamHandler
+import com.weitu.gallery.model.FieldMap
+import com.weitu.gallery.utils.LogUtils
+import com.weitu.gallery.utils.anyCauseIs
+import com.weitu.gallery.utils.getParcelableExtraCompat
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
@@ -239,7 +239,7 @@ open class MainActivity : FlutterFragmentActivity() {
         } catch (e: Exception) {
             // on Android 11, app may crash as follows:
             // `Fatal Exception:`
-            // `java.lang.RuntimeException: Unable to destroy activity {deckers.thibault.aves/deckers.thibault.aves.MainActivity}:`
+            // `java.lang.RuntimeException: Unable to destroy activity {com.weitu.gallery/com.weitu.gallery.MainActivity}:`
             // `java.lang.IllegalArgumentException: NetworkCallback was not registered`
             // related to this error:
             // `Package android does not belong to 10162`

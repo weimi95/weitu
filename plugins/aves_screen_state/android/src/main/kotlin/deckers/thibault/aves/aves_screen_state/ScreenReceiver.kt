@@ -1,4 +1,4 @@
-package deckers.thibault.aves.aves_screen_state
+package com.weitu.gallery.aves_screen_state
 
 import android.content.BroadcastReceiver
 import android.content.Context

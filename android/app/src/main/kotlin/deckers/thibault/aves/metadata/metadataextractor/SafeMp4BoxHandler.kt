@@ -1,4 +1,4 @@
-package deckers.thibault.aves.metadata.metadataextractor
+package com.weitu.gallery.metadata.metadataextractor
 
 import com.drew.imaging.mp4.Mp4Handler
 import com.drew.metadata.Metadata

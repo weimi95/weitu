@@ -1,18 +1,18 @@
-package deckers.thibault.aves.model.provider
+package com.weitu.gallery.model.provider
 
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
-import deckers.thibault.aves.metadata.Metadata
-import deckers.thibault.aves.metadata.metadataextractor.Helper
-import deckers.thibault.aves.model.EntryFields
-import deckers.thibault.aves.model.FieldMap
-import deckers.thibault.aves.model.SourceEntry
-import deckers.thibault.aves.utils.LogUtils
-import deckers.thibault.aves.utils.MimeTypes
-import deckers.thibault.aves.utils.StorageUtils
+import com.weitu.gallery.metadata.Metadata
+import com.weitu.gallery.metadata.metadataextractor.Helper
+import com.weitu.gallery.model.EntryFields
+import com.weitu.gallery.model.FieldMap
+import com.weitu.gallery.model.SourceEntry
+import com.weitu.gallery.utils.LogUtils
+import com.weitu.gallery.utils.MimeTypes
+import com.weitu.gallery.utils.StorageUtils
 
 open class UnknownContentProvider : ImageProvider() {
     open val reliableProviderMimeType: Boolean

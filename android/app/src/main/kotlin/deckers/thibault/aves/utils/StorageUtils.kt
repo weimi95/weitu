@@ -1,4 +1,4 @@
-package deckers.thibault.aves.utils
+package com.weitu.gallery.utils
 
 import android.Manifest
 import android.content.ContentResolver
@@ -18,12 +18,12 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.text.isDigitsOnly
 import com.commonsware.cwac.document.DocumentFileCompat
-import deckers.thibault.aves.model.provider.ImageProvider
-import deckers.thibault.aves.utils.FileUtils.transferFrom
-import deckers.thibault.aves.utils.MimeTypes.isImage
-import deckers.thibault.aves.utils.MimeTypes.isVideo
-import deckers.thibault.aves.utils.PermissionManager.getGrantedDirForPath
-import deckers.thibault.aves.utils.UriUtils.tryParseId
+import com.weitu.gallery.model.provider.ImageProvider
+import com.weitu.gallery.utils.FileUtils.transferFrom
+import com.weitu.gallery.utils.MimeTypes.isImage
+import com.weitu.gallery.utils.MimeTypes.isVideo
+import com.weitu.gallery.utils.PermissionManager.getGrantedDirForPath
+import com.weitu.gallery.utils.UriUtils.tryParseId
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException

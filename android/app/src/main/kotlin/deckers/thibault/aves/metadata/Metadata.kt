@@ -1,12 +1,12 @@
-package deckers.thibault.aves.metadata
+package com.weitu.gallery.metadata
 
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import deckers.thibault.aves.utils.FileUtils.transferFrom
-import deckers.thibault.aves.utils.LogUtils
-import deckers.thibault.aves.utils.MimeTypes
-import deckers.thibault.aves.utils.StorageUtils
+import com.weitu.gallery.utils.FileUtils.transferFrom
+import com.weitu.gallery.utils.LogUtils
+import com.weitu.gallery.utils.MimeTypes
+import com.weitu.gallery.utils.StorageUtils
 import java.io.File
 import java.io.InputStream
 import java.text.ParseException
