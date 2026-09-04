@@ -8,7 +8,7 @@ import 'package:aves/widgets/common/identity/aves_logo.dart';
 import 'package:flutter/material.dart';
 
 class AppReference extends StatelessWidget {
-  static const avesGithub = 'https://github.com/deckerst/aves';
+  static const avesGithub = 'https://github.com/weimi95/weitu';
   static const avesFaq = '$avesGithub/wiki/FAQ';
 
   const AppReference({super.key});
@@ -25,6 +25,9 @@ class AppReference extends StatelessWidget {
             spacing: 16,
             crossAxisAlignment: .center,
             children: AppReference.buildLinks(context),
+      const SizedBox(height: 8),
+      const Text('基于 Aves 二次开发，感谢原作者 deckerst 及所有贡献者',
+          textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: Colors.grey)),
           ),
         ],
       ),

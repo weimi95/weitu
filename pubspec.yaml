@@ -1,5 +1,5 @@
 name: aves
-description: 微图相册(WeiTu) - a visual media gallery and metadata explorer app.
+description: 微图相册管家（Weitu）——本地相册与媒体资源管理应用，基于 Aves 二次开发。
 repository: https://github.com/weimi95/weitu
 publish_to: none
 
