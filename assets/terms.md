@@ -14,12 +14,12 @@ The app does not collect any personal data. We never have access to your photos 
 
 __Optionally, with your consent, the app accesses the inventory of installed apps__ to improve album display.
 
-__Optionally, with your consent, the app collects anonymous error and diagnostic data__ to improve the app quality. We use Firebase Crashlytics, and the anonymous data are stored on their servers. Please note that those are anonymous data, there is absolutely nothing personal about those data.
+__Optionally, with your consent, the app collects anonymous error and diagnostic data__ to improve the app quality. Error reporting is handled locally and no personal data is transmitted to third-party services.
 
 ## Contact
 
-Developer: Thibault Deckers
+Developer: 微图相册管家
 
-Email: [gallery.aves@gmail.com](mailto:gallery.aves@gmail.com)
+Website: [https://github.com/weimi95/weitu](https://github.com/weimi95/weitu)
 
-Website: [https://github.com/deckerst/aves](https://github.com/deckerst/aves)
+Based on Aves by Thibault Deckers: [https://github.com/deckerst/aves](https://github.com/deckerst/aves)

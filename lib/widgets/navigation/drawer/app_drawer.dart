@@ -218,10 +218,11 @@ class _AppDrawerState extends State<AppDrawer> with WidgetsBindingObserver {
                           text: l10n.appName,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 38,
+                            fontSize: 28,
                             fontWeight: FontWeight.w300,
                             letterSpacing: canHaveLetterSpacing(context.localeName) ? 1 : 0,
-                            fontFeatures: const [FontFeature.enable('smcp')],
+                            // fontFeatures removed: Chinese app name does not need small-caps,
+                            // and '微图相册管家' should render as-is.
                           ),
                         ),
                       ],
