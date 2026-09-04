@@ -59,9 +59,13 @@ jobs:
 
       # `apply_flavor_play.sh` 负责切换 `aves_report_platform` / `aves_services_platform` 依赖；
       # productFlavors 为 play / izzy / libre 且无 default，必须显式指定 `--flavor` 与入口文件。
+      # NOTE: `scripts/apply_flavor_play.sh` is intentionally NOT run here. After the
+      # Google/Firebase strip, `pubspec.yaml` already defaults aves_report_platform
+      # -> aves_report_console and aves_services_platform -> aves_services_none, so the
+      # play flavor needs no dependency switching. The script was also non-executable
+      # in the checkout (Permission denied) and only did a redundant clean + pub get.
       - name: Build debug APK (play flavor)
         run: |
-          scripts/apply_flavor_play.sh 2>&1 | tee -a build_log.txt
           ./flutterw build apk --debug -t lib/main_play.dart --flavor play 2>&1 | tee -a build_log.txt
 
       - name: Upload APK
