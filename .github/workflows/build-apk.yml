@@ -10,8 +10,12 @@ concurrency:
   group: build-apk-${{ github.ref }}
   cancel-in-progress: true
 
-# Declare default permissions as read only.
-permissions: read-all
+# Minimal permissions: read for checkout, write for artifact upload & CodeQL upload.
+# (was `read-all`, which broke `Upload APK` because upload-artifact v7 needs `actions: write`)
+permissions:
+  contents: read
+  actions: write
+  security-events: write
 
 jobs:
   build_apk:
@@ -32,6 +36,13 @@ jobs:
           java-version: '21'
 
       - name: Checkout repository
+        id: checkout
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # retry once on transient checkout failures (GitHub infra / network flakiness)
+      - name: Checkout repository (retry)
+        if: steps.checkout.outcome == 'failure'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Cache pub & Gradle
