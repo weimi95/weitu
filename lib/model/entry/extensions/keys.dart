@@ -25,4 +25,9 @@ class EntryFields {
   static const trashed = 'trashed'; // boolean
   static const trashPath = 'trashPath'; // string
   static const title = 'title'; // string
+
+  // local catalog metadata, passed to the platform for e.g. format conversion
+  static const xmpTitle = 'xmpTitle'; // string
+  static const xmpDescription = 'xmpDescription'; // string
+  static const xmpSubjects = 'xmpSubjects'; // string (semicolon-separated)
 }

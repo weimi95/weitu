@@ -1,4 +1,4 @@
-package com.weitu.gallery.model
+package deckers.thibault.aves.model
 
 // entry fields exported and imported from/to the platform side
 // should match `EntryFields` on Dart side
@@ -26,4 +26,9 @@ object EntryFields {
     const val TRASHED = "trashed" // boolean
     const val TRASH_PATH = "trashPath" // string
     const val TITLE = "title" // string
+
+    // local catalog metadata, passed to the platform for e.g. format conversion
+    const val XMP_TITLE = "xmpTitle" // string
+    const val XMP_DESCRIPTION = "xmpDescription" // string
+    const val XMP_SUBJECTS = "xmpSubjects" // string (semicolon-separated)
 }

@@ -189,6 +189,9 @@ class AvesEntry with AvesEntryBase {
       EntryFields.trashed: trashed,
       EntryFields.trashPath: trashDetails?.path,
       EntryFields.origin: origin,
+      EntryFields.xmpTitle: catalogMetadata?.xmpTitle,
+      EntryFields.xmpDescription: catalogMetadata?.xmpDescription,
+      EntryFields.xmpSubjects: catalogMetadata?.xmpSubjects,
     };
   }
 

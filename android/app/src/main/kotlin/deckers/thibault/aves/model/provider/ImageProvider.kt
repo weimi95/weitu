@@ -1,4 +1,4 @@
-package com.weitu.gallery.model.provider
+package deckers.thibault.aves.model.provider
 
 import android.app.Activity
 import android.content.Context
@@ -15,47 +15,46 @@ import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.FutureTarget
 import com.commonsware.cwac.document.DocumentFileCompat
-import com.weitu.gallery.glide.AvesAppGlideModule
-import com.weitu.gallery.metadata.ExifInterfaceHelper
-import com.weitu.gallery.metadata.ExifInterfaceHelper.getSafeDateMillis
-import com.weitu.gallery.metadata.Metadata
-import com.weitu.gallery.metadata.Metadata.TYPE_EXIF
-import com.weitu.gallery.metadata.Metadata.TYPE_IPTC
-import com.weitu.gallery.metadata.Metadata.TYPE_MP4
-import com.weitu.gallery.metadata.Metadata.TYPE_XMP
-import com.weitu.gallery.metadata.Mp4ParserHelper
-import com.weitu.gallery.metadata.Mp4ParserHelper.updateLocation
-import com.weitu.gallery.metadata.Mp4ParserHelper.updateRotation
-import com.weitu.gallery.metadata.Mp4ParserHelper.updateXmp
-import com.weitu.gallery.metadata.MultiPage
-import com.weitu.gallery.metadata.PixyMetaHelper
-import com.weitu.gallery.metadata.PixyMetaHelper.extendedXmpDocString
-import com.weitu.gallery.metadata.PixyMetaHelper.xmpDocString
-import com.weitu.gallery.metadata.WebPXmpHelper
-import com.weitu.gallery.metadata.metadataextractor.Helper
-import com.weitu.gallery.metadata.xmp.GoogleXMP
-import com.weitu.gallery.model.AvesEntry
-import com.weitu.gallery.model.EntryFields
-import com.weitu.gallery.model.ExifOrientationOp
-import com.weitu.gallery.model.FieldMap
-import com.weitu.gallery.model.NameConflictResolution
-import com.weitu.gallery.model.NameConflictStrategy
-import com.weitu.gallery.model.SourceEntry
-import com.weitu.gallery.utils.BitmapUtils
-import com.weitu.gallery.utils.BmpWriter
-import com.weitu.gallery.utils.FileUtils.getFileSize
-import com.weitu.gallery.utils.FileUtils.transferFrom
-import com.weitu.gallery.utils.FileUtils.transferTo
-import com.weitu.gallery.utils.LogUtils
-import com.weitu.gallery.utils.MimeTypes
-import com.weitu.gallery.utils.MimeTypes.canEditExif
-import com.weitu.gallery.utils.MimeTypes.canEditIptc
-import com.weitu.gallery.utils.MimeTypes.canEditXmp
-import com.weitu.gallery.utils.MimeTypes.canReadWithExifInterface
-import com.weitu.gallery.utils.MimeTypes.canRemoveMetadata
-import com.weitu.gallery.utils.MimeTypes.extensionFor
-import com.weitu.gallery.utils.MimeTypes.isVideo
-import com.weitu.gallery.utils.StorageUtils
+import deckers.thibault.aves.glide.AvesAppGlideModule
+import deckers.thibault.aves.metadata.ExifInterfaceHelper
+import deckers.thibault.aves.metadata.ExifInterfaceHelper.getSafeDateMillis
+import deckers.thibault.aves.metadata.Metadata
+import deckers.thibault.aves.metadata.Metadata.TYPE_EXIF
+import deckers.thibault.aves.metadata.Metadata.TYPE_IPTC
+import deckers.thibault.aves.metadata.Metadata.TYPE_MP4
+import deckers.thibault.aves.metadata.Metadata.TYPE_XMP
+import deckers.thibault.aves.metadata.Mp4ParserHelper
+import deckers.thibault.aves.metadata.Mp4ParserHelper.updateLocation
+import deckers.thibault.aves.metadata.Mp4ParserHelper.updateRotation
+import deckers.thibault.aves.metadata.Mp4ParserHelper.updateXmp
+import deckers.thibault.aves.metadata.MultiPage
+import deckers.thibault.aves.metadata.PixyMetaHelper
+import deckers.thibault.aves.metadata.PixyMetaHelper.extendedXmpDocString
+import deckers.thibault.aves.metadata.PixyMetaHelper.xmpDocString
+import deckers.thibault.aves.metadata.metadataextractor.Helper
+import deckers.thibault.aves.metadata.xmp.GoogleXMP
+import deckers.thibault.aves.model.AvesEntry
+import deckers.thibault.aves.model.EntryFields
+import deckers.thibault.aves.model.ExifOrientationOp
+import deckers.thibault.aves.model.FieldMap
+import deckers.thibault.aves.model.NameConflictResolution
+import deckers.thibault.aves.model.NameConflictStrategy
+import deckers.thibault.aves.model.SourceEntry
+import deckers.thibault.aves.utils.BitmapUtils
+import deckers.thibault.aves.utils.BmpWriter
+import deckers.thibault.aves.utils.FileUtils.getFileSize
+import deckers.thibault.aves.utils.FileUtils.transferFrom
+import deckers.thibault.aves.utils.FileUtils.transferTo
+import deckers.thibault.aves.utils.LogUtils
+import deckers.thibault.aves.utils.MimeTypes
+import deckers.thibault.aves.utils.MimeTypes.canEditExif
+import deckers.thibault.aves.utils.MimeTypes.canEditIptc
+import deckers.thibault.aves.utils.MimeTypes.canEditXmp
+import deckers.thibault.aves.utils.MimeTypes.canReadWithExifInterface
+import deckers.thibault.aves.utils.MimeTypes.canRemoveMetadata
+import deckers.thibault.aves.utils.MimeTypes.extensionFor
+import deckers.thibault.aves.utils.MimeTypes.isVideo
+import deckers.thibault.aves.utils.StorageUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayInputStream
@@ -384,6 +383,7 @@ abstract class ImageProvider {
             if (writeMetadata) {
                 copyMetadata(
                     context = activity,
+                    sourceEntry = sourceEntry,
                     sourceMimeType = sourceMimeType,
                     sourceUri = sourceUri,
                     targetMimeType = targetMimeType,
@@ -403,6 +403,7 @@ abstract class ImageProvider {
 
     private fun copyMetadata(
         context: Context,
+        sourceEntry: AvesEntry,
         sourceMimeType: String,
         sourceUri: Uri,
         targetMimeType: String,
@@ -415,8 +416,17 @@ abstract class ImageProvider {
             transferFrom(inputStream, getFileSize(targetPath))
         }
 
+        // fallback XMP from the local index DB (for formats that cannot store metadata in the file,
+        // e.g. HEIC/AVIF: the description/title/subjects are only kept in the app index DB and should
+        // be baked into the converted file when the user exports to a writable format)
+        val fallbackXmp = if (MimeTypes.canEditXmp(targetMimeType)) {
+            PixyMetaHelper.buildDublinCoreXmp(sourceEntry.xmpTitle, sourceEntry.xmpDescription, sourceEntry.xmpSubjects)
+        } else {
+            null
+        }
+
         // copy IPTC / XMP via PixyMeta
-        PixyMetaHelper.copyIptcXmp(context, sourceMimeType, sourceUri, targetMimeType, targetUri, editableFile)
+        PixyMetaHelper.copyIptcXmp(context, sourceMimeType, sourceUri, targetMimeType, targetUri, editableFile, fallbackXmp)
 
         // copy Exif via ExifInterface
 
@@ -976,19 +986,6 @@ abstract class ImageProvider {
             )
         }
 
-        if (mimeType == MimeTypes.WEBP) {
-            return editWebPXmp(
-                context = context,
-                path = path,
-                uri = uri,
-                mimeType = mimeType,
-                callback = callback,
-                coreXmp = coreXmp,
-                extendedXmp = extendedXmp,
-                editCoreXmp = editCoreXmp,
-            )
-        }
-
         // prefer provided `sizeBytes` over file attribute, because the file size
         // may be temporary incorrect and not match results from `MediaScannerConnection`
         val originalFileSize = sizeBytes
@@ -1081,63 +1078,6 @@ abstract class ImageProvider {
                 }
             }
         }
-    }
-
-    // PixyMeta does not support WebP, so the `XMP ` chunk is edited directly in the
-    // RIFF container instead. Image data chunks are copied verbatim, so the picture
-    // is never re-encoded and never loses quality.
-    private fun editWebPXmp(
-        context: Context,
-        path: String,
-        uri: Uri,
-        mimeType: String,
-        callback: ImageOpCallback,
-        coreXmp: String? = null,
-        extendedXmp: String? = null,
-        editCoreXmp: ((xmp: String) -> String)? = null,
-    ): Boolean {
-        var editedXmpString = coreXmp
-        if (editCoreXmp != null) {
-            val currentXmp = StorageUtils.openInputStream(context, uri)?.use { input -> WebPXmpHelper.getXmp(input) }
-            if (currentXmp != null) {
-                editedXmpString = editCoreXmp(currentXmp)
-            }
-        }
-        if (extendedXmp != null) {
-            Log.w(LOG_TAG, "extended XMP is not supported by mimeType=$mimeType")
-        }
-
-        val editableFile = StorageUtils.createTempFile(context)
-        try {
-            editableFile.outputStream().use { output ->
-                // reopen input to read from start
-                StorageUtils.openInputStream(context, uri)?.use { input ->
-                    if (!editedXmpString.isNullOrEmpty()) {
-                        WebPXmpHelper.setXmp(input, output, editedXmpString)
-                    } else {
-                        Log.w(LOG_TAG, "setting empty XMP for mimeType=$mimeType")
-                        WebPXmpHelper.setXmp(input, output, null)
-                    }
-                }
-            }
-
-            if (getFileSize(editableFile.path) == 0L) {
-                callback.onFailure(Exception("editing XMP yielded an empty file"))
-                return false
-            }
-
-            // copy the edited temporary file back to the original
-            editableFile.transferTo(outputStream(context, mimeType, uri, path))
-            editableFile.delete()
-        } catch (e: IOException) {
-            callback.onFailure(e)
-            return false
-        } catch (e: Exception) {
-            callback.onFailure(e)
-            return false
-        }
-
-        return true
     }
 
     // A few bytes are sometimes appended when writing to a document output stream.

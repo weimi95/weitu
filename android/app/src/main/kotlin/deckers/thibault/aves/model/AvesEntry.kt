@@ -1,4 +1,4 @@
-package com.weitu.gallery.model
+package deckers.thibault.aves.model
 
 import android.content.ContentResolver
 import android.net.Uri
@@ -16,6 +16,10 @@ class AvesEntry(map: FieldMap) {
     val sizeBytes = toLong(map[EntryFields.SIZE_BYTES])
     val trashed = map[EntryFields.TRASHED] as Boolean
     val trashPath = map[EntryFields.TRASH_PATH] as String?
+
+    val xmpTitle = map[EntryFields.XMP_TITLE] as String?
+    val xmpDescription = map[EntryFields.XMP_DESCRIPTION] as String?
+    val xmpSubjects = map[EntryFields.XMP_SUBJECTS] as String?
 
     val storagePath: String?
         get() = if (trashed) {

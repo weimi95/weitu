@@ -1,19 +1,19 @@
-package com.weitu.gallery.metadata
+package deckers.thibault.aves.metadata
 
 import android.content.Context
 import android.net.Uri
-import com.weitu.gallery.metadata.Metadata.TYPE_COMMENT
-import com.weitu.gallery.metadata.Metadata.TYPE_EXIF
-import com.weitu.gallery.metadata.Metadata.TYPE_ICC_PROFILE
-import com.weitu.gallery.metadata.Metadata.TYPE_IPTC
-import com.weitu.gallery.metadata.Metadata.TYPE_JFIF
-import com.weitu.gallery.metadata.Metadata.TYPE_JPEG_ADOBE
-import com.weitu.gallery.metadata.Metadata.TYPE_JPEG_DUCKY
-import com.weitu.gallery.metadata.Metadata.TYPE_PHOTOSHOP_IRB
-import com.weitu.gallery.metadata.Metadata.TYPE_XMP
-import com.weitu.gallery.model.FieldMap
-import com.weitu.gallery.utils.MimeTypes
-import com.weitu.gallery.utils.StorageUtils
+import deckers.thibault.aves.metadata.Metadata.TYPE_COMMENT
+import deckers.thibault.aves.metadata.Metadata.TYPE_EXIF
+import deckers.thibault.aves.metadata.Metadata.TYPE_ICC_PROFILE
+import deckers.thibault.aves.metadata.Metadata.TYPE_IPTC
+import deckers.thibault.aves.metadata.Metadata.TYPE_JFIF
+import deckers.thibault.aves.metadata.Metadata.TYPE_JPEG_ADOBE
+import deckers.thibault.aves.metadata.Metadata.TYPE_JPEG_DUCKY
+import deckers.thibault.aves.metadata.Metadata.TYPE_PHOTOSHOP_IRB
+import deckers.thibault.aves.metadata.Metadata.TYPE_XMP
+import deckers.thibault.aves.model.FieldMap
+import deckers.thibault.aves.utils.MimeTypes
+import deckers.thibault.aves.utils.StorageUtils
 import pixy.meta.meta.Metadata
 import pixy.meta.meta.MetadataEntry
 import pixy.meta.meta.MetadataType
@@ -117,6 +117,7 @@ object PixyMetaHelper {
         targetMimeType: String,
         targetUri: Uri,
         editableFile: File,
+        fallbackXmp: String? = null,
     ) {
         var pixyIptc: IPTC? = null
         var pixyXmp: XMP? = null
@@ -131,7 +132,7 @@ object PixyMetaHelper {
                 }
             }
         }
-        if (pixyIptc != null || pixyXmp != null) {
+        if (pixyIptc != null || pixyXmp != null || fallbackXmp != null) {
             editableFile.outputStream().use { output ->
                 if (pixyIptc != null) {
                     // reopen input to read from start
@@ -145,16 +146,53 @@ object PixyMetaHelper {
                     StorageUtils.openInputStream(context, targetUri)?.use { input ->
                         val xmpString = pixyXmp.xmpDocString()
                         val extendedXmp = if (pixyXmp.hasExtendedXmp()) pixyXmp.extendedXmpDocString() else null
-                        if (targetMimeType == MimeTypes.WEBP) {
-                            // PixyMeta has no WebP support
-                            WebPXmpHelper.setXmp(input, output, xmpString)
-                        } else {
-                            setXmp(input, output, xmpString, if (targetMimeType == MimeTypes.JPEG) extendedXmp else null)
-                        }
+                        setXmp(input, output, xmpString, if (targetMimeType == MimeTypes.JPEG) extendedXmp else null)
+                    }
+                } else if (fallbackXmp != null && MimeTypes.canEditXmp(targetMimeType)) {
+                    // reopen input to read from start
+                    StorageUtils.openInputStream(context, targetUri)?.use { input ->
+                        setXmp(input, output, fallbackXmp, null)
                     }
                 }
             }
         }
+    }
+
+    // Build a minimal Dublin Core (dc) XMP packet from locally stored metadata
+    // (title / description / subjects), so it can be baked into a converted file
+    // for source formats that cannot store metadata in the file itself (e.g. HEIC).
+    fun buildDublinCoreXmp(title: String?, description: String?, subjects: String?): String? {
+        if (title.isNullOrBlank() && description.isNullOrBlank() && subjects.isNullOrBlank()) return null
+        val subjectList = subjects?.split(';')?.map { it.trim() }?.filter { it.isNotEmpty() } ?: emptyList()
+        val sb = StringBuilder()
+        sb.append("<x:xmpmeta xmlns:x=\"adobe:ns:meta/\" x:xmptk=\"Adobe XMP Core 5.1.0\">")
+        sb.append("<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">")
+        sb.append("<rdf:Description rdf:about=\"\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\"")
+        if (!title.isNullOrBlank()) {
+            sb.append(" dc:title=\"").append(escapeXml(title)).append("\"")
+        }
+        if (!description.isNullOrBlank()) {
+            sb.append(" dc:description=\"").append(escapeXml(description)).append("\"")
+        }
+        if (subjectList.isNotEmpty()) {
+            sb.append(">")
+            sb.append("<dc:subject><rdf:Bag>")
+            subjectList.forEach { sb.append("<rdf:li>").append(escapeXml(it)).append("</rdf:li>") }
+            sb.append("</rdf:Bag></dc:subject>")
+            sb.append("</rdf:Description>")
+        } else {
+            sb.append("/>")
+        }
+        sb.append("</rdf:RDF></x:xmpmeta>")
+        return sb.toString()
+    }
+
+    private fun escapeXml(s: String): String {
+        return s.replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace("\"", "&quot;")
+            .replace("'", "&apos;")
     }
 
     fun removeMetadata(input: InputStream, output: OutputStream, metadataTypes: Set<String>) {
