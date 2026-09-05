@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:aves/convert/convert.dart';
 import 'package:aves/model/device.dart';
 import 'package:aves/model/entry/entry.dart';
-import 'package:aves/model/db/db.dart';
 import 'package:aves/model/entry/extensions/props.dart';
 import 'package:aves/model/metadata/catalog.dart';
 import 'package:aves/model/metadata/date_modifier.dart';

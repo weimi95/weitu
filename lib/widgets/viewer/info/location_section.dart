@@ -225,12 +225,12 @@ class _AddressInfoGroupState extends State<_AddressInfoGroup> {
         final latLng = entry.latLng;
         Map<String, InfoValueSpanBuilder>? spanBuilders;
         if (latLng != null) {
-          void openMap() => appService.openMap(latLng!).then((success) {
+          void openMap() => appService.openMap(latLng).then((success) {
             if (!success) showNoMatchingAppDialog(context);
           });
           spanBuilders = {
             l10n.viewerInfoLabelCoordinates: InfoRowGroup.linkSpanBuilder(
-              linkText: (_) => settings.coordinateFormat.format(context, latLng!),
+              linkText: (_) => settings.coordinateFormat.format(context, latLng),
               onTap: (_) => openMap(),
             ),
             if (address.isNotEmpty)

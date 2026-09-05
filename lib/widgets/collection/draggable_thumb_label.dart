@@ -43,6 +43,15 @@ class CollectionDraggableThumbLabel extends StatelessWidget {
                 return [
                   DraggableThumbLabel.formatDayThumbLabel(context, locale, date),
                 ];
+              case .year:
+                return [
+                  if (date != null) '${date.year}',
+                ];
+              case .hour:
+              case .minute:
+                return [
+                  DraggableThumbLabel.formatDayThumbLabel(context, locale, date),
+                ];
             }
           case .name:
             return [

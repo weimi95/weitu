@@ -1,6 +1,4 @@
 import 'package:aves/locale/aves_locale.dart';
-import 'package:aves/model/filters/favourite.dart';
-import 'package:aves/model/filters/mime.dart';
 import 'package:aves/model/filters/recent.dart';
 import 'package:aves/model/naming_pattern.dart';
 import 'package:aves/ref/mime_types.dart';

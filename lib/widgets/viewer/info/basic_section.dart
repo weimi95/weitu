@@ -211,6 +211,46 @@ class _BasicSectionState extends State<BasicSection> with AutomaticKeepAliveClie
           );
   }
 
+  Widget _buildTitleDescriptionChips(BuildContext context) {
+    final entry = widget.entry;
+    final title = entry.catalogMetadata?.xmpTitle;
+    final description = entry.catalogMetadata?.xmpDescription;
+    final hasTitle = title?.isNotEmpty ?? false;
+    final hasDescription = description?.isNotEmpty ?? false;
+    if (!hasTitle && !hasDescription) return const SizedBox();
+
+    final theme = Theme.of(context);
+    final onContainer = theme.colorScheme.onSecondaryContainer;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AvesFilterChip.outlineWidth / 2) + const EdgeInsets.only(top: 8),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.secondaryContainer,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          crossAxisAlignment: .start,
+          children: [
+            if (hasTitle)
+              Text(
+                title!,
+                style: theme.textTheme.titleMedium?.copyWith(color: onContainer),
+              ),
+            if (hasDescription) ...[
+              if (hasTitle) const SizedBox(height: 4),
+              Text(
+                description!,
+                style: theme.textTheme.bodyMedium?.copyWith(color: onContainer),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildEditMetadataButton(BuildContext context, EntryAction action) {
     final entry = widget.entry;
     return ValueListenableBuilder<EntryAction?>(

@@ -4,7 +4,6 @@ import 'package:aves/model/entry/entry.dart';
 import 'package:aves/model/entry/extensions/keys.dart';
 import 'package:aves/model/entry/extensions/props.dart';
 import 'package:aves/model/app/support.dart';
-import 'package:aves/model/db/db.dart';
 import 'package:aves/model/media/geotiff.dart';
 import 'package:aves/model/media/video/metadata.dart';
 import 'package:aves/model/metadata/catalog.dart';
