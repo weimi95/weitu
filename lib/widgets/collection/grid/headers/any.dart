@@ -99,7 +99,7 @@ class CollectionSectionHeader extends StatelessWidget {
     }
     if (k.day != null) return '$year年${k.month ?? 0}月${k.day}日';
     if (k.month != null) return '$year年${k.month}月';
-    return '${year}年';
+    return '$year年';
   }
 
   Widget _buildAlbumHeader(BuildContext context) {
