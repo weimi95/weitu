@@ -57,7 +57,16 @@ class GregorianCalendarOps extends CalendarOps {
   (int year, int month, int day) getYearMonthDay(DateTime date) => (date.year, date.month, date.day);
 
   @override
+  (int year, int month, int day, int hour) getYearMonthDayHour(DateTime date) => (date.year, date.month, date.day, date.hour);
+
+  @override
+  (int year, int month, int day, int hour, int minute) getYearMonthDayHourMinute(DateTime date) => (date.year, date.month, date.day, date.hour, date.minute);
+
+  @override
   DateTime fromYearMonthDay(int? year, int? month, int? day) => DateTime(year ?? 1, month ?? 1, day ?? 1);
+
+  @override
+  DateTime fromYearMonthDayHourMinute(int? year, int? month, int? day, int? hour, int? minute) => DateTime(year ?? 1, month ?? 1, day ?? 1, hour ?? 0, minute ?? 0);
 
   @override
   int yearDelta(DateTime startDate, DateTime endDate) => endDate.year - startDate.year;

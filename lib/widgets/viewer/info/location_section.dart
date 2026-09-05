@@ -222,11 +222,30 @@ class _AddressInfoGroupState extends State<_AddressInfoGroup> {
         final fullAddress = !snapshot.hasError && snapshot.connectionState == ConnectionState.done ? snapshot.data : null;
         final address = fullAddress ?? entry.shortAddress;
         final l10n = context.l10n;
+        final latLng = entry.latLng;
+        Map<String, InfoValueSpanBuilder>? spanBuilders;
+        if (latLng != null) {
+          void openMap() => appService.openMap(latLng!).then((success) {
+            if (!success) showNoMatchingAppDialog(context);
+          });
+          spanBuilders = {
+            l10n.viewerInfoLabelCoordinates: InfoRowGroup.linkSpanBuilder(
+              linkText: (_) => settings.coordinateFormat.format(context, latLng!),
+              onTap: (_) => openMap(),
+            ),
+            if (address.isNotEmpty)
+              l10n.viewerInfoLabelAddress: InfoRowGroup.linkSpanBuilder(
+                linkText: (_) => address,
+                onTap: (_) => openMap(),
+              ),
+          };
+        }
         return InfoRowGroup(
           info: {
             l10n.viewerInfoLabelCoordinates: settings.coordinateFormat.format(context, entry.latLng!),
             if (address.isNotEmpty) l10n.viewerInfoLabelAddress: address,
           },
+          spanBuilders: spanBuilders,
         );
       },
     );

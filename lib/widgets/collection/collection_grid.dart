@@ -719,6 +719,9 @@ class _CollectionScrollViewState extends State<_CollectionScrollView> with Widge
             addAlbums(collection, sectionLayouts, crumbs);
           case .month:
           case .day:
+          case .year:
+          case .hour:
+          case .minute:
             final firstKey = sectionLayouts.first.sectionKey;
             final lastKey = sectionLayouts.last.sectionKey;
             if (firstKey is EntryDateSectionKey && lastKey is EntryDateSectionKey) {

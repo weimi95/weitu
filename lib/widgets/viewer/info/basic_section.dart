@@ -113,6 +113,7 @@ class _BasicSectionState extends State<BasicSection> with AutomaticKeepAliveClie
               child: _buildChips(context),
             ),
             _buildEditButtons(context),
+            _buildTitleDescriptionChips(context),
           ],
         );
       },
@@ -178,9 +179,10 @@ class _BasicSectionState extends State<BasicSection> with AutomaticKeepAliveClie
     final entry = widget.entry;
     final children =
         [
-              EntryAction.editRating,
-              EntryAction.editTags,
-            ]
+      EntryAction.editRating,
+      EntryAction.editTags,
+      EntryAction.editTitleDescription,
+    ]
             .where(
               (v) => actionDelegate.isVisible(
                 appMode: appMode,

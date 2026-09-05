@@ -166,9 +166,11 @@ class CollectionLens with ChangeNotifier {
             return false;
           case .album:
             return showAlbumHeaders();
+          case .year:
           case .month:
-            return true;
           case .day:
+          case .hour:
+          case .minute:
             return true;
         }
       case .name:
@@ -299,6 +301,12 @@ class CollectionLens with ChangeNotifier {
           switch (sectionFactor) {
             case .album:
               sections = groupBy<AvesEntry, EntryAlbumSectionKey>(_filteredSortedEntries, (entry) => EntryAlbumSectionKey(entry.directory));
+            case .year:
+              sections = groupBy<AvesEntry, EntryDateSectionKey>(_filteredSortedEntries, (entry) {
+                final d = entry.bestDate;
+                if (d == null) return EntryDateSectionKey.unknown;
+                return EntryDateSectionKey(year: d.year);
+              });
             case .month:
               final calOps = calendar.ops;
               sections = groupBy<AvesEntry, EntryDateSectionKey>(_filteredSortedEntries, (entry) {
@@ -314,6 +322,22 @@ class CollectionLens with ChangeNotifier {
                 if (d == null) return EntryDateSectionKey.unknown;
                 final (year, month, day) = calOps.getYearMonthDay(d);
                 return EntryDateSectionKey(year: year, month: month, day: day);
+              });
+            case .hour:
+              final calOps = calendar.ops;
+              sections = groupBy<AvesEntry, EntryDateSectionKey>(_filteredSortedEntries, (entry) {
+                final d = entry.bestDate;
+                if (d == null) return EntryDateSectionKey.unknown;
+                final (year, month, day, hour) = calOps.getYearMonthDayHour(d);
+                return EntryDateSectionKey(year: year, month: month, day: day, hour: hour);
+              });
+            case .minute:
+              final calOps = calendar.ops;
+              sections = groupBy<AvesEntry, EntryDateSectionKey>(_filteredSortedEntries, (entry) {
+                final d = entry.bestDate;
+                if (d == null) return EntryDateSectionKey.unknown;
+                final (year, month, day, hour, minute) = calOps.getYearMonthDayHourMinute(d);
+                return EntryDateSectionKey(year: year, month: month, day: day, hour: hour, minute: minute);
               });
             case .none:
               sections = Map.fromEntries([

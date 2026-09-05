@@ -1,6 +1,6 @@
 {
-  "appName": "微图相册",
-  "welcomeMessage": "Welcome to 微图相册",
+  "appName": "Aves",
+  "welcomeMessage": "Welcome to Aves",
   "welcomeOptional": "Optional",
   "welcomeTermsToggle": "I agree to the terms and conditions",
   "itemCount": "{count, plural, =1{{count} item} other{{count} items}}",
@@ -643,8 +643,11 @@
   "collectionSearchTitlesHintText": "Search titles",
 
   "collectionGroupAlbum": "By album",
+  "collectionGroupYear": "By year",
   "collectionGroupMonth": "By month",
   "collectionGroupDay": "By day",
+  "collectionGroupHour": "By hour",
+  "collectionGroupMinute": "By minute",
 
   "sectionNone": "No sections",
   "sectionUnknown": "Unknown",

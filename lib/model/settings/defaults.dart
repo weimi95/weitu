@@ -49,9 +49,8 @@ class SettingsDefaults {
   ];
   static final bottomNavigationActions = [
     const AvesNavItem(route: CollectionPage.routeName),
-    AvesNavItem(route: CollectionPage.routeName, filters: {MimeFilter.video}),
-    AvesNavItem(route: CollectionPage.routeName, filters: {FavouriteFilter.instance}),
     const AvesNavItem(route: AlbumListPage.routeName),
+    const AvesNavItem(route: TagListPage.routeName),
   ];
 
   // collection

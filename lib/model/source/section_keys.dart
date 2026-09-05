@@ -16,12 +16,12 @@ class EntryAlbumSectionKey extends SectionKey with Equatable {
 }
 
 class EntryDateSectionKey extends SectionKey with Equatable {
-  final int? year, month, day;
+  final int? year, month, day, hour, minute;
 
   @override
-  List<Object?> get props => [year, month, day];
+  List<Object?> get props => [year, month, day, hour, minute];
 
-  const EntryDateSectionKey({this.year, this.month, this.day});
+  const EntryDateSectionKey({this.year, this.month, this.day, this.hour, this.minute});
 
   static const EntryDateSectionKey unknown = EntryDateSectionKey();
 }

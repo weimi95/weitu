@@ -116,8 +116,26 @@ class PersianCalendarOps extends CalendarOps {
   }
 
   @override
+  (int year, int month, int day, int hour) getYearMonthDayHour(DateTime date) {
+    final j = toNative(date)!;
+    return (j.year, j.month, j.day, date.hour);
+  }
+
+  @override
+  (int year, int month, int day, int hour, int minute) getYearMonthDayHourMinute(DateTime date) {
+    final j = toNative(date)!;
+    return (j.year, j.month, j.day, date.hour, date.minute);
+  }
+
+  @override
   DateTime fromYearMonthDay(int? year, int? month, int? day) {
     return Jalali(year ?? 1, month ?? 1, day ?? 1).toDateTime();
+  }
+
+  @override
+  DateTime fromYearMonthDayHourMinute(int? year, int? month, int? day, int? hour, int? minute) {
+    final dt = Jalali(year ?? 1, month ?? 1, day ?? 1).toDateTime();
+    return DateTime(dt.year, dt.month, dt.day, hour ?? 0, minute ?? 0);
   }
 
   @override

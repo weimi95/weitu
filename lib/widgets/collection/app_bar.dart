@@ -92,9 +92,11 @@ class _CollectionAppBarState extends State<CollectionAppBar> with RouteAware, Si
   ];
 
   static const _sectionOptions = [
-    EntrySectionFactor.album,
+    EntrySectionFactor.year,
     EntrySectionFactor.month,
     EntrySectionFactor.day,
+    EntrySectionFactor.hour,
+    EntrySectionFactor.minute,
     EntrySectionFactor.none,
   ];
 

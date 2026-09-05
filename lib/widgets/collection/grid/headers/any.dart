@@ -60,6 +60,16 @@ class CollectionSectionHeader extends StatelessWidget {
               date: date,
               selectable: selectable,
             );
+          case .year:
+          case .hour:
+          case .minute:
+            final k = sectionKey as EntryDateSectionKey;
+            return SectionHeader<AvesEntry>(
+              key: ValueKey(sectionKey),
+              sectionKey: sectionKey,
+              title: _sectionTitle(k),
+              selectable: selectable,
+            );
           case .none:
             break;
         }
@@ -77,6 +87,19 @@ class CollectionSectionHeader extends StatelessWidget {
         break;
     }
     return null;
+  }
+
+  static String _sectionTitle(EntryDateSectionKey k) {
+    if (k.year == null) return '';
+    final year = k.year!;
+    if (k.hour != null) {
+      final hh = k.hour!.toString().padLeft(2, '0');
+      final mm = (k.minute ?? 0).toString().padLeft(2, '0');
+      return '$year年${k.month ?? 0}月${k.day ?? 0}日 $hh:$mm';
+    }
+    if (k.day != null) return '$year年${k.month ?? 0}月${k.day}日';
+    if (k.month != null) return '$year年${k.month}月';
+    return '${year}年';
   }
 
   Widget _buildAlbumHeader(BuildContext context) {

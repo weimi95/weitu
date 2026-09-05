@@ -78,6 +78,9 @@ class AIcons {
   static const date = Symbols.calendar_today;
   static const dateByDay = Symbols.today;
   static const dateByMonth = Symbols.calendar_month;
+  static const dateByYear = Symbols.calendar_view_month;
+  static const dateByHour = Symbols.schedule;
+  static const dateByMinute = Symbols.hourglass_bottom;
   static const dateRecent = Symbols.today;
   static const dateUndated = Symbols.event_busy;
   static const dateWeekday = Symbols.today;

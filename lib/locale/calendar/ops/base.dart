@@ -35,7 +35,13 @@ abstract class CalendarOps {
 
   (int year, int month, int day) getYearMonthDay(DateTime date);
 
+  (int year, int month, int day, int hour) getYearMonthDayHour(DateTime date);
+
+  (int year, int month, int day, int hour, int minute) getYearMonthDayHourMinute(DateTime date);
+
   DateTime fromYearMonthDay(int? year, int? month, int? day);
+
+  DateTime fromYearMonthDayHourMinute(int? year, int? month, int? day, int? hour, int? minute);
 
   int yearDelta(DateTime startDate, DateTime endDate);
 

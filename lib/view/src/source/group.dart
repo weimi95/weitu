@@ -8,8 +8,11 @@ extension ExtraEntryGroupFactorView on EntrySectionFactor {
     final l10n = context.l10n;
     return switch (this) {
       .album => l10n.collectionGroupAlbum,
+      .year => l10n.collectionGroupYear,
       .month => l10n.collectionGroupMonth,
       .day => l10n.collectionGroupDay,
+      .hour => l10n.collectionGroupHour,
+      .minute => l10n.collectionGroupMinute,
       .none => l10n.sectionNone,
     };
   }
@@ -17,8 +20,11 @@ extension ExtraEntryGroupFactorView on EntrySectionFactor {
   IconData get icon {
     return switch (this) {
       .album => AIcons.album,
+      .year => AIcons.dateByYear,
       .month => AIcons.dateByMonth,
       .day => AIcons.dateByDay,
+      .hour => AIcons.dateByHour,
+      .minute => AIcons.dateByMinute,
       .none => AIcons.clear,
     };
   }
