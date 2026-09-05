@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:aves/model/entry/entry.dart';
 import 'package:aves/model/entry/extensions/multipage.dart';
 import 'package:aves/model/entry/extensions/props.dart';
 import 'package:aves/model/media/video/metadata.dart';
 import 'package:aves/ref/mime_types.dart';
+import 'package:aves/ref/metadata/xmp.dart';
 import 'package:aves/services/common/services.dart';
 import 'package:aves/services/metadata/svg_metadata_service.dart';
 import 'package:aves/theme/colors.dart';
@@ -53,6 +55,26 @@ extension ExtraAvesEntryInfo on AvesEntry {
 
     if (isVideo || (mimeType == MimeTypes.heif && isMultiPage) || mimeType == MimeTypes.avif) {
       directories.addAll(await _getStreamDirectories(context));
+    }
+
+    // HEIC/AVIF cannot store embedded XMP (index-DB route, original file untouched),
+    // so synthesize a Dublin Core XMP directory from the catalog metadata
+    // so the user-edited title/description/tags show up in the info page XMP section,
+    // just like they do for converted JPGs.
+    if ((mimeType == MimeTypes.heif || mimeType == MimeTypes.avif) && !rawMetadata.containsKey(MetadataDirectory.xmpDirectory)) {
+      final cm = catalogMetadata;
+      final title = cm?.xmpTitle?.trim();
+      final description = cm?.xmpDescription?.trim();
+      final subjects = cm?.xmpSubjects?.trim();
+      if ((title?.isNotEmpty ?? false) || (description?.isNotEmpty ?? false) || (subjects?.isNotEmpty ?? false)) {
+        final tags = <String, String>{
+          'schemaRegistryPrefixes': jsonEncode({'dc:': XmpNamespaces.dc}),
+          if (title?.isNotEmpty ?? false) 'dc:title': title!,
+          if (description?.isNotEmpty ?? false) 'dc:description': description!,
+          if (subjects?.isNotEmpty ?? false) 'dc:subject': subjects!,
+        };
+        directories.add(MetadataDirectory(MetadataDirectory.xmpDirectory, SplayTreeMap.from(tags)));
+      }
     }
 
     final titledDirectories = directories.map((dir) {
