@@ -161,29 +161,30 @@ object PixyMetaHelper {
     // Build a minimal Dublin Core (dc) XMP packet from locally stored metadata
     // (title / description / subjects), so it can be baked into a converted file
     // for source formats that cannot store metadata in the file itself (e.g. HEIC).
+    // dc:title/dc:description are language alternatives (rdf:Alt) and dc:subject is
+    // an unordered bag (rdf:Bag), which is what metadata-extractor / Aves expect.
     fun buildDublinCoreXmp(title: String?, description: String?, subjects: String?): String? {
         if (title.isNullOrBlank() && description.isNullOrBlank() && subjects.isNullOrBlank()) return null
         val subjectList = subjects?.split(';')?.map { it.trim() }?.filter { it.isNotEmpty() } ?: emptyList()
         val sb = StringBuilder()
+        sb.append("<?xpacket begin=\"\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>")
         sb.append("<x:xmpmeta xmlns:x=\"adobe:ns:meta/\" x:xmptk=\"Adobe XMP Core 5.1.0\">")
         sb.append("<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">")
-        sb.append("<rdf:Description rdf:about=\"\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\"")
+        sb.append("<rdf:Description rdf:about=\"\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">")
         if (!title.isNullOrBlank()) {
-            sb.append(" dc:title=\"").append(escapeXml(title)).append("\"")
+            sb.append("<dc:title><rdf:Alt><rdf:li xml:lang=\"x-default\">").append(escapeXml(title)).append("</rdf:li></rdf:Alt></dc:title>")
         }
         if (!description.isNullOrBlank()) {
-            sb.append(" dc:description=\"").append(escapeXml(description)).append("\"")
+            sb.append("<dc:description><rdf:Alt><rdf:li xml:lang=\"x-default\">").append(escapeXml(description)).append("</rdf:li></rdf:Alt></dc:description>")
         }
         if (subjectList.isNotEmpty()) {
-            sb.append(">")
             sb.append("<dc:subject><rdf:Bag>")
             subjectList.forEach { sb.append("<rdf:li>").append(escapeXml(it)).append("</rdf:li>") }
             sb.append("</rdf:Bag></dc:subject>")
-            sb.append("</rdf:Description>")
-        } else {
-            sb.append("/>")
         }
+        sb.append("</rdf:Description>")
         sb.append("</rdf:RDF></x:xmpmeta>")
+        sb.append("<?xpacket end=\"w\"?>")
         return sb.toString()
     }
 
