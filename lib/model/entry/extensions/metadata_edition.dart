@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:aves/convert/convert.dart';
 import 'package:aves/model/device.dart';
 import 'package:aves/model/entry/entry.dart';
+import 'package:aves/model/db/db.dart';
 import 'package:aves/model/entry/extensions/props.dart';
+import 'package:aves/model/metadata/catalog.dart';
 import 'package:aves/model/metadata/date_modifier.dart';
 import 'package:aves/ref/metadata/exif.dart';
 import 'package:aves/ref/metadata/iptc.dart';
@@ -267,6 +269,17 @@ extension ExtraAvesEntryMetadataEdition on AvesEntry {
   // - IPTC / keywords, if IPTC exists
   // - XMP / dc:subject
   Future<Set<EntryDataType>> editTags(Set<String> tags) async {
+    // Formats that cannot be written to file (e.g. HEIC): store subjects
+    // in the private index DB instead of writing to the file.
+    if (!isXmpEditionSupported) {
+      final subjects = tags.join(';');
+      final updated = catalogMetadata?.copyWith(xmpSubjects: subjects) ??
+          CatalogMetadata(id: id, xmpSubjects: subjects);
+      await localMediaDb.updateCatalogMetadata(id, updated);
+      catalogMetadata = updated;
+      return {EntryDataType.catalog};
+    }
+
     final dataTypes = <EntryDataType>{};
     final metadata = <MetadataType, dynamic>{};
 

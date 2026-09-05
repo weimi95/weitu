@@ -53,6 +53,8 @@ class LocalMediaDbUpgrader {
           await _upgradeFrom13(db);
         case 14:
           await _upgradeFrom14(db);
+        case 15:
+          await _upgradeFrom15(db);
       }
       oldVersion++;
     }
@@ -565,5 +567,12 @@ class LocalMediaDbUpgrader {
     // transitional upgrade previously used to sanitize rebuildable tables
     // (dateTakenTable, metadataTable, addressTable, trashTable, videoPlaybackTable)
     // for users with a potentially corrupted DB following upgrade to v1.12.4
+  }
+
+  static Future<void> _upgradeFrom15(Database db) async {
+    debugPrint('upgrading DB from v15');
+
+    // add local description override column for formats that cannot be written to file (e.g. HEIC)
+    await db.execute('ALTER TABLE $metadataTable ADD COLUMN xmpDescription TEXT');
   }
 }

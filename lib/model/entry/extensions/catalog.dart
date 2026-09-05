@@ -5,6 +5,8 @@ import 'package:aves/model/entry/extensions/keys.dart';
 import 'package:aves/model/entry/extensions/props.dart';
 import 'package:aves/model/media/geotiff.dart';
 import 'package:aves/model/media/video/metadata.dart';
+import 'package:aves/model/app/support.dart';
+import 'package:aves/model/db/db.dart';
 import 'package:aves/model/metadata/catalog.dart';
 import 'package:aves/ref/mime_types.dart';
 import 'package:aves/services/common/services.dart';
@@ -45,6 +47,20 @@ extension ExtraAvesEntryCatalog on AvesEntry {
 
       // cataloguing on platform
       catalogMetadata = await metadataFetchService.getCatalogMetadata(this, background: background);
+
+      // For formats that cannot be written to file (e.g. HEIC), keep locally stored
+      // description/subjects/title from the private index DB, so rescanning does not
+      // wipe them with the empty values read from the file.
+      if (catalogMetadata != null && !AppSupport.canEditXmp(mimeType)) {
+        final stored = (await localMediaDb.loadCatalogMetadataById({id})).firstOrNull;
+        if (stored != null) {
+          catalogMetadata = catalogMetadata!.copyWith(
+            xmpDescription: (stored.xmpDescription?.isNotEmpty ?? false) ? stored.xmpDescription : catalogMetadata!.xmpDescription,
+            xmpSubjects: (stored.xmpSubjects?.isNotEmpty ?? false) ? stored.xmpSubjects : catalogMetadata!.xmpSubjects,
+            xmpTitle: (stored.xmpTitle?.isNotEmpty ?? false) ? stored.xmpTitle : catalogMetadata!.xmpTitle,
+          );
+        }
+      }
 
       // post-processing
       if ((isVideo && (catalogMetadata?.dateMillis ?? 0) == 0) || (mimeType == MimeTypes.avif && durationMillis != null)) {

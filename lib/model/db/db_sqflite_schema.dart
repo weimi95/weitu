@@ -69,6 +69,7 @@ class SqfliteLocalMediaDbSchema {
           ', rotationDegrees INTEGER'
           ', xmpSubjects TEXT'
           ', xmpTitle TEXT'
+          ', xmpDescription TEXT'
           ', latitude REAL'
           ', longitude REAL'
           ', rating INTEGER'
