@@ -81,6 +81,9 @@ class AppSupport {
       // using `mp4parser`
       case MimeTypes.mp4:
         return true;
+      // using `WebPXmpHelper` (RIFF `XMP ` chunk, PixyMeta has no WebP support)
+      case MimeTypes.webp:
+        return true;
       default:
         return false;
     }

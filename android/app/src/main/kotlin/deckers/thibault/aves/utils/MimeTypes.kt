@@ -135,6 +135,8 @@ object MimeTypes {
         JPEG, TIFF, PNG, GIF -> true
         // using `mp4parser`
         MP4 -> true
+        // using `WebPXmpHelper` (RIFF `XMP ` chunk, PixyMeta has no WebP support)
+        WEBP -> true
         else -> false
     }
 

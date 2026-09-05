@@ -31,6 +31,7 @@ import com.weitu.gallery.metadata.MultiPage
 import com.weitu.gallery.metadata.PixyMetaHelper
 import com.weitu.gallery.metadata.PixyMetaHelper.extendedXmpDocString
 import com.weitu.gallery.metadata.PixyMetaHelper.xmpDocString
+import com.weitu.gallery.metadata.WebPXmpHelper
 import com.weitu.gallery.metadata.metadataextractor.Helper
 import com.weitu.gallery.metadata.xmp.GoogleXMP
 import com.weitu.gallery.model.AvesEntry
@@ -975,6 +976,19 @@ abstract class ImageProvider {
             )
         }
 
+        if (mimeType == MimeTypes.WEBP) {
+            return editWebPXmp(
+                context = context,
+                path = path,
+                uri = uri,
+                mimeType = mimeType,
+                callback = callback,
+                coreXmp = coreXmp,
+                extendedXmp = extendedXmp,
+                editCoreXmp = editCoreXmp,
+            )
+        }
+
         // prefer provided `sizeBytes` over file attribute, because the file size
         // may be temporary incorrect and not match results from `MediaScannerConnection`
         val originalFileSize = sizeBytes
@@ -1067,6 +1081,63 @@ abstract class ImageProvider {
                 }
             }
         }
+    }
+
+    // PixyMeta does not support WebP, so the `XMP ` chunk is edited directly in the
+    // RIFF container instead. Image data chunks are copied verbatim, so the picture
+    // is never re-encoded and never loses quality.
+    private fun editWebPXmp(
+        context: Context,
+        path: String,
+        uri: Uri,
+        mimeType: String,
+        callback: ImageOpCallback,
+        coreXmp: String? = null,
+        extendedXmp: String? = null,
+        editCoreXmp: ((xmp: String) -> String)? = null,
+    ): Boolean {
+        var editedXmpString = coreXmp
+        if (editCoreXmp != null) {
+            val currentXmp = StorageUtils.openInputStream(context, uri)?.use { input -> WebPXmpHelper.getXmp(input) }
+            if (currentXmp != null) {
+                editedXmpString = editCoreXmp(currentXmp)
+            }
+        }
+        if (extendedXmp != null) {
+            Log.w(LOG_TAG, "extended XMP is not supported by mimeType=$mimeType")
+        }
+
+        val editableFile = StorageUtils.createTempFile(context)
+        try {
+            editableFile.outputStream().use { output ->
+                // reopen input to read from start
+                StorageUtils.openInputStream(context, uri)?.use { input ->
+                    if (!editedXmpString.isNullOrEmpty()) {
+                        WebPXmpHelper.setXmp(input, output, editedXmpString)
+                    } else {
+                        Log.w(LOG_TAG, "setting empty XMP for mimeType=$mimeType")
+                        WebPXmpHelper.setXmp(input, output, null)
+                    }
+                }
+            }
+
+            if (getFileSize(editableFile.path) == 0L) {
+                callback.onFailure(Exception("editing XMP yielded an empty file"))
+                return false
+            }
+
+            // copy the edited temporary file back to the original
+            editableFile.transferTo(outputStream(context, mimeType, uri, path))
+            editableFile.delete()
+        } catch (e: IOException) {
+            callback.onFailure(e)
+            return false
+        } catch (e: Exception) {
+            callback.onFailure(e)
+            return false
+        }
+
+        return true
     }
 
     // A few bytes are sometimes appended when writing to a document output stream.

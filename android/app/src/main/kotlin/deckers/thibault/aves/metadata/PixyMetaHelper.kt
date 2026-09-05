@@ -145,7 +145,12 @@ object PixyMetaHelper {
                     StorageUtils.openInputStream(context, targetUri)?.use { input ->
                         val xmpString = pixyXmp.xmpDocString()
                         val extendedXmp = if (pixyXmp.hasExtendedXmp()) pixyXmp.extendedXmpDocString() else null
-                        setXmp(input, output, xmpString, if (targetMimeType == MimeTypes.JPEG) extendedXmp else null)
+                        if (targetMimeType == MimeTypes.WEBP) {
+                            // PixyMeta has no WebP support
+                            WebPXmpHelper.setXmp(input, output, xmpString)
+                        } else {
+                            setXmp(input, output, xmpString, if (targetMimeType == MimeTypes.JPEG) extendedXmp else null)
+                        }
                     }
                 }
             }
