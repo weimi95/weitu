@@ -144,11 +144,14 @@ extension ExtraAvesEntryProps on AvesEntry {
 
   bool get canEditLocation => canEdit && (isExifEditionSupported || mimeType == MimeTypes.mp4);
 
-  bool get canEditTitleDescription => canEdit && isXmpEditionSupported;
+  // HEIC/WebP 等原生不可写 XMP 的格式，标题/评分/标签改走 App 私有索引库。
+  bool get _isCatalogMetadataEditionSupported => canEdit && !isPureVideo && !isXmpEditionSupported;
 
-  bool get canEditRating => canEdit && isXmpEditionSupported;
+  bool get canEditTitleDescription => canEdit && (isXmpEditionSupported || _isCatalogMetadataEditionSupported);
 
-  bool get canEditTags => canEdit && isXmpEditionSupported;
+  bool get canEditRating => canEdit && (isXmpEditionSupported || _isCatalogMetadataEditionSupported);
+
+  bool get canEditTags => canEdit && (isXmpEditionSupported || _isCatalogMetadataEditionSupported);
 
   bool get canRotate => canEdit && (isExifEditionSupported || mimeType == MimeTypes.mp4);
 

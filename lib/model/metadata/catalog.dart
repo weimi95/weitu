@@ -71,6 +71,7 @@ class CatalogMetadata {
     String? xmpDescription,
     double? latitude,
     double? longitude,
+    int? rating,
   }) {
     return CatalogMetadata(
       id: id ?? this.id,
@@ -90,7 +91,7 @@ class CatalogMetadata {
       xmpDescription: xmpDescription ?? this.xmpDescription,
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
-      rating: rating,
+      rating: rating ?? this.rating,
     );
   }
 

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:aves/convert/convert.dart';
 import 'package:aves/model/device.dart';
 import 'package:aves/model/entry/entry.dart';
+import 'package:aves/model/db/db.dart';
 import 'package:aves/model/entry/extensions/props.dart';
 import 'package:aves/model/metadata/catalog.dart';
 import 'package:aves/model/metadata/date_modifier.dart';
@@ -253,6 +254,23 @@ extension ExtraAvesEntryMetadataEdition on AvesEntry {
       });
     }
 
+    // Formats that cannot be written to file (e.g. HEIC): store title/description
+    // in the private index DB instead of writing to the file.
+    if (!isXmpEditionSupported && (editTitle || editDescription)) {
+      final updated = catalogMetadata?.copyWith(
+            xmpTitle: editTitle ? (title ?? '') : null,
+            xmpDescription: editDescription ? (description ?? '') : null,
+          ) ??
+          CatalogMetadata(
+            id: id,
+            xmpTitle: editTitle ? (title ?? '') : null,
+            xmpDescription: editDescription ? (description ?? '') : null,
+          );
+      await localMediaDb.updateCatalogMetadata(id, updated);
+      catalogMetadata = updated;
+      return {EntryDataType.catalog};
+    }
+
     final newFields = await metadataEditService.editMetadata(this, metadata);
     if (newFields.isNotEmpty) {
       dataTypes.addAll({
@@ -318,6 +336,16 @@ extension ExtraAvesEntryMetadataEdition on AvesEntry {
       metadata[MetadataType.xmp] = await _editXmp((descriptions) {
         return editRatingXmp(descriptions, rating);
       });
+    }
+
+    // Formats that cannot be written to file (e.g. HEIC): store rating
+    // in the private index DB instead of writing to the file.
+    if (!isXmpEditionSupported) {
+      final updated = catalogMetadata?.copyWith(rating: rating ?? 0) ??
+          CatalogMetadata(id: id, rating: rating ?? 0);
+      await localMediaDb.updateCatalogMetadata(id, updated);
+      catalogMetadata = updated;
+      return {EntryDataType.catalog};
     }
 
     final newFields = await metadataEditService.editMetadata(this, metadata);
