@@ -113,7 +113,11 @@ class TileExtentController {
   // level 2 allows a single column (1-column card)
   int get columnCountMinForLevel => infoLevel >= 2 ? 1 : 2;
 
-  double _extentMax() => min(extentMax, (viewportSize.shortestSide - (horizontalPadding * 2) - spacing * (columnCountMinForLevel - 1)) / columnCountMinForLevel);
+  double _extentMax() {
+    final levelMax = (viewportSize.shortestSide - (horizontalPadding * 2) - spacing * (columnCountMinForLevel - 1)) / columnCountMinForLevel;
+    // level 2 needs a 1-column extent, which can exceed the normal grid extentMax
+    return infoLevel >= 2 ? levelMax : min(extentMax, levelMax);
+  }
 
   double _columnCountForExtent(double extent) => (viewportSize.width - (horizontalPadding * 2) + spacing) / (extent + spacing);
 

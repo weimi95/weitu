@@ -130,7 +130,7 @@ class Tile extends StatelessWidget {
   // level 2: 1-column card with title + description + tags + format + date-time + file size
   Widget _buildCard(BuildContext context) {
     final isLarge = infoLevel == 2;
-    final infoHeight = isLarge ? thumbnailExtent * 0.4 : thumbnailExtent * 0.3;
+    final infoHeight = isLarge ? thumbnailExtent * 0.45 : thumbnailExtent * 0.3;
     final imageHeight = thumbnailExtent - infoHeight;
     final description = entry.catalogMetadata?.xmpDescription?.isNotEmpty == true ? entry.catalogMetadata!.xmpDescription : null;
     return Column(

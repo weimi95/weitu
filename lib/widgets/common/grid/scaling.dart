@@ -222,7 +222,7 @@ class _GridScaleGestureDetectorState<T> extends State<GridScaleGestureDetector<T
     if (tileLayout == TileLayout.grid || tileLayout == TileLayout.mosaic) {
       final gestureScale = _lastScale ?? 1.0;
       final oldLevel = tileExtentController.infoLevel;
-      if (oldLevel < 2 && gestureScale > 1.05 && oldExtent >= _extentMax! * 0.99) {
+      if (oldLevel < 2 && gestureScale > 1.05 && preferredExtent >= _extentMax! * 0.99) {
         tileExtentController.setInfoLevel(oldLevel + 1);
         consumed = true;
       } else if (oldLevel > 0 && gestureScale < 0.95) {
