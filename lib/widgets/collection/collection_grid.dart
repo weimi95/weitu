@@ -93,6 +93,7 @@ class _CollectionGridState extends State<CollectionGrid> {
     if (_tileExtentController?.spacing != spacing) {
       _tileExtentController = TileExtentController(
         settingsRouteKey: settingsRouteKey,
+        columnCountMin: 1,
         columnCountDefault: CollectionGrid.columnCountDefault,
         extentMin: CollectionGrid.extentMin,
         extentMax: CollectionGrid.extentMax,
@@ -144,10 +145,10 @@ class _CollectionGridContentState extends State<_CollectionGridContent> {
           valueListenable: context.select<TileExtentController, ValueNotifier<double>>((controller) => controller.extentNotifier),
           builder: (context, thumbnailExtent, child) {
             assert(thumbnailExtent > 0);
-            return Selector<TileExtentController, (double, int, double, double)>(
-              selector: (context, c) => (c.viewportSize.width, c.columnCount, c.spacing, c.horizontalPadding),
+            return Selector<TileExtentController, (double, int, double, double, int)>(
+              selector: (context, c) => (c.viewportSize.width, c.columnCount, c.spacing, c.horizontalPadding, c.infoLevel),
               builder: (context, c, child) {
-                final (scrollableWidth, columnCount, tileSpacing, horizontalPadding) = c;
+                final (scrollableWidth, columnCount, tileSpacing, horizontalPadding, infoLevel) = c;
                 final source = collection.source;
                 return GridTheme(
                   extent: thumbnailExtent,
@@ -192,6 +193,7 @@ class _CollectionGridContentState extends State<_CollectionGridContent> {
                                       entry: entry,
                                       thumbnailExtent: extent,
                                       tileLayout: tileLayout,
+                                      infoLevel: infoLevel,
                                       isScrollingNotifier: _isScrollingNotifier,
                                     );
                                     if (!settings.useTvLayout) return tile;

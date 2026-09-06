@@ -1,5 +1,7 @@
 import 'package:aves/app_mode.dart';
 import 'package:aves/model/entry/entry.dart';
+import 'package:aves/model/settings/settings.dart';
+import 'package:aves/theme/format.dart';
 import 'package:aves/model/selection.dart';
 import 'package:aves/model/source/collection_lens.dart';
 import 'package:aves/services/intent_service.dart';
@@ -11,6 +13,7 @@ import 'package:aves/widgets/common/thumbnail/decorated.dart';
 import 'package:aves/widgets/common/thumbnail/notifications.dart';
 import 'package:aves/widgets/viewer/hero.dart';
 import 'package:aves_model/aves_model.dart';
+import 'package:aves_utils/aves_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +22,7 @@ class InteractiveTile extends StatelessWidget {
   final AvesEntry entry;
   final double thumbnailExtent;
   final TileLayout tileLayout;
+  final int infoLevel;
   final ValueNotifier<bool>? isScrollingNotifier;
 
   const InteractiveTile({
@@ -27,6 +31,7 @@ class InteractiveTile extends StatelessWidget {
     required this.entry,
     required this.thumbnailExtent,
     required this.tileLayout,
+    this.infoLevel = 0,
     this.isScrollingNotifier,
   });
 
@@ -61,6 +66,7 @@ class InteractiveTile extends StatelessWidget {
           entry: entry,
           thumbnailExtent: thumbnailExtent,
           tileLayout: tileLayout,
+          infoLevel: infoLevel,
           selectable: true,
           highlightable: true,
           isScrollingNotifier: isScrollingNotifier,
@@ -75,6 +81,7 @@ class Tile extends StatelessWidget {
   final AvesEntry entry;
   final double thumbnailExtent;
   final TileLayout tileLayout;
+  final int infoLevel;
   final bool selectable, highlightable;
   final ValueNotifier<bool>? isScrollingNotifier;
   final Object? Function()? heroTagger;
@@ -84,6 +91,7 @@ class Tile extends StatelessWidget {
     required this.entry,
     required this.thumbnailExtent,
     required this.tileLayout,
+    this.infoLevel = 0,
     this.selectable = false,
     this.highlightable = false,
     this.isScrollingNotifier,
@@ -92,6 +100,8 @@ class Tile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (infoLevel >= 1) return _buildCard(context);
+
     switch (tileLayout) {
       case .mosaic:
       case .grid:
@@ -112,6 +122,128 @@ class Tile extends StatelessWidget {
           ],
         );
     }
+  }
+
+  // info card layout: image on top (scaled to leave room for text), details below
+  // level 1: 2-column card with title (large) + description (small)
+  // level 2: 1-column card with title + description + tags + format + date-time + file size
+  Widget _buildCard(BuildContext context) {
+    final isLarge = infoLevel == 2;
+    final infoHeight = isLarge ? thumbnailExtent * 0.4 : thumbnailExtent * 0.3;
+    final imageHeight = thumbnailExtent - infoHeight;
+    final description = entry.catalogMetadata?.xmpDescription?.isNotEmpty == true ? entry.catalogMetadata!.xmpDescription : null;
+    return Column(
+      crossAxisAlignment: .stretch,
+      children: [
+        SizedBox(
+          width: thumbnailExtent,
+          height: imageHeight,
+          child: DecoratedThumbnail(
+            entry: entry,
+            tileExtent: imageHeight,
+            fitWidth: thumbnailExtent,
+            isMosaic: false,
+            fit: BoxFit.contain,
+            selectable: selectable,
+            highlightable: highlightable,
+            heroTagger: heroTagger,
+            heroPlaceholderBuilder: (context, heroSize, child) => child,
+            cancellableNotifier: isScrollingNotifier,
+          ),
+        ),
+        Container(
+          height: infoHeight,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: _buildCardInfo(context, isLarge, description),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCardInfo(BuildContext context, bool isLarge, String? description) {
+    final baseStyle = DefaultTextStyle.of(context).style;
+    final titleStyle = baseStyle.copyWith(
+      fontSize: isLarge ? 15 : 13,
+      fontWeight: FontWeight.w600,
+    );
+    final descStyle = baseStyle.copyWith(
+      fontSize: isLarge ? 13 : 11,
+      color: Theme.of(context).hintColor,
+    );
+
+    return Column(
+      crossAxisAlignment: .start,
+      mainAxisSize: .min,
+      children: [
+        Text(
+          entry.bestTitle ?? '',
+          style: titleStyle,
+          maxLines: isLarge ? 2 : 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        if (description != null) ...[
+          const SizedBox(height: 2),
+          Text(
+            description,
+            style: descStyle,
+            maxLines: isLarge ? 3 : 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+        if (isLarge) ..._buildLargeMeta(context),
+      ],
+    );
+  }
+
+  List<Widget> _buildLargeMeta(BuildContext context) {
+    final theme = Theme.of(context);
+    final captionStyle = theme.textTheme.bodySmall!.copyWith(color: theme.hintColor);
+    final widgets = <Widget>[];
+
+    final tags = entry.tags;
+    if (tags.isNotEmpty) {
+      widgets.add(
+        Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Wrap(
+            spacing: 4,
+            runSpacing: 2,
+            children: [
+              for (final tag in tags.take(10))
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                  decoration: BoxDecoration(
+                    color: theme.dividerColor.withValues(alpha: .18),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(tag, style: captionStyle),
+                ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final metaRows = <String>[];
+    if (entry.mimeType != null) metaRows.add(entry.mimeType!);
+    final date = entry.bestDate;
+    if (date != null) metaRows.add(formatDateTime(date, settings.avesLocale, MediaQuery.alwaysUse24HourFormatOf(context)));
+    final size = entry.sizeBytes;
+    if (size != null) metaRows.add(formatFileSize(settings.avesLocale, size));
+    if (metaRows.isNotEmpty) {
+      widgets.add(
+        Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Text(
+            metaRows.join('  •  '),
+            style: captionStyle,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      );
+    }
+    return widgets;
   }
 
   Widget _buildThumbnail() => DecoratedThumbnail(

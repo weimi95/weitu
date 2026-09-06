@@ -22,6 +22,8 @@ class ThumbnailImage extends StatefulWidget {
   final double extent, devicePixelRatio;
   final bool isMosaic, progressive;
   final BoxFit? fit;
+  // when provided, overrides the thumbnail width (used for card layout where the image area is wider than tall)
+  final double? fitWidth;
   final bool showLoadingBackground;
   final ValueNotifier<bool>? cancellableNotifier;
   final Object? heroTag;
@@ -35,6 +37,7 @@ class ThumbnailImage extends StatefulWidget {
     this.progressive = true,
     this.isMosaic = false,
     this.fit,
+    this.fitWidth,
     this.showLoadingBackground = true,
     this.cancellableNotifier,
     this.heroTag,
@@ -203,7 +206,9 @@ class _ThumbnailImageState extends State<ThumbnailImage> {
 
     final thumbnailHeight = extent;
     final double thumbnailWidth;
-    if (isMosaic) {
+    if (widget.fitWidth != null) {
+      thumbnailWidth = widget.fitWidth!;
+    } else if (isMosaic) {
       thumbnailWidth =
           thumbnailHeight *
           entry.displayAspectRatio.clamp(

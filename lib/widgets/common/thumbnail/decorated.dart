@@ -15,6 +15,9 @@ class DecoratedThumbnail extends StatelessWidget {
   final Object? Function()? heroTagger;
   final HeroPlaceholderBuilder? heroPlaceholderBuilder;
   final TransitionBuilder? imageDecorator;
+  // when provided, the thumbnail image area uses this width (card layout)
+  final double? fitWidth;
+  final BoxFit? fit;
 
   static Color borderColor(BuildContext context) => Theme.of(context).dividerColor;
 
@@ -31,13 +34,17 @@ class DecoratedThumbnail extends StatelessWidget {
     this.heroTagger,
     this.heroPlaceholderBuilder,
     this.imageDecorator,
+    this.fitWidth,
+    this.fit,
   });
 
   @override
   Widget build(BuildContext context) {
     final double thumbnailHeight = tileExtent;
     final double thumbnailWidth;
-    if (isMosaic) {
+    if (fitWidth != null) {
+      thumbnailWidth = fitWidth!;
+    } else if (isMosaic) {
       thumbnailWidth =
           thumbnailHeight *
           entry.displayAspectRatio.clamp(
@@ -53,6 +60,8 @@ class DecoratedThumbnail extends StatelessWidget {
       extent: tileExtent,
       devicePixelRatio: MediaQuery.devicePixelRatioOf(context),
       isMosaic: isMosaic,
+      fitWidth: fitWidth,
+      fit: fit,
       cancellableNotifier: cancellableNotifier,
       heroTag: heroTagger?.call(),
       heroPlaceholderBuilder: heroPlaceholderBuilder,

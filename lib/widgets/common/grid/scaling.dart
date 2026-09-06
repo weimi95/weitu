@@ -53,6 +53,7 @@ class _GridScaleGestureDetectorState<T> extends State<GridScaleGestureDetector<T
   ValueNotifier<Size>? _scaledSizeNotifier;
   OverlayEntry? _overlayEntry;
   ScalerMetadata<T>? _metadata;
+  double? _lastScale;
 
   TileLayout get tileLayout => widget.tileLayout;
 
@@ -105,6 +106,7 @@ class _GridScaleGestureDetectorState<T> extends State<GridScaleGestureDetector<T
     // until we scaled and scrolled to the tile in the new grid
     if (_applyingScale) return;
 
+    _lastScale = null;
     final tileExtentController = context.read<TileExtentController>();
 
     final scrollableContext = widget.scrollableKey.currentContext!;
@@ -177,6 +179,7 @@ class _GridScaleGestureDetectorState<T> extends State<GridScaleGestureDetector<T
   void _onScaleUpdate(ScaleUpdateDetails details) {
     if (_scaledSizeNotifier == null) return;
 
+    _lastScale = details.scale;
     final s = details.scale;
     switch (tileLayout) {
       case .mosaic:
@@ -213,7 +216,28 @@ class _GridScaleGestureDetectorState<T> extends State<GridScaleGestureDetector<T
       case .list:
         preferredExtent = scaledSize.height;
     }
-    final newExtent = tileExtentController.setUserPreferredExtent(preferredExtent);
+
+    // switch info card level when pinching past the column-count boundary
+    bool consumed = false;
+    if (tileLayout == TileLayout.grid || tileLayout == TileLayout.mosaic) {
+      final gestureScale = _lastScale ?? 1.0;
+      final oldLevel = tileExtentController.infoLevel;
+      if (oldLevel < 2 && gestureScale > 1.05 && oldExtent >= _extentMax! * 0.99) {
+        tileExtentController.setInfoLevel(oldLevel + 1);
+        consumed = true;
+      } else if (oldLevel > 0 && gestureScale < 0.95) {
+        tileExtentController.setInfoLevel(oldLevel - 1);
+        consumed = true;
+      }
+    }
+
+    late final double newExtent;
+    if (consumed) {
+      newExtent = tileExtentController.extentNotifier.value;
+    } else {
+      newExtent = tileExtentController.setUserPreferredExtent(preferredExtent);
+    }
+
     if (newExtent == oldExtent) {
       _applyingScale = false;
     } else {
