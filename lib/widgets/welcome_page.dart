@@ -32,6 +32,15 @@ class _WelcomePageState extends State<WelcomePage> {
   static const termsPath = 'assets/terms.md';
   static const termsDirection = TextDirection.ltr;
 
+  static const _highlights = '''
+## 微图相册 亮点
+
+- 纯本地管理，照片和视频不上传云端
+- 界面简洁、浏览流畅、省电省空间
+- 支持 HEIC、RAW、动图、全景等多种格式
+- 编辑与转换不改动原图，安全可逆
+''';
+
   @override
   void initState() {
     super.initState();
@@ -93,7 +102,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           if (isPortrait) ...[
                             Flexible(
                               child: MarkdownContainer(
-                                data: terms,
+                                data: _highlights,
                                 textDirection: termsDirection,
                               ),
                             ),
@@ -108,7 +117,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                     child: Padding(
                                       padding: const EdgeInsets.only(bottom: 8),
                                       child: MarkdownContainer(
-                                        data: terms,
+                                        data: _highlights,
                                         textDirection: termsDirection,
                                       ),
                                     ),
