@@ -435,6 +435,7 @@ class _FilterGridContentState<T extends CollectionFilter> extends State<_FilterG
                 bannerBuilder: _getFilterBanner,
                 scrollController: widget.scrollController,
                 tileLayout: tileLayout,
+                footerSlivers: widget.footerSlivers,
               ),
             );
             return sectionedListLayoutProvider;
@@ -477,6 +478,7 @@ class _FilterSectionedContent<T extends CollectionFilter> extends StatefulWidget
   final String? Function(BuildContext context, T filter) bannerBuilder;
   final ScrollController scrollController;
   final TileLayout tileLayout;
+  final List<Widget>? footerSlivers;
 
   const _FilterSectionedContent({
     required this.appBar,
@@ -488,6 +490,7 @@ class _FilterSectionedContent<T extends CollectionFilter> extends StatefulWidget
     required this.bannerBuilder,
     required this.scrollController,
     required this.tileLayout,
+    this.footerSlivers,
   });
 
   @override
@@ -565,6 +568,7 @@ class _FilterSectionedContentState<T extends CollectionFilter> extends State<_Fi
       sortFactor: widget.sortFactor,
       emptyBuilder: emptyBuilder,
       scrollController: scrollController,
+      footerSlivers: widget.footerSlivers,
     );
 
     final scaler = _FilterScaler<T>(
@@ -683,6 +687,7 @@ class _FilterScrollView<T extends CollectionFilter> extends StatelessWidget {
   final ChipSortFactor sortFactor;
   final Widget Function() emptyBuilder;
   final ScrollController scrollController;
+  final List<Widget>? footerSlivers;
 
   const _FilterScrollView({
     required this.scrollableKey,
@@ -691,6 +696,7 @@ class _FilterScrollView<T extends CollectionFilter> extends StatelessWidget {
     required this.sortFactor,
     required this.emptyBuilder,
     required this.scrollController,
+    this.footerSlivers,
   });
 
   @override

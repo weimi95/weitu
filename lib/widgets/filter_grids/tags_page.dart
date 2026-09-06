@@ -2,12 +2,14 @@ import 'package:aves/locale/calendar/calendar_utils.dart';
 import 'package:aves/model/dynamic_albums.dart';
 import 'package:aves/model/filters/aspect_ratio.dart';
 import 'package:aves/model/filters/container/dynamic_album.dart';
+import 'package:aves/model/filters/container/tag_group.dart';
 import 'package:aves/model/filters/covered/location.dart';
 import 'package:aves/model/filters/covered/stored_album.dart';
 import 'package:aves/model/filters/date.dart';
 import 'package:aves/model/filters/favourite.dart';
 import 'package:aves/model/filters/filters.dart';
 import 'package:aves/model/filters/mime.dart';
+import 'package:aves/model/filters/tag.dart';
 import 'package:aves/model/filters/missing.dart';
 import 'package:aves/model/filters/rating.dart';
 import 'package:aves/model/filters/recent.dart';
@@ -56,7 +58,7 @@ class _TagListPageState extends State<TagListPage> with FeedbackMixin, VaultAwar
   final ValueNotifier<String?> _expandedSectionNotifier = ValueNotifier(null);
 
   // mirrors the type filters shown in the search media collections page
-  static const List<CollectionFilter> typeFilters = [
+  static final List<CollectionFilter> typeFilters = [
     FavouriteFilter.instance,
     MimeFilter.image,
     MimeFilter.video,
