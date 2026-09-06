@@ -2,6 +2,7 @@ import 'package:aves/app_mode.dart';
 import 'package:aves/model/entry/entry.dart';
 import 'package:aves/model/settings/settings.dart';
 import 'package:aves/theme/format.dart';
+import 'package:aves/utils/file_utils.dart';
 import 'package:aves/model/selection.dart';
 import 'package:aves/model/source/collection_lens.dart';
 import 'package:aves/services/intent_service.dart';
