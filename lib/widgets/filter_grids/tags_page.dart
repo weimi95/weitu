@@ -52,6 +52,60 @@ class TagListPage extends StatefulWidget {
 
   @override
   State<TagListPage> createState() => _TagListPageState();
+
+  // common with picking page
+
+  static List<FilterGridItem<TagBaseFilter>> getGridItems(
+    CollectionSource source,
+    Set<ChipType> chipTypes,
+    Uri? groupUri,
+  ) {
+    final groupContent = tagGrouping.getDirectChildren(groupUri);
+
+    Set<T> whereTypeRecursively<T>(Set<CollectionFilter> filters) {
+      return {
+        ...filters.whereType<T>(),
+        ...filters.whereType<TagGroupFilter>().expand((v) => whereTypeRecursively<T>(v.filter.innerFilters)),
+      };
+    }
+
+    final listedTags = <String>{};
+    if (chipTypes.contains(ChipType.regular)) {
+      final allTags = source.sortedTags;
+      if (groupUri == null) {
+        final withinGroups = whereTypeRecursively<TagFilter>(groupContent).map((v) => v.tag).toSet();
+        listedTags.addAll(allTags.whereNot(withinGroups.contains));
+      } else {
+        // check that group content is listed from source, to prevent displaying hidden content
+        listedTags.addAll(groupContent.whereType<TagFilter>().map((v) => v.tag).where(allTags.contains));
+      }
+    }
+
+    // always show groups, which are needed to navigate to other types
+    final tagGroupFilters = groupContent.whereType<TagGroupFilter>().whereNot(settings.hiddenFilters.contains).toSet();
+
+    final filters = <TagBaseFilter>{
+      ...tagGroupFilters,
+      ...listedTags.map(TagFilter.new),
+    };
+
+    return FilterNavigationPage.sort(settings.tagSortFactor, settings.tagSortReverse, source, filters);
+  }
+
+  static Map<ChipSectionKey, List<FilterGridItem<TagBaseFilter>>> groupToSections(Iterable<FilterGridItem<TagBaseFilter>> sortedMapEntries) {
+    final pinned = settings.pinnedFilters.whereType<TagFilter>();
+    final byPin = groupBy<FilterGridItem<TagBaseFilter>, bool>(sortedMapEntries, (e) => pinned.contains(e.filter));
+    final pinnedMapEntries = (byPin[true] ?? []);
+    final unpinnedMapEntries = (byPin[false] ?? []);
+
+    return {
+      if (pinnedMapEntries.isNotEmpty || unpinnedMapEntries.isNotEmpty)
+        const ChipSectionKey(): [
+          ...pinnedMapEntries,
+          ...unpinnedMapEntries,
+        ],
+    };
+  }
 }
 
 class _TagListPageState extends State<TagListPage> with FeedbackMixin, VaultAwareMixin {
@@ -279,59 +333,5 @@ class _TagListPageState extends State<TagListPage> with FeedbackMixin, VaultAwar
         return _filterRow(context, context.l10n.searchPlacesSectionTitle, filters);
       },
     );
-  }
-
-  // common with picking page
-
-  static List<FilterGridItem<TagBaseFilter>> getGridItems(
-    CollectionSource source,
-    Set<ChipType> chipTypes,
-    Uri? groupUri,
-  ) {
-    final groupContent = tagGrouping.getDirectChildren(groupUri);
-
-    Set<T> whereTypeRecursively<T>(Set<CollectionFilter> filters) {
-      return {
-        ...filters.whereType<T>(),
-        ...filters.whereType<TagGroupFilter>().expand((v) => whereTypeRecursively<T>(v.filter.innerFilters)),
-      };
-    }
-
-    final listedTags = <String>{};
-    if (chipTypes.contains(ChipType.regular)) {
-      final allTags = source.sortedTags;
-      if (groupUri == null) {
-        final withinGroups = whereTypeRecursively<TagFilter>(groupContent).map((v) => v.tag).toSet();
-        listedTags.addAll(allTags.whereNot(withinGroups.contains));
-      } else {
-        // check that group content is listed from source, to prevent displaying hidden content
-        listedTags.addAll(groupContent.whereType<TagFilter>().map((v) => v.tag).where(allTags.contains));
-      }
-    }
-
-    // always show groups, which are needed to navigate to other types
-    final tagGroupFilters = groupContent.whereType<TagGroupFilter>().whereNot(settings.hiddenFilters.contains).toSet();
-
-    final filters = <TagBaseFilter>{
-      ...tagGroupFilters,
-      ...listedTags.map(TagFilter.new),
-    };
-
-    return FilterNavigationPage.sort(settings.tagSortFactor, settings.tagSortReverse, source, filters);
-  }
-
-  static Map<ChipSectionKey, List<FilterGridItem<TagBaseFilter>>> groupToSections(Iterable<FilterGridItem<TagBaseFilter>> sortedMapEntries) {
-    final pinned = settings.pinnedFilters.whereType<TagFilter>();
-    final byPin = groupBy<FilterGridItem<TagBaseFilter>, bool>(sortedMapEntries, (e) => pinned.contains(e.filter));
-    final pinnedMapEntries = (byPin[true] ?? []);
-    final unpinnedMapEntries = (byPin[false] ?? []);
-
-    return {
-      if (pinnedMapEntries.isNotEmpty || unpinnedMapEntries.isNotEmpty)
-        const ChipSectionKey(): [
-          ...pinnedMapEntries,
-          ...unpinnedMapEntries,
-        ],
-    };
   }
 }

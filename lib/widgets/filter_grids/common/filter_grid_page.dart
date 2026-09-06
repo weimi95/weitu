@@ -255,7 +255,7 @@ class _FilterGridState<T extends CollectionFilter> extends State<_FilterGrid<T>>
           emptyBuilder: widget.emptyBuilder,
           heroType: widget.heroType,
           onTileTap: widget.onTileTap,
-          footerSlivers: widget.footerSlivers,
+          footerSlivers: footerSlivers,
         ),
       ),
     );
@@ -435,7 +435,7 @@ class _FilterGridContentState<T extends CollectionFilter> extends State<_FilterG
                 bannerBuilder: _getFilterBanner,
                 scrollController: widget.scrollController,
                 tileLayout: tileLayout,
-                footerSlivers: widget.footerSlivers,
+                footerSlivers: footerSlivers,
               ),
             );
             return sectionedListLayoutProvider;
@@ -568,7 +568,7 @@ class _FilterSectionedContentState<T extends CollectionFilter> extends State<_Fi
       sortFactor: widget.sortFactor,
       emptyBuilder: emptyBuilder,
       scrollController: scrollController,
-      footerSlivers: widget.footerSlivers,
+      footerSlivers: footerSlivers,
     );
 
     final scaler = _FilterScaler<T>(
@@ -748,7 +748,7 @@ class _FilterScrollView<T extends CollectionFilter> extends StatelessWidget {
 
   Widget _buildScrollView(BuildContext context) {
     return Selector<SectionedListLayout<FilterGridItem<T>>, bool>(
-      selector: (context, layout) => layout.sections.isEmpty && (widget.footerSlivers?.isEmpty ?? true),
+      selector: (context, layout) => layout.sections.isEmpty && (footerSlivers?.isEmpty ?? true),
       builder: (context, isEmpty, child) {
         return CustomScrollView(
           key: scrollableKey,
@@ -772,7 +772,7 @@ class _FilterScrollView<T extends CollectionFilter> extends StatelessWidget {
                     )
                   : SectionedListSliver<FilterGridItem<T>>(),
             ),
-            ...?widget.footerSlivers,
+            ...?footerSlivers,
             const NavBarPaddingSliver(),
             const BottomPaddingSliver(),
             const TvTileGridBottomPaddingSliver(),
