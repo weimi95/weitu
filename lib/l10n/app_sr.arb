@@ -1,7 +1,7 @@
 {
-    "appName": "Aves",
+    "appName": "微图相册",
     "@appName": {},
-    "welcomeMessage": "Добродошли у Aves",
+    "welcomeMessage": "Добродошли у 微图相册",
     "@welcomeMessage": {},
     "welcomeOptional": "Izborno",
     "@welcomeOptional": {}

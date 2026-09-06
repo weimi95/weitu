@@ -1,6 +1,6 @@
 {
-  "appName": "Aves",
-  "welcomeMessage": "Welcome to Aves",
+  "appName": "微图相册",
+  "welcomeMessage": "Welcome to 微图相册",
   "welcomeOptional": "Optional",
   "welcomeTermsToggle": "I agree to the terms and conditions",
   "itemCount": "{count, plural, =1{{count} item} other{{count} items}}",
@@ -822,6 +822,7 @@
   "placeEmpty": "No places",
 
   "tagPageTitle": "Tags",
+  "tagWallTypeSectionTitle": "Types",
   "tagEmpty": "No tags",
   "tagPickPageTitle": "Pick Tag",
 

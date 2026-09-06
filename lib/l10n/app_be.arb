@@ -1,8 +1,8 @@
 {
-    "appName": "Aves",
+    "appName": "微图相册",
     "welcomeTermsToggle": "Я згодны з умовамі",
     "welcomeOptional": "Неабавязковыя",
-    "welcomeMessage": "Сардэчна запрашаем у Aves",
+    "welcomeMessage": "Сардэчна запрашаем у 微图相册",
     "itemCount": "{count, plural, =1{{count} элемент} other{{count} элементаў}}",
     "@itemCount": {
         "placeholders": {

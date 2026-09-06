@@ -65,6 +65,7 @@ class FilterGridPage<T extends CollectionFilter> extends StatelessWidget {
   final HeroType heroType;
   final Widget? floatingActionButton;
   final FilterTileTapCallback<T> onTileTap;
+  final List<Widget>? footerSlivers;
   final StreamController<DraggableScrollbarEvent> _draggableScrollBarEventStreamController = StreamController.broadcast();
 
   FilterGridPage({
@@ -82,6 +83,7 @@ class FilterGridPage<T extends CollectionFilter> extends StatelessWidget {
     required this.heroType,
     this.floatingActionButton,
     required this.onTileTap,
+    this.footerSlivers,
   });
 
   @override
@@ -110,6 +112,7 @@ class FilterGridPage<T extends CollectionFilter> extends StatelessWidget {
               emptyBuilder: emptyBuilder,
               heroType: heroType,
               onTileTap: onTileTap,
+              footerSlivers: footerSlivers,
             );
           },
         ),
@@ -180,6 +183,7 @@ class _FilterGrid<T extends CollectionFilter> extends StatefulWidget {
   final Widget Function() emptyBuilder;
   final HeroType heroType;
   final FilterTileTapCallback<T> onTileTap;
+  final List<Widget>? footerSlivers;
 
   const _FilterGrid({
     super.key,
@@ -195,6 +199,7 @@ class _FilterGrid<T extends CollectionFilter> extends StatefulWidget {
     required this.emptyBuilder,
     required this.heroType,
     required this.onTileTap,
+    required this.footerSlivers,
   });
 
   @override
@@ -250,6 +255,7 @@ class _FilterGridState<T extends CollectionFilter> extends State<_FilterGrid<T>>
           emptyBuilder: widget.emptyBuilder,
           heroType: widget.heroType,
           onTileTap: widget.onTileTap,
+          footerSlivers: widget.footerSlivers,
         ),
       ),
     );
@@ -267,6 +273,7 @@ class _FilterGridContent<T extends CollectionFilter> extends StatefulWidget {
   final Widget Function() emptyBuilder;
   final HeroType heroType;
   final FilterTileTapCallback<T> onTileTap;
+  final List<Widget>? footerSlivers;
 
   const _FilterGridContent({
     super.key,
@@ -281,6 +288,7 @@ class _FilterGridContent<T extends CollectionFilter> extends StatefulWidget {
     required this.emptyBuilder,
     required this.heroType,
     required this.onTileTap,
+    required this.footerSlivers,
   });
 
   @override
@@ -734,7 +742,7 @@ class _FilterScrollView<T extends CollectionFilter> extends StatelessWidget {
 
   Widget _buildScrollView(BuildContext context) {
     return Selector<SectionedListLayout<FilterGridItem<T>>, bool>(
-      selector: (context, layout) => layout.sections.isEmpty,
+      selector: (context, layout) => layout.sections.isEmpty && (widget.footerSlivers?.isEmpty ?? true),
       builder: (context, isEmpty, child) {
         return CustomScrollView(
           key: scrollableKey,
@@ -758,6 +766,7 @@ class _FilterScrollView<T extends CollectionFilter> extends StatelessWidget {
                     )
                   : SectionedListSliver<FilterGridItem<T>>(),
             ),
+            ...?widget.footerSlivers,
             const NavBarPaddingSliver(),
             const BottomPaddingSliver(),
             const TvTileGridBottomPaddingSliver(),

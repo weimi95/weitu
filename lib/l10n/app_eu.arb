@@ -40,7 +40,7 @@
     "nextButtonLabel": "HURRENGOA",
     "showButtonLabel": "ERAKUTSI",
     "hideButtonLabel": "EZKUTATU",
-    "appName": "Aves",
+    "appName": "微图相册",
     "welcomeMessage": "Ongi etorri",
     "welcomeOptional": "Aukerazkoa",
     "itemCount": "{count, plural, =1{elementu {count}} other{{count} elementu}}",

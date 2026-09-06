@@ -1,5 +1,5 @@
 {
-    "welcomeMessage": "Bun venit la Aves",
+    "welcomeMessage": "Bun venit la 微图相册",
     "welcomeOptional": "Opțional",
     "welcomeTermsToggle": "Sunt de acord cu Termenii și condițiile",
     "timeSeconds": "{count, plural, =1{{count} secundă} other{{count} secunde}}",
@@ -388,7 +388,7 @@
             }
         }
     },
-    "appName": "Aves",
+    "appName": "微图相册",
     "itemCount": "{count, plural, =1{{count} element} other{{count} elemente}}",
     "@itemCount": {
         "placeholders": {

@@ -1,6 +1,6 @@
 {
-    "appName": "Aves",
-    "welcomeMessage": "Selamat datang di Aves",
+    "appName": "微图相册",
+    "welcomeMessage": "Selamat datang di 微图相册",
     "welcomeOptional": "Opsional",
     "welcomeTermsToggle": "Saya menyetujui syarat dan ketentuan",
     "itemCount": "{count, plural, other{{count} benda}}",

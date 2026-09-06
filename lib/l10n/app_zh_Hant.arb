@@ -1,6 +1,6 @@
 {
-    "appName": "Aves",
-    "welcomeMessage": "歡迎使用 Aves",
+    "appName": "微图相册",
+    "welcomeMessage": "歡迎使用 微图相册",
     "welcomeOptional": "可選擇的",
     "welcomeTermsToggle": "我同意這些使用條款及狀況",
     "itemCount": "{count, plural, other{{count} 項}}",
@@ -640,6 +640,7 @@
     "searchCountriesSectionTitle": "國家",
     "albumPickPageTitleExport": "匯出到相簿",
     "tagPageTitle": "標籤",
+    "tagWallTypeSectionTitle": "類型",
     "tagEmpty": "沒有標籤",
     "searchCollectionFieldHint": "搜尋收藏品",
     "searchPlacesSectionTitle": "地點",

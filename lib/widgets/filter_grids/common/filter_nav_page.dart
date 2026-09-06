@@ -32,6 +32,7 @@ class FilterNavigationPage<T extends CollectionFilter, CSAD extends ChipSetActio
   final Map<ChipSectionKey, List<FilterGridItem<T>>> filterSections;
   final Set<T>? newFilters;
   final Widget Function() emptyBuilder;
+  final List<Widget>? footerSlivers;
 
   const FilterNavigationPage({
     super.key,
@@ -43,6 +44,7 @@ class FilterNavigationPage<T extends CollectionFilter, CSAD extends ChipSetActio
     required this.filterSections,
     this.newFilters,
     required this.emptyBuilder,
+    this.footerSlivers,
   });
 
   @override
@@ -171,6 +173,7 @@ class _FilterNavigationPageState<T extends CollectionFilter, CSAD extends ChipSe
               // do not always enable hero, otherwise unwanted hero gets triggered
               // when using `Show in [...]` action from a chip in the Collection filter bar
               heroType: animate ? HeroType.onTap : HeroType.never,
+              footerSlivers: widget.footerSlivers,
               onTileTap: (gridItem, navigate) async {
                 final selection = context.read<Selection<FilterGridItem<T>>?>();
                 if (selection != null && selection.isSelecting) {

@@ -1,7 +1,7 @@
 {
     "sourceStateLocatingPlaces": "နေရာ တည်နေရာများ",
     "chipActionDelete": "ဖျက်ရန်",
-    "welcomeMessage": "Aves မှ ကြိုဆိုပါတယ်",
+    "welcomeMessage": "微图相册 မှ ကြိုဆိုပါတယ်",
     "columnCount": "{count, plural, other{{count} ကော်လံ}}",
     "@columnCount": {
         "placeholders": {
@@ -10,7 +10,7 @@
             }
         }
     },
-    "appName": "Aves",
+    "appName": "微图相册",
     "welcomeOptional": "မရွေးဘဲထားနိုင်သည်",
     "welcomeTermsToggle": "စည်းမျဥ်းစည်းကမ်းနှင့် သတ်မှတ်ချက်များကို သဘောတူပါသည်",
     "itemCount": "{count, plural, other{{count} ခု}}",
