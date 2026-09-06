@@ -19,12 +19,13 @@ class SectionedEntryListLayoutProvider extends SectionedListLayoutProvider<AvesE
     required super.spacing,
     required super.horizontalPadding,
     required double tileExtent,
+    double? tileHeight,
     required super.tileBuilder,
     required super.tileAnimationDelay,
     required super.child,
   }) : super(
          tileWidth: tileExtent,
-         tileHeight: tileExtent,
+         tileHeight: tileHeight ?? tileExtent,
          coverRatioResolver: (item) => item.displayAspectRatio,
        );
 

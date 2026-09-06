@@ -24,6 +24,7 @@ class InteractiveTile extends StatelessWidget {
   final double thumbnailExtent;
   final TileLayout tileLayout;
   final int infoLevel;
+  final double? cellHeight;
   final ValueNotifier<bool>? isScrollingNotifier;
 
   const InteractiveTile({
@@ -33,6 +34,7 @@ class InteractiveTile extends StatelessWidget {
     required this.thumbnailExtent,
     required this.tileLayout,
     this.infoLevel = 0,
+    this.cellHeight,
     this.isScrollingNotifier,
   });
 
@@ -68,6 +70,7 @@ class InteractiveTile extends StatelessWidget {
           thumbnailExtent: thumbnailExtent,
           tileLayout: tileLayout,
           infoLevel: infoLevel,
+          cellHeight: cellHeight,
           selectable: true,
           highlightable: true,
           isScrollingNotifier: isScrollingNotifier,
@@ -83,6 +86,7 @@ class Tile extends StatelessWidget {
   final double thumbnailExtent;
   final TileLayout tileLayout;
   final int infoLevel;
+  final double? cellHeight;
   final bool selectable, highlightable;
   final ValueNotifier<bool>? isScrollingNotifier;
   final Object? Function()? heroTagger;
@@ -93,6 +97,7 @@ class Tile extends StatelessWidget {
     required this.thumbnailExtent,
     required this.tileLayout,
     this.infoLevel = 0,
+    this.cellHeight,
     this.selectable = false,
     this.highlightable = false,
     this.isScrollingNotifier,
@@ -130,8 +135,9 @@ class Tile extends StatelessWidget {
   // level 2: 1-column card with title + description + tags + format + date-time + file size
   Widget _buildCard(BuildContext context) {
     final isLarge = infoLevel == 2;
-    final infoHeight = isLarge ? thumbnailExtent * 0.45 : thumbnailExtent * 0.3;
-    final imageHeight = thumbnailExtent - infoHeight;
+    final cellHeight = this.cellHeight ?? thumbnailExtent;
+    final infoHeight = isLarge ? cellHeight * 0.35 : thumbnailExtent * 0.3;
+    final imageHeight = cellHeight - infoHeight;
     final description = entry.catalogMetadata?.xmpDescription?.isNotEmpty == true ? entry.catalogMetadata!.xmpDescription : null;
     return Column(
       crossAxisAlignment: .stretch,

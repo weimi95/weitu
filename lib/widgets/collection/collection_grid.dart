@@ -145,10 +145,16 @@ class _CollectionGridContentState extends State<_CollectionGridContent> {
           valueListenable: context.select<TileExtentController, ValueNotifier<double>>((controller) => controller.extentNotifier),
           builder: (context, thumbnailExtent, child) {
             assert(thumbnailExtent > 0);
-            return Selector<TileExtentController, (double, int, double, double, int)>(
-              selector: (context, c) => (c.viewportSize.width, c.columnCount, c.spacing, c.horizontalPadding, c.infoLevel),
+            return Selector<TileExtentController, (Size, int, double, double, int)>(
+              selector: (context, c) => (c.viewportSize, c.columnCount, c.spacing, c.horizontalPadding, c.infoLevel),
               builder: (context, c, child) {
-                final (scrollableWidth, columnCount, tileSpacing, horizontalPadding, infoLevel) = c;
+                final (viewportSize, columnCount, tileSpacing, horizontalPadding, infoLevel) = c;
+                final scrollableWidth = viewportSize.width;
+                // level 2 (1-column card): make the cell ~one screen tall so the image
+                // is large and all metadata (title/desc/tags/format/date/size) fits below
+                final tileHeight = infoLevel == 2
+                    ? (viewportSize.height * 0.92).clamp(thumbnailExtent, thumbnailExtent * 2.4)
+                    : thumbnailExtent;
                 final source = collection.source;
                 return GridTheme(
                   extent: thumbnailExtent,
@@ -182,6 +188,7 @@ class _CollectionGridContentState extends State<_CollectionGridContent> {
                               spacing: tileSpacing,
                               horizontalPadding: horizontalPadding,
                               tileExtent: thumbnailExtent,
+                              tileHeight: tileHeight,
                               tileBuilder: (entry, tileSize) {
                                 final extent = tileSize.shortestSide;
                                 return ListenableBuilder(
@@ -194,6 +201,7 @@ class _CollectionGridContentState extends State<_CollectionGridContent> {
                                       thumbnailExtent: extent,
                                       tileLayout: tileLayout,
                                       infoLevel: infoLevel,
+                                      cellHeight: tileSize.height,
                                       isScrollingNotifier: _isScrollingNotifier,
                                     );
                                     if (!settings.useTvLayout) return tile;
