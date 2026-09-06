@@ -255,7 +255,7 @@ class _FilterGridState<T extends CollectionFilter> extends State<_FilterGrid<T>>
           emptyBuilder: widget.emptyBuilder,
           heroType: widget.heroType,
           onTileTap: widget.onTileTap,
-          footerSlivers: footerSlivers,
+          footerSlivers: widget.footerSlivers,
         ),
       ),
     );
@@ -435,7 +435,7 @@ class _FilterGridContentState<T extends CollectionFilter> extends State<_FilterG
                 bannerBuilder: _getFilterBanner,
                 scrollController: widget.scrollController,
                 tileLayout: tileLayout,
-                footerSlivers: footerSlivers,
+                footerSlivers: widget.footerSlivers,
               ),
             );
             return sectionedListLayoutProvider;
@@ -568,7 +568,7 @@ class _FilterSectionedContentState<T extends CollectionFilter> extends State<_Fi
       sortFactor: widget.sortFactor,
       emptyBuilder: emptyBuilder,
       scrollController: scrollController,
-      footerSlivers: footerSlivers,
+      footerSlivers: widget.footerSlivers,
     );
 
     final scaler = _FilterScaler<T>(
