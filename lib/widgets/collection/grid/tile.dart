@@ -201,7 +201,7 @@ class Tile extends StatelessWidget {
     final widgets = <Widget>[];
 
     final tags = entry.tags;
-    if (tags.isNotEmpty) {
+    if (tags?.isNotEmpty == true) {
       widgets.add(
         Padding(
           padding: const EdgeInsets.only(top: 4),
@@ -209,7 +209,7 @@ class Tile extends StatelessWidget {
             spacing: 4,
             runSpacing: 2,
             children: [
-              for (final tag in tags.take(10))
+              for (final tag in tags!)
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                   decoration: BoxDecoration(
