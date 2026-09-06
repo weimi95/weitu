@@ -1,4 +1,4 @@
-package com.weitu.gallery.channel.calls
+package deckers.thibault.aves.channel.calls
 
 import android.content.Context
 import android.media.MediaFormat
@@ -29,72 +29,72 @@ import com.drew.metadata.mp4.media.Mp4UuidBoxDirectory
 import com.drew.metadata.png.PngDirectory
 import com.drew.metadata.webp.WebpDirectory
 import com.drew.metadata.xmp.XmpDirectory
-import com.weitu.gallery.channel.calls.Coresult.Companion.safe
-import com.weitu.gallery.metadata.ExifGeoTiffTags
-import com.weitu.gallery.metadata.ExifInterfaceHelper
-import com.weitu.gallery.metadata.ExifInterfaceHelper.describeAll
-import com.weitu.gallery.metadata.ExifInterfaceHelper.getSafeDateMillis
-import com.weitu.gallery.metadata.ExifInterfaceHelper.getSafeDouble
-import com.weitu.gallery.metadata.ExifInterfaceHelper.getSafeInt
-import com.weitu.gallery.metadata.ExifInterfaceHelper.getSafeRational
-import com.weitu.gallery.metadata.ExifTags
-import com.weitu.gallery.metadata.GSpherical
-import com.weitu.gallery.metadata.GeoTiffKeys
-import com.weitu.gallery.metadata.MediaMetadataRetrieverHelper
-import com.weitu.gallery.metadata.MediaMetadataRetrieverHelper.getSafeDateMillis
-import com.weitu.gallery.metadata.MediaMetadataRetrieverHelper.getSafeDescription
-import com.weitu.gallery.metadata.MediaMetadataRetrieverHelper.getSafeDouble
-import com.weitu.gallery.metadata.MediaMetadataRetrieverHelper.getSafeInt
-import com.weitu.gallery.metadata.Metadata
-import com.weitu.gallery.metadata.Metadata.DIR_DNG
-import com.weitu.gallery.metadata.Metadata.DIR_EXIF_GEOTIFF
-import com.weitu.gallery.metadata.Metadata.DIR_PNG_TEXTUAL_DATA
-import com.weitu.gallery.metadata.Metadata.getRotationDegreesForExifCode
-import com.weitu.gallery.metadata.Metadata.isFlippedForExifCode
-import com.weitu.gallery.metadata.Mp4ParserHelper
-import com.weitu.gallery.metadata.MultiPage
-import com.weitu.gallery.metadata.PixyMetaHelper
-import com.weitu.gallery.metadata.QuickTimeMetadata
-import com.weitu.gallery.metadata.metadataextractor.Helper.PNG_ITXT_DIR_NAME
-import com.weitu.gallery.metadata.metadataextractor.Helper.PNG_LAST_MODIFICATION_TIME_FORMAT
-import com.weitu.gallery.metadata.metadataextractor.Helper.PNG_TIME_DIR_NAME
-import com.weitu.gallery.metadata.metadataextractor.Helper.containsGeoTiffTags
-import com.weitu.gallery.metadata.metadataextractor.Helper.extractGeoKeys
-import com.weitu.gallery.metadata.metadataextractor.Helper.extractPngProfile
-import com.weitu.gallery.metadata.metadataextractor.Helper.getDateDigitizedMillis
-import com.weitu.gallery.metadata.metadataextractor.Helper.getDateModifiedMillis
-import com.weitu.gallery.metadata.metadataextractor.Helper.getDateOriginalMillis
-import com.weitu.gallery.metadata.metadataextractor.Helper.getSafeBoolean
-import com.weitu.gallery.metadata.metadataextractor.Helper.getSafeDateMillis
-import com.weitu.gallery.metadata.metadataextractor.Helper.getSafeInt
-import com.weitu.gallery.metadata.metadataextractor.Helper.getSafeRational
-import com.weitu.gallery.metadata.metadataextractor.Helper.getSafeString
-import com.weitu.gallery.metadata.metadataextractor.Helper.isPngTextDir
-import com.weitu.gallery.metadata.metadataextractor.PngActlDirectory
-import com.weitu.gallery.metadata.metadataextractor.SafeXmpReader
-import com.weitu.gallery.metadata.metadataextractor.mpf.MpEntry
-import com.weitu.gallery.metadata.metadataextractor.mpf.MpEntryDirectory
-import com.weitu.gallery.metadata.xmp.GoogleXMP
-import com.weitu.gallery.metadata.xmp.XMP
-import com.weitu.gallery.metadata.xmp.XMP.doesPropExist
-import com.weitu.gallery.metadata.xmp.XMP.getPropArrayItemValues
-import com.weitu.gallery.metadata.xmp.XMP.getSafeDateMillis
-import com.weitu.gallery.metadata.xmp.XMP.getSafeInt
-import com.weitu.gallery.metadata.xmp.XMP.getSafeLocalizedText
-import com.weitu.gallery.metadata.xmp.XMP.hasHdrGainMap
-import com.weitu.gallery.metadata.xmp.XMP.isMotionPhoto
-import com.weitu.gallery.metadata.xmp.XMP.isPanorama
-import com.weitu.gallery.model.FieldMap
-import com.weitu.gallery.utils.ContextUtils.queryContentPropValue
-import com.weitu.gallery.utils.HashUtils
-import com.weitu.gallery.utils.LogUtils
-import com.weitu.gallery.utils.MimeTypes
-import com.weitu.gallery.utils.MimeTypes.TIFF_EXTENSION_PATTERN
-import com.weitu.gallery.utils.MimeTypes.canReadWithExifInterface
-import com.weitu.gallery.utils.MimeTypes.canReadWithMetadataExtractor
-import com.weitu.gallery.utils.MimeTypes.isIsoBMFFImage
-import com.weitu.gallery.utils.MimeTypes.isVideo
-import com.weitu.gallery.utils.StorageUtils
+import deckers.thibault.aves.channel.calls.Coresult.Companion.safe
+import deckers.thibault.aves.metadata.ExifGeoTiffTags
+import deckers.thibault.aves.metadata.ExifInterfaceHelper
+import deckers.thibault.aves.metadata.ExifInterfaceHelper.describeAll
+import deckers.thibault.aves.metadata.ExifInterfaceHelper.getSafeDateMillis
+import deckers.thibault.aves.metadata.ExifInterfaceHelper.getSafeDouble
+import deckers.thibault.aves.metadata.ExifInterfaceHelper.getSafeInt
+import deckers.thibault.aves.metadata.ExifInterfaceHelper.getSafeRational
+import deckers.thibault.aves.metadata.ExifTags
+import deckers.thibault.aves.metadata.GSpherical
+import deckers.thibault.aves.metadata.GeoTiffKeys
+import deckers.thibault.aves.metadata.MediaMetadataRetrieverHelper
+import deckers.thibault.aves.metadata.MediaMetadataRetrieverHelper.getSafeDateMillis
+import deckers.thibault.aves.metadata.MediaMetadataRetrieverHelper.getSafeDescription
+import deckers.thibault.aves.metadata.MediaMetadataRetrieverHelper.getSafeDouble
+import deckers.thibault.aves.metadata.MediaMetadataRetrieverHelper.getSafeInt
+import deckers.thibault.aves.metadata.Metadata
+import deckers.thibault.aves.metadata.Metadata.DIR_DNG
+import deckers.thibault.aves.metadata.Metadata.DIR_EXIF_GEOTIFF
+import deckers.thibault.aves.metadata.Metadata.DIR_PNG_TEXTUAL_DATA
+import deckers.thibault.aves.metadata.Metadata.getRotationDegreesForExifCode
+import deckers.thibault.aves.metadata.Metadata.isFlippedForExifCode
+import deckers.thibault.aves.metadata.Mp4ParserHelper
+import deckers.thibault.aves.metadata.MultiPage
+import deckers.thibault.aves.metadata.PixyMetaHelper
+import deckers.thibault.aves.metadata.QuickTimeMetadata
+import deckers.thibault.aves.metadata.metadataextractor.Helper.PNG_ITXT_DIR_NAME
+import deckers.thibault.aves.metadata.metadataextractor.Helper.PNG_LAST_MODIFICATION_TIME_FORMAT
+import deckers.thibault.aves.metadata.metadataextractor.Helper.PNG_TIME_DIR_NAME
+import deckers.thibault.aves.metadata.metadataextractor.Helper.containsGeoTiffTags
+import deckers.thibault.aves.metadata.metadataextractor.Helper.extractGeoKeys
+import deckers.thibault.aves.metadata.metadataextractor.Helper.extractPngProfile
+import deckers.thibault.aves.metadata.metadataextractor.Helper.getDateDigitizedMillis
+import deckers.thibault.aves.metadata.metadataextractor.Helper.getDateModifiedMillis
+import deckers.thibault.aves.metadata.metadataextractor.Helper.getDateOriginalMillis
+import deckers.thibault.aves.metadata.metadataextractor.Helper.getSafeBoolean
+import deckers.thibault.aves.metadata.metadataextractor.Helper.getSafeDateMillis
+import deckers.thibault.aves.metadata.metadataextractor.Helper.getSafeInt
+import deckers.thibault.aves.metadata.metadataextractor.Helper.getSafeRational
+import deckers.thibault.aves.metadata.metadataextractor.Helper.getSafeString
+import deckers.thibault.aves.metadata.metadataextractor.Helper.isPngTextDir
+import deckers.thibault.aves.metadata.metadataextractor.PngActlDirectory
+import deckers.thibault.aves.metadata.metadataextractor.SafeXmpReader
+import deckers.thibault.aves.metadata.metadataextractor.mpf.MpEntry
+import deckers.thibault.aves.metadata.metadataextractor.mpf.MpEntryDirectory
+import deckers.thibault.aves.metadata.xmp.GoogleXMP
+import deckers.thibault.aves.metadata.xmp.XMP
+import deckers.thibault.aves.metadata.xmp.XMP.doesPropExist
+import deckers.thibault.aves.metadata.xmp.XMP.getPropArrayItemValues
+import deckers.thibault.aves.metadata.xmp.XMP.getSafeDateMillis
+import deckers.thibault.aves.metadata.xmp.XMP.getSafeInt
+import deckers.thibault.aves.metadata.xmp.XMP.getSafeLocalizedText
+import deckers.thibault.aves.metadata.xmp.XMP.hasHdrGainMap
+import deckers.thibault.aves.metadata.xmp.XMP.isMotionPhoto
+import deckers.thibault.aves.metadata.xmp.XMP.isPanorama
+import deckers.thibault.aves.model.FieldMap
+import deckers.thibault.aves.utils.ContextUtils.queryContentPropValue
+import deckers.thibault.aves.utils.HashUtils
+import deckers.thibault.aves.utils.LogUtils
+import deckers.thibault.aves.utils.MimeTypes
+import deckers.thibault.aves.utils.MimeTypes.TIFF_EXTENSION_PATTERN
+import deckers.thibault.aves.utils.MimeTypes.canReadWithExifInterface
+import deckers.thibault.aves.utils.MimeTypes.canReadWithMetadataExtractor
+import deckers.thibault.aves.utils.MimeTypes.isIsoBMFFImage
+import deckers.thibault.aves.utils.MimeTypes.isVideo
+import deckers.thibault.aves.utils.StorageUtils
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -112,7 +112,7 @@ import java.util.Locale
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 import androidx.exifinterface.media.ExifInterfaceFork as ExifInterface
-import com.weitu.gallery.metadata.metadataextractor.Helper as MetadataExtractorHelper
+import deckers.thibault.aves.metadata.metadataextractor.Helper as MetadataExtractorHelper
 
 class MetadataFetchHandler(private val context: Context) : MethodCallHandler {
     private val ioScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -522,6 +522,9 @@ class MetadataFetchHandler(private val context: Context) : MethodCallHandler {
     // set `KEY_XMP_SUBJECTS` from these fields (by precedence):
     // - XMP / dc:subject
     // - IPTC / keywords
+    // set `KEY_XMP_DESCRIPTION` from these fields (by precedence):
+    // - XMP / dc:description
+    // - IPTC / caption-abstract
     // set `KEY_RATING` from these fields (by precedence):
     // - XMP / xmp:Rating
     // - XMP / MicrosoftPhoto:Rating
@@ -638,6 +641,7 @@ class MetadataFetchHandler(private val context: Context) : MethodCallHandler {
                     metadataMap[KEY_XMP_SUBJECTS] = values.joinToString(XMP_SUBJECTS_SEPARATOR)
                 }
                 xmpMeta.getSafeLocalizedText(XMP.DC_TITLE_PROP_NAME, acceptBlank = false) { metadataMap[KEY_XMP_TITLE] = it }
+                xmpMeta.getSafeLocalizedText(XMP.DC_DESCRIPTION_PROP_NAME, acceptBlank = false) { metadataMap[KEY_XMP_DESCRIPTION] = it }
                 if (!metadataMap.containsKey(KEY_DATE_MILLIS)) {
                     xmpMeta.getSafeDateMillis(XMP.XMP_CREATE_DATE_PROP_NAME) { metadataMap[KEY_DATE_MILLIS] = it }
                     if (!metadataMap.containsKey(KEY_DATE_MILLIS)) {
@@ -734,13 +738,16 @@ class MetadataFetchHandler(private val context: Context) : MethodCallHandler {
                         }
 
                         // XMP fallback to IPTC
-                        if (!metadataMap.containsKey(KEY_XMP_TITLE) || !metadataMap.containsKey(KEY_XMP_SUBJECTS)) {
+                        if (!metadataMap.containsKey(KEY_XMP_TITLE) || !metadataMap.containsKey(KEY_XMP_SUBJECTS) || !metadataMap.containsKey(KEY_XMP_DESCRIPTION)) {
                             for (dir in metadata.getDirectoriesOfType(IptcDirectory::class.java)) {
                                 if (!metadataMap.containsKey(KEY_XMP_TITLE)) {
                                     dir.getSafeString(IptcDirectory.TAG_OBJECT_NAME, acceptBlank = false) { metadataMap[KEY_XMP_TITLE] = it }
                                 }
                                 if (!metadataMap.containsKey(KEY_XMP_SUBJECTS)) {
                                     dir.keywords?.let { metadataMap[KEY_XMP_SUBJECTS] = it.joinToString(XMP_SUBJECTS_SEPARATOR) }
+                                }
+                                if (!metadataMap.containsKey(KEY_XMP_DESCRIPTION)) {
+                                    dir.getSafeString(IptcDirectory.TAG_CAPTION, acceptBlank = false) { metadataMap[KEY_XMP_DESCRIPTION] = it }
                                 }
                             }
                         }
@@ -1523,6 +1530,7 @@ class MetadataFetchHandler(private val context: Context) : MethodCallHandler {
         private const val KEY_LONGITUDE = "longitude"
         private const val KEY_XMP_SUBJECTS = "xmpSubjects"
         private const val KEY_XMP_TITLE = "xmpTitle"
+        private const val KEY_XMP_DESCRIPTION = "xmpDescription"
         private const val KEY_RATING = "rating"
 
         private const val MASK_IS_ANIMATED = 1 shl 0
