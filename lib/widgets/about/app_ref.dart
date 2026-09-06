@@ -8,7 +8,7 @@ import 'package:aves/widgets/common/identity/aves_logo.dart';
 import 'package:flutter/material.dart';
 
 class AppReference extends StatelessWidget {
-  static const avesGithub = 'https://github.com/weimi95/weitu';
+  static const avesGithub = 'https://github.com/deckerst/aves';
   static const avesFaq = '$avesGithub/wiki/FAQ';
 
   const AppReference({super.key});
@@ -24,12 +24,7 @@ class AppReference extends StatelessWidget {
             alignment: .center,
             spacing: 16,
             crossAxisAlignment: .center,
-            children: [
-              ...AppReference.buildLinks(context),
-              const SizedBox(height: 8),
-              const Text('基于 Aves 二次开发，感谢原作者 deckerst 及所有贡献者',
-                  textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: Colors.grey)),
-            ],
+            children: AppReference.buildLinks(context),
           ),
         ],
       ),
@@ -69,22 +64,6 @@ class AppReference extends StatelessWidget {
   static List<Widget> buildLinks(BuildContext context) {
     final l10n = context.l10n;
     return [
-      const LinkChip(
-        leading: Icon(
-          AIcons.github,
-          size: 24,
-        ),
-        text: 'GitHub',
-        urlString: AppReference.avesGithub,
-      ),
-      LinkChip(
-        leading: const Icon(
-          AIcons.legal,
-          size: 22,
-        ),
-        text: l10n.aboutLinkLicense,
-        urlString: '${AppReference.avesGithub}/blob/main/LICENSE',
-      ),
       LinkChip(
         leading: const Icon(
           AIcons.privacy,
