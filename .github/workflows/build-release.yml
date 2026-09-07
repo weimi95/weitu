@@ -1,0 +1,110 @@
+name: Build Release APK
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: build-release-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  build_release:
+    name: Build signed release APKs (arm64 + v7a)
+    runs-on: ubuntu-latest
+    steps:
+      # AGP 9.3.1 + jvmToolchain 21 requires a modern JDK.
+      - name: Set up JDK for Android Gradle plugin
+        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95 # v5.6.0
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Checkout repository (retry 1)
+        if: failure()
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Cache pub & Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-pub-gradle-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-gradle-
+
+      # Use the bundled Flutter wrapper (`./flutterw`). Do NOT use subosito/flutter-action:
+      # 3.47.0-0.3.pre is on the beta channel and that action resolves against stable,
+      # failing with "Unable to determine Flutter version for channel: stable".
+      - name: Get Flutter packages
+        run: ./flutterw pub get
+
+      - name: Generate app localizations
+        run: ./flutterw gen-l10n
+
+      # Restore the release signing keystore (PKCS12) from repo secrets.
+      # NOTE: scripts/apply_flavor_*.sh are NOT run: after the Google/Firebase strip,
+      # pubspec.yaml already defaults aves_report_platform -> aves_report_console and
+      # aves_services_platform -> aves_services_none, and those scripts are not executable
+      # in the checkout (Permission denied) anyway.
+      - name: Restore signing keystore
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/keys"
+          printf '%s' "$WEITU_KEYSTORE_BASE64" | base64 -d > "$GITHUB_WORKSPACE/keys/weitu-release.p12"
+          ls -l "$GITHUB_WORKSPACE/keys"
+        env:
+          WEITU_KEYSTORE_BASE64: ${{ secrets.WEITU_KEYSTORE_BASE64 }}
+
+      # --split-per-abi + --target-platform android-arm,android-arm64 emits exactly two APKs:
+      # armeabi-v7a (legacy 32-bit) and arm64-v8a (modern phones). x86_64 is excluded on purpose.
+      - name: Build release APKs
+        run: |
+          ./flutterw build apk --release -t lib/main_play.dart --flavor play \
+            --split-per-abi --target-platform android-arm,android-arm64 2>&1 | tee -a build_log.txt
+        env:
+          AVES_STORE_FILE: ${{ github.workspace }}/keys/weitu-release.p12
+          AVES_STORE_PASSWORD: ${{ secrets.WEITU_KEY_PASSWORD }}
+          AVES_KEY_ALIAS: weitu
+          AVES_KEY_PASSWORD: ${{ secrets.WEITU_KEY_PASSWORD }}
+
+      - name: Rename APKs for distribution
+        run: |
+          cd build/app/outputs/apk/play/release
+          for f in app-*-play-release.apk; do
+            abi=$(echo "$f" | sed -E 's/^app-(.*)-play-release\.apk$/\1/')
+            mv "$f" "weitu-1.0.0-${abi}.apk"
+          done
+          ls -lh
+
+      - name: Upload APKs
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: weitu-1.0.0-release-apks
+          path: build/app/outputs/apk/play/release/*.apk
+          if-no-files-found: error
+
+      - name: Create GitHub Release v1.0.0
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.0
+          name: 微图相册 v1.0.0
+          body_path: .github/RELEASE_NOTES_v1.0.0.md
+          files: build/app/outputs/apk/play/release/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload build log (diagnostics)
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release-build-log
+          path: build_log.txt
+          if-no-files-found: warn
