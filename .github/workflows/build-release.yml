@@ -75,14 +75,28 @@ jobs:
           AVES_KEY_ALIAS: weitu
           AVES_KEY_PASSWORD: ${{ secrets.WEITU_KEY_PASSWORD }}
 
+      # AGP output naming varies by version (app-<abi>-<flavor>-release.apk vs
+      # app-<flavor>-<abi>-release.apk), so match on the ABI substring instead of a fixed
+      # prefix. Renaming is cosmetic: if it fails, the original APKs are still uploaded.
+      - name: List raw APK outputs (diagnostics)
+        run: ls -laR build/app/outputs/apk || true
+
       - name: Rename APKs for distribution
+        continue-on-error: true
         run: |
           cd build/app/outputs/apk/play/release
-          for f in app-*-play-release.apk; do
-            abi=$(echo "$f" | sed -E 's/^app-(.*)-play-release\.apk$/\1/')
-            mv "$f" "weitu-1.0.0-${abi}.apk"
+          echo "raw:"; ls -la
+          for f in *.apk; do
+            [ -e "$f" ] || continue
+            case "$f" in
+              *arm64-v8a*)   abi=arm64-v8a ;;
+              *armeabi-v7a*) abi=armeabi-v7a ;;
+              *x86_64*)      abi=x86_64 ;;
+              *)             continue ;;
+            esac
+            [ "$f" = "weitu-1.0.0-${abi}.apk" ] || mv -- "$f" "weitu-1.0.0-${abi}.apk"
           done
-          ls -lh
+          echo "renamed:"; ls -lh
 
       - name: Upload APKs
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
