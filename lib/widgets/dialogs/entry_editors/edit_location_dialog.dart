@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
+import 'dart:math';
 
 import 'package:aves/app_mode.dart';
 import 'package:aves/locale/number.dart';
@@ -30,14 +31,11 @@ import 'package:aves/widgets/common/providers/media_query_data_provider.dart';
 import 'package:aves/widgets/dialogs/aves_dialog.dart';
 import 'package:aves/widgets/dialogs/item_picker.dart';
 import 'package:aves/widgets/dialogs/pick_dialogs/item_pick_page.dart';
-import 'package:aves/widgets/dialogs/pick_dialogs/location_pick_page.dart';
 import 'package:aves/widgets/dialogs/time_shift_dialog.dart';
-import 'package:aves/widgets/map/map_page.dart';
 import 'package:aves_map/aves_map.dart';
 import 'package:aves_model/aves_model.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:gpx/gpx.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
@@ -60,7 +58,7 @@ class EditEntryLocationDialog extends StatefulWidget {
 
 class _EditEntryLocationDialogState extends State<EditEntryLocationDialog> with FeedbackMixin {
   final Set<StreamSubscription> _subscriptions = {};
-  LocationEditAction _action = LocationEditAction.chooseOnMap;
+  LocationEditAction _action = LocationEditAction.setCustom;
   LatLng? _mapCoordinates;
   late final AvesEntry mainEntry;
   late AvesEntry _copyItemSource;
@@ -74,7 +72,7 @@ class _EditEntryLocationDialogState extends State<EditEntryLocationDialog> with 
   late ANumberParser coordinateParser;
 
   static const _coordinatePattern = '0.000000';
-  static const _gpxProjection = SphericalMercator();
+  static const _gpxProjection = _WebMercator();
   static const _minDurationToGpxPoint = Duration(hours: 1);
 
   @override
@@ -172,8 +170,6 @@ class _EditEntryLocationDialogState extends State<EditEntryLocationDialog> with 
 
   Widget _buildContent() {
     switch (_action) {
-      case .chooseOnMap:
-        return _buildChooseOnMapContent(context);
       case .copyItem:
         return _buildCopyItemContent(context);
       case .setCustom:
@@ -183,23 +179,6 @@ class _EditEntryLocationDialogState extends State<EditEntryLocationDialog> with 
       case .remove:
         return const SizedBox();
     }
-  }
-
-  Widget _buildChooseOnMapContent(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(start: 16, end: 8),
-      child: Row(
-        children: [
-          Expanded(child: _coordinatesText(context, _mapCoordinates)),
-          const SizedBox(width: 8),
-          IconButton(
-            icon: const Icon(AIcons.map),
-            onPressed: _pickLocation,
-            tooltip: context.l10n.editEntryLocationDialogChooseOnMap,
-          ),
-        ],
-      ),
-    );
   }
 
   void _setCustomLocation(LatLng latLng) {
@@ -220,27 +199,6 @@ class _EditEntryLocationDialogState extends State<EditEntryLocationDialog> with 
             },
           )
         : null;
-  }
-
-  Future<void> _pickLocation() async {
-    final pickCollection = _createPickCollection();
-    final latLng = await Navigator.maybeOf(context)?.push<LatLng>(
-      MaterialPageRoute(
-        settings: const RouteSettings(name: LocationPickPage.routeName),
-        builder: (context) => LocationPickPage(
-          collection: pickCollection,
-          initialLocation: _mapCoordinates,
-        ),
-        fullscreenDialog: true,
-      ),
-    );
-    if (latLng != null) {
-      settings.mapDefaultCenter = latLng;
-      setState(() {
-        _mapCoordinates = latLng;
-        _validate();
-      });
-    }
   }
 
   Widget _buildCopyItemContent(BuildContext context) {
@@ -353,17 +311,6 @@ class _EditEntryLocationDialogState extends State<EditEntryLocationDialog> with 
                   icon: const Icon(AIcons.edit),
                   onPressed: _pickGpxShift,
                   tooltip: l10n.changeTooltip,
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(child: Text(l10n.statsWithGps(_gpxMap.length))),
-                const SizedBox(width: 8),
-                IconButton(
-                  icon: const Icon(AIcons.map),
-                  onPressed: _previewGpx,
-                  tooltip: l10n.openMapPageTooltip,
                 ),
               ],
             ),
@@ -487,59 +434,6 @@ class _EditEntryLocationDialogState extends State<EditEntryLocationDialog> with 
     setState(_validate);
   }
 
-  Future<void> _previewGpx() async {
-    final source = widget.collection?.source;
-    if (source == null) return;
-
-    final previewEntries = _gpxMap.entries.map((kv) {
-      final entry = kv.key.copyWith();
-      final latLng = kv.value;
-      final catalogMetadata = entry.catalogMetadata?.copyWith() ?? CatalogMetadata(id: entry.id);
-      catalogMetadata.latitude = latLng.latitude;
-      catalogMetadata.longitude = latLng.longitude;
-      entry.catalogMetadata = catalogMetadata;
-      return entry;
-    }).toList();
-
-    final mapCollection = CollectionLens(
-      source: source,
-      listenToSource: false,
-      fixedSelection: previewEntries,
-    );
-
-    final trackPoints = _gpx?.trks
-        .expand((trk) => trk.trksegs)
-        .map(
-          (trkSeg) => trkSeg.trkpts
-              .map((wpt) {
-                final lat = wpt.lat;
-                final lon = wpt.lon;
-                return (lat != null && lon != null) ? LatLng(lat, lon) : null;
-              })
-              .nonNulls
-              .toList(),
-        )
-        .toList();
-
-    final tracks = trackPoints != null ? GeoTrack.buildTracks(trackPoints) : null;
-
-    await Navigator.maybeOf(context)?.push(
-      MaterialPageRoute(
-        settings: const RouteSettings(name: LocationPickPage.routeName),
-        builder: (context) {
-          return ListenableProvider<ValueNotifier<AppMode>>.value(
-            value: ValueNotifier(.previewMap),
-            child: MapPage(
-              collection: mapCollection,
-              tracks: tracks,
-            ),
-          );
-        },
-        fullscreenDialog: true,
-      ),
-    );
-  }
-
   Text _unknownText(BuildContext context) {
     final l10n = context.l10n;
     return Text(
@@ -602,8 +496,6 @@ class _EditEntryLocationDialogState extends State<EditEntryLocationDialog> with 
 
   void _validate() {
     switch (_action) {
-      case .chooseOnMap:
-        _isValidNotifier.value = _mapCoordinates != null;
       case .copyItem:
         _isValidNotifier.value = _copyItemSource.hasGps;
       case .setCustom:
@@ -621,8 +513,6 @@ class _EditEntryLocationDialogState extends State<EditEntryLocationDialog> with 
     final LocationEditActionResult result = {};
     void addLocationForAllEntries(LatLng? latLng) => result.addEntries(entries.map((v) => MapEntry(v, latLng)));
     switch (_action) {
-      case .chooseOnMap:
-        addLocationForAllEntries(_mapCoordinates);
       case .copyItem:
         addLocationForAllEntries(_copyItemSource.latLng);
       case .setCustom:
@@ -637,3 +527,25 @@ class _EditEntryLocationDialogState extends State<EditEntryLocationDialog> with 
 }
 
 typedef LocationEditActionResult = Map<AvesEntry, LatLng?>;
+
+class _WebMercator {
+  static const double _radius = 6378137.0;
+  static const double _deg = math.pi / 180;
+
+  const _WebMercator();
+
+  (double, double) projectXY(LatLng latLng) {
+    const max = 1 - 1e-15;
+    final lat = math.max(math.min(max, latLng.latitude * _deg), -max);
+    final sin = math.sin(lat);
+    final x = _radius * (latLng.longitude * _deg + math.pi);
+    final y = _radius / 2 * math.log((1 + sin) / (1 - sin));
+    return (x, y);
+  }
+
+  LatLng unprojectXY(double x, double y) {
+    final lat = (2 * math.atan(math.exp(y / _radius)) - math.pi / 2) / _deg;
+    final lon = x / _radius / _deg - 180;
+    return LatLng(lat, lon);
+  }
+}

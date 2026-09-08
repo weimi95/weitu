@@ -18,9 +18,7 @@ class PlatformMobileServices extends MobileServices {
 
   @override
   Widget buildMap<T>({
-    required AvesMapController controller,
     required Listenable clusterListenable,
-    required ValueNotifier<ZoomedBounds> boundsNotifier,
     required EntryMapStyle style,
     required TransitionBuilder decoratorBuilder,
     required WidgetBuilder buttonPanelBuilder,

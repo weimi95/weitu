@@ -9,13 +9,8 @@ import 'package:aves/services/common/services.dart';
 import 'package:aves/theme/icons.dart';
 import 'package:aves/widgets/common/extensions/build_context.dart';
 import 'package:aves/widgets/common/identity/aves_filter_chip.dart';
-import 'package:aves/widgets/common/map/geo_map.dart';
-import 'package:aves/widgets/common/map/map_action_delegate.dart';
-import 'package:aves/widgets/common/providers/map_theme_provider.dart';
 import 'package:aves/widgets/dialogs/aves_dialog.dart';
-import 'package:aves/widgets/map/map_page.dart';
 import 'package:aves/widgets/viewer/info/common.dart';
-import 'package:aves_map/aves_map.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,7 +35,6 @@ class LocationSection extends StatefulWidget {
 }
 
 class _LocationSectionState extends State<LocationSection> {
-  final AvesMapController _mapController = AvesMapController();
 
   CollectionLens? get collection => widget.collection;
 
@@ -62,7 +56,6 @@ class _LocationSectionState extends State<LocationSection> {
   @override
   void dispose() {
     _unregisterWidget(widget);
-    _mapController.dispose();
     super.dispose();
   }
 
@@ -79,34 +72,10 @@ class _LocationSectionState extends State<LocationSection> {
     if (!entry.hasGps) return const SizedBox();
 
     final canNavigate = context.select<ValueNotifier<AppMode>, bool>((v) => v.value.canNavigate);
-    return NotificationListener(
-      onNotification: (notification) {
-        if (notification is OpenMapAppNotification) {
-          _openMapApp();
-          return true;
-        }
-        return false;
-      },
-      child: Column(
+    return Column(
         crossAxisAlignment: .start,
         children: [
           if (widget.showTitle) const SectionRow(icon: AIcons.location),
-          MapTheme(
-            interactive: false,
-            showCoordinateFilter: false,
-            navigationButton: canNavigate ? MapNavigationButton.map : MapNavigationButton.none,
-            visualDensity: VisualDensity.compact,
-            mapHeight: 200,
-            child: GeoMap(
-              controller: _mapController,
-              entries: [entry],
-              availableSize: MediaQuery.sizeOf(context),
-              isAnimatingNotifier: widget.isScrollingNotifier,
-              onUserZoomChange: (zoom) => settings.infoMapZoom = zoom.roundToDouble(),
-              onMarkerTap: collection != null && canNavigate ? (location, entry) => _openMapPage(context) : null,
-              openMapPage: collection != null ? _openMapPage : null,
-            ),
-          ),
           ListenableBuilder(
             listenable: entry.addressChangeNotifier,
             builder: (context, child) {
@@ -146,46 +115,11 @@ class _LocationSectionState extends State<LocationSection> {
             },
           ),
         ],
-      ),
     );
-  }
-
-  Future<void> _openMapPage(BuildContext context) async {
-    final baseCollection = collection;
-    if (baseCollection == null) return;
-
-    final mapCollection = baseCollection.copyWith(
-      listenToSource: true,
-      fixedSelection: baseCollection.sortedEntries.where((entry) => entry.hasGps).toList(),
-    );
-    await Navigator.maybeOf(context)?.push(
-      MaterialPageRoute(
-        settings: const RouteSettings(name: MapPage.routeName),
-        builder: (context) => MapPage(
-          collection: mapCollection,
-          initialEntry: entry,
-        ),
-      ),
-    );
-  }
-
-  Future<void> _openMapApp() async {
-    final latLng = entry.latLng;
-    if (latLng != null) {
-      await appService.openMap(latLng).then((success) {
-        if (!success) showNoMatchingAppDialog(context);
-      });
-    }
   }
 
   void _onMetadataChanged() {
     setState(() {});
-
-    final location = entry.latLng;
-    if (location != null) {
-      _mapController.notifyMarkerLocationChange();
-      _mapController.moveTo(location);
-    }
   }
 }
 

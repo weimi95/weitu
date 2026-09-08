@@ -131,7 +131,6 @@ class EntryActionDelegate with FeedbackMixin, PermissionAwareMixin, SizeAwareMix
         case .editTags:
         case .removeMetadata:
         case .exportMetadata:
-        case .showGeoTiffOnMap:
         case .convertMotionPhotoToStillImage:
         case .viewMotionPhotoVideo:
           return _metadataActionDelegate.isVisible(

@@ -20,7 +20,6 @@ enum EntryConvertAction { convert, convertMotionPhotoToStillImage }
 enum LengthUnit { px, percent }
 
 enum LocationEditAction {
-  chooseOnMap,
   copyItem,
   setCustom,
   importGpx,

@@ -48,7 +48,6 @@ enum EntryAction {
   removeMetadata,
   exportMetadata,
   // metadata / GeoTIFF
-  showGeoTiffOnMap,
   // metadata / motion photo
   convertMotionPhotoToStillImage,
   viewMotionPhotoVideo,
@@ -142,7 +141,6 @@ class EntryActions {
   ];
 
   static const formatSpecificMetadataActions = <EntryAction>[
-    .showGeoTiffOnMap,
     .convertMotionPhotoToStillImage,
     .viewMotionPhotoVideo,
   ];

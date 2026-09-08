@@ -12,7 +12,6 @@ enum EntrySetAction {
   setHome,
   emptyBin,
   // browsing or selecting
-  map,
   slideshow,
   stats,
   rescan,
@@ -57,7 +56,6 @@ class EntrySetActions {
     .addShortcut,
     .setHome,
     null,
-    .map,
     .slideshow,
     .stats,
     null,
@@ -69,7 +67,6 @@ class EntrySetActions {
   static const collectionEditorBrowsing = <EntrySetAction>[
     .searchCollection,
     .toggleTitleSearch,
-    .map,
     .slideshow,
     .stats,
     // only available as a quick action
@@ -86,7 +83,6 @@ class EntrySetActions {
     .rename,
     .toggleFavourite,
     null,
-    .map,
     .slideshow,
     .stats,
     null,
@@ -105,7 +101,6 @@ class EntrySetActions {
     .convert,
     .copyToClipboard,
     .exportGpx,
-    .map,
     .slideshow,
     .stats,
     .selectAll,

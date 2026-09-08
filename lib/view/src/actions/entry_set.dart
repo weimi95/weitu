@@ -22,7 +22,6 @@ extension ExtraEntrySetActionView on EntrySetAction {
       .setHome => l10n.collectionActionSetHome,
       .emptyBin => l10n.collectionActionEmptyBin,
       // browsing or selecting
-      .map => l10n.menuActionMap,
       .slideshow => l10n.menuActionSlideshow,
       .stats => l10n.menuActionStats,
       .rescan => l10n.collectionActionRescan,
@@ -73,7 +72,6 @@ extension ExtraEntrySetActionView on EntrySetAction {
       .setHome => AIcons.home,
       .emptyBin => AIcons.emptyBin,
       // browsing or selecting
-      .map => AIcons.map,
       .slideshow => AIcons.slideshow,
       .stats => AIcons.stats,
       .rescan => AIcons.refresh,

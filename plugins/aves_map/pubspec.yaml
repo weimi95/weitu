@@ -15,7 +15,6 @@ dependencies:
   custom_rounded_rectangle_border:
   equatable:
   fluster:
-  flutter_map:
   latlong2:
   leak_tracker:
   provider:

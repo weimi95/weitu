@@ -21,7 +21,6 @@ extension ExtraChipSetActionView on ChipSetAction {
       .createAlbum => l10n.chipActionCreateAlbum,
       .createVault => l10n.chipActionCreateVault,
       // browsing or selecting
-      .map => l10n.menuActionMap,
       .slideshow => l10n.menuActionSlideshow,
       .stats => l10n.menuActionStats,
       // selecting (single/multiple filters)
@@ -59,7 +58,6 @@ extension ExtraChipSetActionView on ChipSetAction {
       .createAlbum => AIcons.add,
       .createVault => AIcons.vaultAdd,
       // browsing or selecting
-      .map => AIcons.map,
       .slideshow => AIcons.slideshow,
       .stats => AIcons.stats,
       // selecting (single/multiple filters)

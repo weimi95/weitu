@@ -50,9 +50,7 @@ import 'package:aves/widgets/dialogs/aves_dialog.dart';
 import 'package:aves/widgets/dialogs/convert_entry_dialog.dart';
 import 'package:aves/widgets/dialogs/entry_editors/rename_entry_set_page.dart';
 import 'package:aves/widgets/dialogs/filter_editors/create_dynamic_album_dialog.dart';
-import 'package:aves/widgets/dialogs/pick_dialogs/location_pick_page.dart';
 import 'package:aves/widgets/filter_grids/albums_page.dart';
-import 'package:aves/widgets/map/map_page.dart';
 import 'package:aves/widgets/search/collection_search_page_route.dart';
 import 'package:aves/widgets/stats/stats_page.dart';
 import 'package:aves/widgets/viewer/slideshow_page.dart';
@@ -102,7 +100,6 @@ class EntrySetActionDelegate with FeedbackMixin, PermissionAwareMixin, SizeAware
       case .emptyBin:
         return isMain && isTrash && canWrite;
       // browsing or selecting
-      case .map:
       case .slideshow:
       case .stats:
         return isMain;
@@ -169,7 +166,6 @@ class EntrySetActionDelegate with FeedbackMixin, PermissionAwareMixin, SizeAware
         return collection.filters.isNotEmpty;
       case .emptyBin:
         return !isSelecting && hasItems;
-      case .map:
       case .slideshow:
       case .stats:
       case .rescan:
@@ -226,8 +222,6 @@ class EntrySetActionDelegate with FeedbackMixin, PermissionAwareMixin, SizeAware
       case .setHome:
         _setHome(context);
       // browsing or selecting
-      case .map:
-        _goToMap(context);
       case .slideshow:
         _goToSlideshow(context);
       case .stats:
@@ -465,7 +459,7 @@ class EntrySetActionDelegate with FeedbackMixin, PermissionAwareMixin, SizeAware
         })
         .nonNulls
         .toList();
-    final bounds = ZoomedBounds.fromPoints(points: waypoints.map((v) => LatLng(v.lat!, v.lon!)).toSet());
+    final bounds = LatLngBounds.fromPoints(waypoints.map((v) => LatLng(v.lat!, v.lon!)).toList());
 
     final gpxDate = DateTime.now();
     final gpx = Gpx()
@@ -477,10 +471,10 @@ class EntrySetActionDelegate with FeedbackMixin, PermissionAwareMixin, SizeAware
         ),
         time: gpxDate,
         bounds: Bounds(
-          minlat: bounds.sw.latitude,
-          minlon: bounds.sw.longitude,
-          maxlat: bounds.ne.latitude,
-          maxlon: bounds.ne.longitude,
+          minlat: bounds.southWest.latitude,
+          minlon: bounds.southWest.longitude,
+          maxlat: bounds.northEast.latitude,
+          maxlon: bounds.northEast.longitude,
         ),
       )
       ..wpts = waypoints
@@ -680,26 +674,6 @@ class EntrySetActionDelegate with FeedbackMixin, PermissionAwareMixin, SizeAware
     await _edit(context, todoEntries, (entry) => entry.editLocation(locationByEntry[entry]));
   }
 
-  Future<LatLng?> editLocationByMap(BuildContext context, Set<AvesEntry> entries, LatLng clusterLocation, CollectionLens mapCollection) async {
-    final todoEntries = await _getEditableItems(context, entries, canEdit: (entry) => entry.canEditLocation);
-    if (todoEntries == null || todoEntries.isEmpty) return null;
-
-    final location = await Navigator.maybeOf(context)?.push<LatLng>(
-      MaterialPageRoute(
-        settings: const RouteSettings(name: LocationPickPage.routeName),
-        builder: (context) => LocationPickPage(
-          collection: mapCollection,
-          initialLocation: clusterLocation,
-        ),
-        fullscreenDialog: true,
-      ),
-    );
-    if (location == null) return null;
-
-    await _edit(context, todoEntries, (entry) => entry.editLocation(location));
-    return location;
-  }
-
   Future<void> removeLocation(BuildContext context, Set<AvesEntry> entries) async {
     final l10n = context.l10n;
     if (!await showConfirmationDialog(
@@ -795,24 +769,6 @@ class EntrySetActionDelegate with FeedbackMixin, PermissionAwareMixin, SizeAware
     if (types == null || types.isEmpty) return;
 
     await _edit(context, entries, (entry) => entry.removeMetadata(types));
-  }
-
-  Future<void> _goToMap(BuildContext context) async {
-    final collection = context.read<CollectionLens>();
-    final entries = _getTargetItems(context);
-
-    // need collection with fresh ID to prevent hero from scroller on Map page to Collection page
-    final mapCollection = CollectionLens(
-      source: collection.source,
-      filters: collection.filters,
-      fixedSelection: entries.where((entry) => entry.hasGps).toList(),
-    );
-    await Navigator.maybeOf(context)?.push(
-      MaterialPageRoute(
-        settings: const RouteSettings(name: MapPage.routeName),
-        builder: (context) => MapPage(collection: mapCollection),
-      ),
-    );
   }
 
   void _goToSlideshow(BuildContext context) {

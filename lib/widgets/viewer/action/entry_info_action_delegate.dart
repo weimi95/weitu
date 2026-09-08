@@ -18,7 +18,6 @@ import 'package:aves/widgets/common/action_mixins/feedback.dart';
 import 'package:aves/widgets/common/action_mixins/permission_aware.dart';
 import 'package:aves/widgets/common/extensions/build_context.dart';
 import 'package:aves/widgets/dialogs/aves_confirmation_dialog.dart';
-import 'package:aves/widgets/map/map_page.dart';
 import 'package:aves/widgets/viewer/action/single_entry_editor.dart';
 import 'package:aves/widgets/viewer/debug/debug_page.dart';
 import 'package:aves/widgets/viewer/info/embedded/notifications.dart';
@@ -49,8 +48,6 @@ class EntryInfoActionDelegate with FeedbackMixin, PermissionAwareMixin, EntryEdi
       case .exportMetadata:
         return true;
       // GeoTIFF
-      case .showGeoTiffOnMap:
-        return appMode.canNavigate && targetEntry.isGeotiff;
       // motion photo
       case .convertMotionPhotoToStillImage:
         return canWrite && targetEntry.isMotionPhoto;
@@ -87,8 +84,6 @@ class EntryInfoActionDelegate with FeedbackMixin, PermissionAwareMixin, EntryEdi
       case .exportMetadata:
         return !availability.isLocked;
       // GeoTIFF
-      case .showGeoTiffOnMap:
-        return true;
       // motion photo
       case .convertMotionPhotoToStillImage:
         return targetEntry.canEdit && targetEntry.isXmpEditionSupported;
@@ -119,8 +114,6 @@ class EntryInfoActionDelegate with FeedbackMixin, PermissionAwareMixin, EntryEdi
       case .exportMetadata:
         await _exportMetadata(context, targetEntry);
       // GeoTIFF
-      case .showGeoTiffOnMap:
-        await _showGeoTiffOnMap(context, targetEntry, collection);
       // motion photo
       case .convertMotionPhotoToStillImage:
         await _convertMotionPhotoToStillImage(context, targetEntry);
@@ -245,35 +238,6 @@ class EntryInfoActionDelegate with FeedbackMixin, PermissionAwareMixin, EntryEdi
     }
 
     await edit(context, targetEntry, targetEntry.removeTrailerVideo);
-  }
-
-  Future<void> _showGeoTiffOnMap(BuildContext context, AvesEntry targetEntry, CollectionLens? collection) async {
-    final info = await metadataFetchService.getGeoTiffInfo(targetEntry);
-    if (info == null) return;
-
-    final mappedGeoTiff = MappedGeoTiff(
-      info: info,
-      entry: targetEntry,
-      devicePixelRatio: MediaQuery.devicePixelRatioOf(context),
-    );
-    if (!mappedGeoTiff.canOverlay) return;
-
-    final baseCollection = collection;
-    if (baseCollection == null) return;
-
-    final mapCollection = baseCollection.copyWith(
-      listenToSource: true,
-      fixedSelection: baseCollection.sortedEntries.where((entry) => entry.hasGps).where((entry) => entry != targetEntry).toList(),
-    );
-    await Navigator.maybeOf(context)?.push(
-      MaterialPageRoute(
-        settings: const RouteSettings(name: MapPage.routeName),
-        builder: (context) => MapPage(
-          collection: mapCollection,
-          overlayEntry: mappedGeoTiff,
-        ),
-      ),
-    );
   }
 
   void _goToDebug(BuildContext context, AvesEntry targetEntry) {

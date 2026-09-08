@@ -63,7 +63,6 @@ extension ExtraEntryActionView on EntryAction {
       .removeMetadata => l10n.entryInfoActionRemoveMetadata,
       .exportMetadata => l10n.entryInfoActionExportMetadata,
       // metadata / GeoTIFF
-      .showGeoTiffOnMap => l10n.entryActionShowGeoTiffOnMap,
       // metadata / motion photo
       .convertMotionPhotoToStillImage => l10n.entryActionConvertMotionPhotoToStillImage,
       .viewMotionPhotoVideo => l10n.entryActionViewMotionPhotoVideo,
@@ -142,7 +141,6 @@ extension ExtraEntryActionView on EntryAction {
       .removeMetadata => AIcons.clear,
       .exportMetadata => AIcons.fileExport,
       // metadata / GeoTIFF
-      .showGeoTiffOnMap => AIcons.map,
       // metadata / motion photo
       .convertMotionPhotoToStillImage => AIcons.convertToStillImage,
       .viewMotionPhotoVideo => AIcons.openVideoPart,

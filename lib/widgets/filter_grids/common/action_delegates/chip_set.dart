@@ -26,7 +26,6 @@ import 'package:aves/widgets/dialogs/aves_confirmation_dialog.dart';
 import 'package:aves/widgets/dialogs/aves_dialog.dart';
 import 'package:aves/widgets/dialogs/filter_editors/cover_selection_dialog.dart';
 import 'package:aves/widgets/dialogs/tile_view_dialog.dart';
-import 'package:aves/widgets/map/map_page.dart';
 import 'package:aves/widgets/search/collection_search_page_route.dart';
 import 'package:aves/widgets/stats/stats_page.dart';
 import 'package:aves/widgets/viewer/slideshow_page.dart';
@@ -100,7 +99,6 @@ abstract class ChipSetActionDelegate<T extends CollectionFilter> with FeedbackMi
       case .createVault:
         return false;
       // browsing or selecting
-      case .map:
       case .slideshow:
       case .stats:
         return isMain;
@@ -153,7 +151,6 @@ abstract class ChipSetActionDelegate<T extends CollectionFilter> with FeedbackMi
       case .createVault:
         return true;
       // browsing or selecting
-      case .map:
       case .slideshow:
       case .stats:
         return (!isSelecting && hasItems) || (isSelecting && hasSelection);
@@ -200,8 +197,6 @@ abstract class ChipSetActionDelegate<T extends CollectionFilter> with FeedbackMi
       case .createVault:
         break;
       // browsing or selecting
-      case .map:
-        _goToMap(context);
       case .slideshow:
         _goToSlideshow(context);
       case .stats:
@@ -311,19 +306,6 @@ abstract class ChipSetActionDelegate<T extends CollectionFilter> with FeedbackMi
           source: context.read<CollectionSource>(),
           filters: {filter},
         ),
-      ),
-    );
-  }
-
-  Future<void> _goToMap(BuildContext context) async {
-    final mapCollection = CollectionLens(
-      source: context.read<CollectionSource>(),
-      fixedSelection: _selectedEntries(context).where((entry) => entry.hasGps).toList(),
-    );
-    await Navigator.maybeOf(context)?.push(
-      MaterialPageRoute(
-        settings: const RouteSettings(name: MapPage.routeName),
-        builder: (context) => MapPage(collection: mapCollection),
       ),
     );
   }

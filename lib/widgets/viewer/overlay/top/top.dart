@@ -9,7 +9,6 @@ import 'package:aves/widgets/common/fx/borders.dart';
 import 'package:aves/widgets/viewer/multipage/conductor.dart';
 import 'package:aves/widgets/viewer/overlay/top/details/details.dart';
 import 'package:aves/widgets/viewer/overlay/top/histogram.dart';
-import 'package:aves/widgets/viewer/overlay/top/minimap.dart';
 import 'package:aves/widgets/viewer/page_entry_builder.dart';
 import 'package:aves/widgets/viewer/view/conductor.dart';
 import 'package:aves/widgets/viewer/view/controller.dart';
@@ -70,10 +69,6 @@ class ViewerTopOverlay extends StatelessWidget {
         final startCornerChildren = [
           if (settings.showOverlayZoomLevel)
             ZoomLevelIndicator(
-              viewStateNotifier: viewStateNotifier,
-            ),
-          if (settings.showOverlayMinimap)
-            Minimap(
               viewStateNotifier: viewStateNotifier,
             ),
         ];

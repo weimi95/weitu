@@ -9,7 +9,7 @@ publish_to: none
 # - Play Store changelog: /whatsnew/whatsnew-en-US
 # - izzy changelog:       /fastlane/metadata/android/en-US/changelogs/XXX01.txt
 # - libre changelog:      /fastlane/metadata/android/en-US/changelogs/XXX.txt
-version: 1.0.2+3
+version: 1.0.3+4
 
 environment:
   # this project bundles Flutter SDK via `flutter_wrapper`
@@ -95,7 +95,6 @@ dependencies:
   flutter_localizations_plus:
     git:
       url: https://github.com/deckerst/flutter_localizations_plus.git
-  flutter_map:
   flutter_markdown_plus:
   flutter_staggered_animations:
     git:
@@ -147,8 +146,6 @@ dependencies:
       url: https://github.com/deckerst/aves_streams_channel.git
   synchronized:
   url_launcher:
-  # `vector_map_tiles` v10.0.0-beta API is unclear to provide sprites
-  vector_map_tiles: ^9.0.0-beta
   vector_math:
   vector_tile_renderer:
   volume_controller:

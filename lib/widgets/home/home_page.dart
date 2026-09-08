@@ -28,7 +28,6 @@ import 'package:aves/widgets/explorer/explorer_page.dart';
 import 'package:aves/widgets/filter_grids/albums_page.dart';
 import 'package:aves/widgets/filter_grids/tags_page.dart';
 import 'package:aves/widgets/home/home_error.dart';
-import 'package:aves/widgets/map/map_page.dart';
 import 'package:aves/widgets/search/collection_search_page_route.dart';
 import 'package:aves/widgets/settings/home_widget_settings_page.dart';
 import 'package:aves/widgets/settings/screen_saver_settings_page.dart';
@@ -70,7 +69,6 @@ class _HomePageState extends State<HomePage> {
     AlbumListPage.routeName,
     CollectionPage.routeName,
     ExplorerPage.routeName,
-    MapPage.routeName,
     SearchPage.routeName,
   ];
 
@@ -129,17 +127,6 @@ class _HomePageState extends State<HomePage> {
           case IntentActions.view:
             appMode = .view;
             _secureUris = (intentData[IntentDataKeys.secureUris] as List?)?.cast<String>();
-          case IntentActions.viewGeo:
-            error = true;
-            if (intentUri != null) {
-              final locationZoom = parseGeoUri(intentUri);
-              if (locationZoom != null) {
-                _initialRouteName = MapPage.routeName;
-                _initialLocationZoom = locationZoom;
-                error = false;
-              }
-            }
-            break;
           case IntentActions.edit:
             appMode = .edit;
           case IntentActions.setWallpaper:
@@ -395,21 +382,6 @@ class _HomePageState extends State<HomePage> {
         return buildRoute((context) => const AlbumListPage(initialGroup: null));
       case TagListPage.routeName:
         return buildRoute((context) => const TagListPage(initialGroup: null));
-      case MapPage.routeName:
-        return buildRoute((context) {
-          final mapCollection = CollectionLens(
-            source: source,
-            filters: {
-              LocationFilter.located,
-              ...?filters,
-            },
-          );
-          return MapPage(
-            collection: mapCollection,
-            initialLocation: _initialLocationZoom?.$1,
-            initialZoom: _initialLocationZoom?.$2,
-          );
-        });
       case ExplorerPage.routeName:
         final path = _initialExplorerPath ?? settings.homeCustomExplorerPath;
         return buildRoute((context) => ExplorerPage(path: path));

@@ -11,7 +11,6 @@ enum ChipSetAction {
   createAlbum,
   createVault,
   // browsing or selecting
-  map,
   slideshow,
   stats,
   // selecting (single/multiple filters)
@@ -43,7 +42,6 @@ class ChipSetActions {
     .search,
     .toggleTitleSearch,
     null,
-    .map,
     .slideshow,
     .stats,
     null,
@@ -64,7 +62,6 @@ class ChipSetActions {
     .group,
     null,
     .showCollection,
-    .map,
     .slideshow,
     .stats,
     null,
