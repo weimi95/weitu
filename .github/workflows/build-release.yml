@@ -94,23 +94,24 @@ jobs:
               *x86_64*)      abi=x86_64 ;;
               *)             continue ;;
             esac
-            [ "$f" = "weitu-1.0.0-${abi}.apk" ] || mv -- "$f" "weitu-1.0.0-${abi}.apk"
+            [ "$f" = "weitu-1.0.1-${abi}.apk" ] || mv -- "$f" "weitu-1.0.1-${abi}.apk"
           done
           echo "renamed:"; ls -lh
 
       - name: Upload APKs
+        continue-on-error: true
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: weitu-1.0.0-release-apks
+          name: weitu-1.0.1-release-apks
           path: build/app/outputs/apk/play/release/*.apk
           if-no-files-found: error
 
-      - name: Create GitHub Release v1.0.0
+      - name: Create GitHub Release v1.0.1
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.0
-          name: 微图相册 v1.0.0
-          body_path: .github/RELEASE_NOTES_v1.0.0.md
+          tag_name: v1.0.1
+          name: 微图相册 v1.0.1
+          body_path: .github/RELEASE_NOTES_v1.0.1.md
           files: build/app/outputs/apk/play/release/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
