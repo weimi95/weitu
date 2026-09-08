@@ -142,8 +142,14 @@ class Tile extends StatelessWidget {
     final isLarge = infoLevel == 2;
     final cellHeight = this.cellHeight ?? thumbnailExtent;
     final maxInfoHeight = this.maxInfoHeight ?? (isLarge ? cellHeight * 0.3 : thumbnailExtent * 0.3);
-    final estimatedImageHeight = cellHeight - maxInfoHeight;
     final description = entry.catalogMetadata?.xmpDescription?.isNotEmpty == true ? entry.catalogMetadata!.xmpDescription : null;
+    // estimate the metadata height from how many lines of text it needs, so a card with
+    // little text stays short and the picture takes the rest of the cell
+    final tags = entry.tags;
+    final infoLineCount = 2 + (description != null ? 1 : 0) + (tags?.isNotEmpty == true ? 1 : 0);
+    final estimatedInfoHeight = 8 + infoLineCount * 20.0;
+    final infoHeight = estimatedInfoHeight > maxInfoHeight ? maxInfoHeight : estimatedInfoHeight;
+    final estimatedImageHeight = cellHeight - infoHeight;
     return SizedBox(
       height: cellHeight,
       child: Column(
@@ -163,10 +169,9 @@ class Tile extends StatelessWidget {
               cancellableNotifier: isScrollingNotifier,
             ),
           ),
-          ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: maxInfoHeight),
+          SizedBox(
+            height: infoHeight,
             child: SingleChildScrollView(
-              shrinkWrap: true,
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: _buildCardInfo(context, isLarge, description),
             ),

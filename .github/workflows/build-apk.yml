@@ -79,7 +79,19 @@ jobs:
       # in the checkout (Permission denied) and only did a redundant clean + pub get.
       - name: Build debug APK (play flavor)
         run: |
+          set -o pipefail
           ./flutterw build apk --debug -t lib/main_play.dart --flavor play --target-platform android-arm64 2>&1 | tee -a build_log.txt
+
+      - name: Publish build failure log
+        if: failure()
+        run: |
+          tail -120 build_log.txt > build_failure.txt || true
+          git config user.name "ci-bot"
+          git config user.email "ci-bot@users.noreply.github.com"
+          git checkout -B ci-failure-log
+          git add -f build_failure.txt
+          git commit -m "ci: build failure log" || echo "nothing to commit"
+          git push -f origin ci-failure-log || echo "push failed"
 
       - name: Upload APK
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
