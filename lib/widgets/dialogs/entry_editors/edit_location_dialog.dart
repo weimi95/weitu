@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
-import 'dart:math';
 
 import 'package:aves/app_mode.dart';
 import 'package:aves/locale/number.dart';
@@ -72,7 +71,6 @@ class _EditEntryLocationDialogState extends State<EditEntryLocationDialog> with 
   late ANumberParser coordinateParser;
 
   static const _coordinatePattern = '0.000000';
-  static const _gpxProjection = _WebMercator();
   static const _minDurationToGpxPoint = Duration(hours: 1);
 
   @override
@@ -418,13 +416,10 @@ class _EditEntryLocationDialogState extends State<EditEntryLocationDialog> with 
             final secondsToEnd = getDurationToPoint(entry, to).inSeconds;
             final t = (secondsFromStart.toDouble()) / (secondsFromStart + secondsToEnd);
 
-            final fromXY = _gpxProjection.projectXY(LatLng(from.lat!, from.lon!));
-            final toXY = _gpxProjection.projectXY(LatLng(to.lat!, to.lon!));
-            final entryXY = (
-              lerpDouble(fromXY.$1, toXY.$1, t)!,
-              lerpDouble(fromXY.$2, toXY.$2, t)!,
+            _gpxMap[entry] = LatLng(
+              lerpDouble(from.lat!, to.lat!, t)!,
+              lerpDouble(from.lon!, to.lon!, t)!,
             );
-            _gpxMap[entry] = _gpxProjection.unprojectXY(entryXY.$1, entryXY.$2);
           }
           entryIndex++;
         }
@@ -527,25 +522,3 @@ class _EditEntryLocationDialogState extends State<EditEntryLocationDialog> with 
 }
 
 typedef LocationEditActionResult = Map<AvesEntry, LatLng?>;
-
-class _WebMercator {
-  static const double _radius = 6378137.0;
-  static const double _deg = math.pi / 180;
-
-  const _WebMercator();
-
-  (double, double) projectXY(LatLng latLng) {
-    const max = 1 - 1e-15;
-    final lat = math.max(math.min(max, latLng.latitude * _deg), -max);
-    final sin = math.sin(lat);
-    final x = _radius * (latLng.longitude * _deg + math.pi);
-    final y = _radius / 2 * math.log((1 + sin) / (1 - sin));
-    return (x, y);
-  }
-
-  LatLng unprojectXY(double x, double y) {
-    final lat = (2 * math.atan(math.exp(y / _radius)) - math.pi / 2) / _deg;
-    final lon = x / _radius / _deg - 180;
-    return LatLng(lat, lon);
-  }
-}
