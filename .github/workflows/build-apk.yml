@@ -86,7 +86,7 @@ jobs:
         with:
           name: weitu-debug-apk
           path: build/app/outputs/flutter-apk/*.apk
-          retention-days: 2
+          retention-days: 1
           if-no-files-found: error
 
       - name: Upload build log (diagnostics)
