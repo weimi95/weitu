@@ -1,0 +1,120 @@
+Configure project ':printing' JavaCompile tasks with compilerArgs=[-Xlint:unchecked, -Xlint:deprecation]
+Configure project ':screen_brightness_android' JavaCompile tasks with compilerArgs=[-Xlint:unchecked, -Xlint:deprecation]
+Configure project ':shared_preferences_android' JavaCompile tasks with compilerArgs=[-Xlint:unchecked, -Xlint:deprecation]
+Configure project ':sqflite_android' JavaCompile tasks with compilerArgs=[-Xlint:unchecked, -Xlint:deprecation]
+Configure project ':streams_channel' JavaCompile tasks with compilerArgs=[-Xlint:unchecked, -Xlint:deprecation]
+Configure project ':url_launcher_android' JavaCompile tasks with compilerArgs=[-Xlint:unchecked, -Xlint:deprecation]
+Configure project ':volume_controller' JavaCompile tasks with compilerArgs=[-Xlint:unchecked, -Xlint:deprecation]
+Configure project ':wakelock_plus' JavaCompile tasks with compilerArgs=[-Xlint:unchecked, -Xlint:deprecation]
+WARNING: Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): dynamic_color
+Future versions of Flutter will fail to build if your app uses plugins that apply KGP.
+
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If no such version exists, report the issue to the plugin. If necessary, here is a guide on filing
+an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
+
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+"ar": 4 untranslated message(s).
+"az": 668 untranslated message(s).
+"be": 59 untranslated message(s).
+"bg": 16 untranslated message(s).
+"bn": 714 untranslated message(s).
+"ca": 17 untranslated message(s).
+"ckb": 273 untranslated message(s).
+"cs": 17 untranslated message(s).
+"da": 19 untranslated message(s).
+"de": 7 untranslated message(s).
+"el": 18 untranslated message(s).
+"es": 4 untranslated message(s).
+"et": 4 untranslated message(s).
+"eu": 56 untranslated message(s).
+"fa": 4 untranslated message(s).
+"fi": 16 untranslated message(s).
+"fr": 4 untranslated message(s).
+"gl": 17 untranslated message(s).
+"he": 658 untranslated message(s).
+"hi": 236 untranslated message(s).
+"hr": 736 untranslated message(s).
+"hu": 10 untranslated message(s).
+"id": 16 untranslated message(s).
+"is": 7 untranslated message(s).
+"it": 4 untranslated message(s).
+"ja": 52 untranslated message(s).
+"kmr": 4 untranslated message(s).
+"kn": 17 untranslated message(s).
+"ko": 4 untranslated message(s).
+"lo": 16 untranslated message(s).
+"lt": 20 untranslated message(s).
+"ml": 723 untranslated message(s).
+"my": 174 untranslated message(s).
+"nb": 97 untranslated message(s).
+"ne": 739 untranslated message(s).
+"nl": 16 untranslated message(s).
+"nn": 113 untranslated message(s).
+"or": 666 untranslated message(s).
+"pl": 4 untranslated message(s).
+"pt": 4 untranslated message(s).
+"ro": 10 untranslated message(s).
+"ru": 7 untranslated message(s).
+"sat": 737 untranslated message(s).
+"sk": 38 untranslated message(s).
+"sl": 735 untranslated message(s).
+"sr": 736 untranslated message(s).
+"sv": 4 untranslated message(s).
+"ta": 7 untranslated message(s).
+"th": 465 untranslated message(s).
+"tr": 4 untranslated message(s).
+"uk": 17 untranslated message(s).
+"ur": 739 untranslated message(s).
+"vi": 48 untranslated message(s).
+To see a detailed report, use the untranslated-messages-file 
+option in the l10n.yaml file:
+untranslated-messages-file: desiredFileName.txt
+<other option>: <other selection> 
+
+
+This will generate a JSON format file containing all messages that 
+need to be translated.
+Checking the license for package CMake 3.22.1 in /usr/local/lib/android/sdk/licenses
+License for package CMake 3.22.1 accepted.
+Preparing "Install CMake 3.22.1 v.3.22.1".
+"Install CMake 3.22.1 v.3.22.1" ready.
+Installing CMake 3.22.1 in /usr/local/lib/android/sdk/cmake/3.22.1
+"Install CMake 3.22.1 v.3.22.1" complete.
+"Install CMake 3.22.1 v.3.22.1" finished.
+lib/widgets/collection/grid/tile.dart:169:15: Error: No named parameter with the name 'shrinkWrap'.
+              shrinkWrap: true,
+              ^^^^^^^^^^
+.flutter/packages/flutter/lib/src/widgets/single_child_scroll_view.dart:149:9: Context: Found this candidate, but the arguments don't match.
+  const SingleChildScrollView({
+        ^^^^^^^^^^^^^^^^^^^^^
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+warning: [options] source value 8 is obsolete and will be removed in a future release
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+3 warnings
+Target kernel_snapshot_program failed: Exception
+
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileFlutterBuildPlayRelease' (registered by plugin 'dev.flutter.flutter-gradle-plugin').
+> Process 'command '/home/runner/work/weitu/weitu/.flutter/bin/flutter'' finished with non-zero exit value 1
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 2m 43s
+Running Gradle task 'assemblePlayRelease'...                      164.1s
+Gradle task assemblePlayRelease failed with exit code 1
