@@ -15,6 +15,7 @@ abstract class SectionedListLayoutProvider<T> extends StatelessWidget {
   final TileLayout tileLayout;
   final int columnCount;
   final double spacing, horizontalPadding, tileWidth, tileHeight;
+  final double? maxTileHeight;
   final TileBuilder<T> tileBuilder;
   final Duration tileAnimationDelay;
   final CoverRatioResolver<T> coverRatioResolver;
@@ -29,6 +30,7 @@ abstract class SectionedListLayoutProvider<T> extends StatelessWidget {
     required this.horizontalPadding,
     required double tileWidth,
     required this.tileHeight,
+    this.maxTileHeight,
     required this.tileBuilder,
     required this.tileAnimationDelay,
     required this.coverRatioResolver,
@@ -55,6 +57,7 @@ abstract class SectionedListLayoutProvider<T> extends StatelessWidget {
               horizontalPadding: horizontalPadding,
               tileWidth: tileWidth,
               tileHeight: tileHeight,
+              maxRowHeight: maxTileHeight,
               tileBuilder: tileBuilder,
               tileAnimationDelay: tileAnimationDelay,
               coverRatioResolver: coverRatioResolver,

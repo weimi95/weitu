@@ -25,6 +25,7 @@ class InteractiveTile extends StatelessWidget {
   final TileLayout tileLayout;
   final int infoLevel;
   final double? cellHeight;
+  final double? maxInfoHeight;
   final ValueNotifier<bool>? isScrollingNotifier;
 
   const InteractiveTile({
@@ -35,6 +36,7 @@ class InteractiveTile extends StatelessWidget {
     required this.tileLayout,
     this.infoLevel = 0,
     this.cellHeight,
+    this.maxInfoHeight,
     this.isScrollingNotifier,
   });
 
@@ -71,6 +73,7 @@ class InteractiveTile extends StatelessWidget {
           tileLayout: tileLayout,
           infoLevel: infoLevel,
           cellHeight: cellHeight,
+          maxInfoHeight: maxInfoHeight,
           selectable: true,
           highlightable: true,
           isScrollingNotifier: isScrollingNotifier,
@@ -87,6 +90,7 @@ class Tile extends StatelessWidget {
   final TileLayout tileLayout;
   final int infoLevel;
   final double? cellHeight;
+  final double? maxInfoHeight;
   final bool selectable, highlightable;
   final ValueNotifier<bool>? isScrollingNotifier;
   final Object? Function()? heroTagger;
@@ -98,6 +102,7 @@ class Tile extends StatelessWidget {
     required this.tileLayout,
     this.infoLevel = 0,
     this.cellHeight,
+    this.maxInfoHeight,
     this.selectable = false,
     this.highlightable = false,
     this.isScrollingNotifier,
@@ -136,34 +141,38 @@ class Tile extends StatelessWidget {
   Widget _buildCard(BuildContext context) {
     final isLarge = infoLevel == 2;
     final cellHeight = this.cellHeight ?? thumbnailExtent;
-    final infoHeight = isLarge ? cellHeight * 0.35 : thumbnailExtent * 0.3;
-    final imageHeight = cellHeight - infoHeight;
+    final maxInfoHeight = this.maxInfoHeight ?? (isLarge ? cellHeight * 0.3 : thumbnailExtent * 0.3);
+    final estimatedImageHeight = cellHeight - maxInfoHeight;
     final description = entry.catalogMetadata?.xmpDescription?.isNotEmpty == true ? entry.catalogMetadata!.xmpDescription : null;
-    return Column(
-      crossAxisAlignment: .stretch,
-      children: [
-        SizedBox(
-          width: thumbnailExtent,
-          height: imageHeight,
-          child: DecoratedThumbnail(
-            entry: entry,
-            tileExtent: imageHeight,
-            fitWidth: thumbnailExtent,
-            isMosaic: false,
-            fit: BoxFit.contain,
-            selectable: selectable,
-            highlightable: highlightable,
-            heroTagger: heroTagger,
-            heroPlaceholderBuilder: (context, heroSize, child) => child,
-            cancellableNotifier: isScrollingNotifier,
+    return SizedBox(
+      height: cellHeight,
+      child: Column(
+        crossAxisAlignment: .stretch,
+        children: [
+          Expanded(
+            child: DecoratedThumbnail(
+              entry: entry,
+              tileExtent: estimatedImageHeight,
+              fitWidth: thumbnailExtent,
+              isMosaic: false,
+              fit: BoxFit.contain,
+              selectable: selectable,
+              highlightable: highlightable,
+              heroTagger: heroTagger,
+              heroPlaceholderBuilder: (context, heroSize, child) => child,
+              cancellableNotifier: isScrollingNotifier,
+            ),
           ),
-        ),
-        Container(
-          height: infoHeight,
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: _buildCardInfo(context, isLarge, description),
-        ),
-      ],
+          ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: maxInfoHeight),
+            child: SingleChildScrollView(
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: _buildCardInfo(context, isLarge, description),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -185,7 +194,7 @@ class Tile extends StatelessWidget {
         Text(
           entry.bestTitle ?? '',
           style: titleStyle,
-          maxLines: isLarge ? 2 : 1,
+          maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         if (description != null) ...[
@@ -193,7 +202,7 @@ class Tile extends StatelessWidget {
           Text(
             description,
             style: descStyle,
-            maxLines: isLarge ? 3 : 2,
+            maxLines: isLarge ? 1 : 2,
             overflow: TextOverflow.ellipsis,
           ),
         ],
@@ -211,12 +220,12 @@ class Tile extends StatelessWidget {
     if (tags?.isNotEmpty == true) {
       widgets.add(
         Padding(
-          padding: const EdgeInsets.only(top: 4),
+          padding: const EdgeInsets.only(top: 2),
           child: Wrap(
             spacing: 4,
             runSpacing: 2,
             children: [
-              for (final tag in tags!)
+              for (final tag in tags!.take(3))
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                   decoration: BoxDecoration(
@@ -240,11 +249,11 @@ class Tile extends StatelessWidget {
     if (metaRows.isNotEmpty) {
       widgets.add(
         Padding(
-          padding: const EdgeInsets.only(top: 4),
+          padding: const EdgeInsets.only(top: 2),
           child: Text(
             metaRows.join('  •  '),
             style: captionStyle,
-            maxLines: 2,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
         ),

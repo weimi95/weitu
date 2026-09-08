@@ -150,11 +150,11 @@ class _CollectionGridContentState extends State<_CollectionGridContent> {
               builder: (context, c, child) {
                 final (viewportSize, columnCount, tileSpacing, horizontalPadding, infoLevel) = c;
                 final scrollableWidth = viewportSize.width;
-                // level 2 (1-column card): make the cell ~one screen tall so the image
-                // is large and all metadata (title/desc/tags/format/date/size) fits below
-                final tileHeight = infoLevel == 2
-                    ? (viewportSize.height * 0.92).clamp(thumbnailExtent, thumbnailExtent * 2.4)
-                    : thumbnailExtent;
+                // level 2 (1-column card): use the mosaic layout so each card height follows
+                // the image aspect ratio. A cell is at most one screen tall: the picture
+                // takes up to 70% of the viewport and the metadata block up to 30%.
+                final maxInfoHeight = viewportSize.height * 0.3;
+                final tileHeight = infoLevel == 2 ? thumbnailExtent + maxInfoHeight : thumbnailExtent;
                 final source = collection.source;
                 return GridTheme(
                   extent: thumbnailExtent,
@@ -183,12 +183,13 @@ class _CollectionGridContentState extends State<_CollectionGridContent> {
                               collection: collection,
                               selectable: selectable,
                               scrollableWidth: scrollableWidth,
-                              tileLayout: tileLayout,
+                              tileLayout: infoLevel == 2 ? TileLayout.mosaic : tileLayout,
                               columnCount: columnCount,
                               spacing: tileSpacing,
                               horizontalPadding: horizontalPadding,
                               tileExtent: thumbnailExtent,
                               tileHeight: tileHeight,
+                              maxTileHeight: infoLevel == 2 ? viewportSize.height * 0.7 : null,
                               tileBuilder: (entry, tileSize) {
                                 final extent = tileSize.shortestSide;
                                 return ListenableBuilder(
@@ -202,6 +203,7 @@ class _CollectionGridContentState extends State<_CollectionGridContent> {
                                       tileLayout: tileLayout,
                                       infoLevel: infoLevel,
                                       cellHeight: tileSize.height,
+                                      maxInfoHeight: infoLevel == 2 ? maxInfoHeight : null,
                                       isScrollingNotifier: _isScrollingNotifier,
                                     );
                                     if (!settings.useTvLayout) return tile;

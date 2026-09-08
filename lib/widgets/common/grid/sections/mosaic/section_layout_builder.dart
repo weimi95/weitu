@@ -18,6 +18,7 @@ class MosaicSectionLayoutBuilder<T> extends SectionLayoutBuilder<T> {
   late double Function(int itemCount) rowAvailableWidth;
   late double rowHeightMax;
   final CoverRatioResolver<T> coverRatioResolver;
+  final double? maxRowHeight;
 
   static const double heightMaxFactor = 2.4;
   static const double minThumbnailAspectRatio = 9 / 32;
@@ -38,10 +39,12 @@ class MosaicSectionLayoutBuilder<T> extends SectionLayoutBuilder<T> {
     required super.tileBuilder,
     required Duration tileAnimationDelay,
     required this.coverRatioResolver,
+    this.maxRowHeight,
   }) : super(tileAnimationDelay: Duration(milliseconds: (tileAnimationDelay.inMilliseconds / columnCount).ceil())) {
     final rowWidth = scrollableWidth - horizontalPadding * 2;
     rowAvailableWidth = (itemCount) => rowWidth - (itemCount - 1) * spacing;
-    rowHeightMax = tileWidth * heightMaxFactor;
+    final defaultRowHeightMax = tileWidth * heightMaxFactor;
+    rowHeightMax = maxRowHeight != null ? min(defaultRowHeightMax, maxRowHeight!) : defaultRowHeightMax;
   }
 
   @override
