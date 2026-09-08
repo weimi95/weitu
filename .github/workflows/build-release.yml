@@ -67,6 +67,7 @@ jobs:
       # armeabi-v7a (legacy 32-bit) and arm64-v8a (modern phones). x86_64 is excluded on purpose.
       - name: Build release APKs
         run: |
+          set -o pipefail
           ./flutterw build apk --release -t lib/main_play.dart --flavor play \
             --split-per-abi --target-platform android-arm,android-arm64 2>&1 | tee -a build_log.txt
         env:
@@ -106,13 +107,25 @@ jobs:
           path: build/app/outputs/apk/play/release/*.apk
           if-no-files-found: error
 
+      - name: Compose release body (with build diagnostics)
+        run: |
+          {
+            cat .github/RELEASE_NOTES_v1.0.1.md
+            echo ""
+            echo "--- diagnostics ---"
+            echo "apk outputs:"
+            ls -laR build/app/outputs/apk 2>&1 | tail -30
+            echo "build log tail:"
+            tail -25 build_log.txt
+          } > release_body.md
+
       - name: Create GitHub Release v1.0.1
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.1
           name: 微图相册 v1.0.1
-          body_path: .github/RELEASE_NOTES_v1.0.1.md
-          files: build/app/outputs/apk/play/release/*.apk
+          body_path: release_body.md
+          files: build/app/outputs/apk/**/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
