@@ -95,7 +95,7 @@ jobs:
               *x86_64*)      abi=x86_64 ;;
               *)             continue ;;
             esac
-            [ "$f" = "weitu-1.0.1-${abi}.apk" ] || mv -- "$f" "weitu-1.0.1-${abi}.apk"
+            [ "$f" = "weitu-1.0.1-${abi}.apk" ] || mv -- "$f" "weitu-1.0.2-${abi}.apk"
           done
           echo "renamed:"; ls -lh
 
@@ -103,14 +103,14 @@ jobs:
         continue-on-error: true
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: weitu-1.0.1-release-apks
+          name: weitu-1.0.2-release-apks
           path: build/app/outputs/apk/play/release/*.apk
           if-no-files-found: error
 
       - name: Compose release body (with build diagnostics)
         run: |
           {
-            cat .github/RELEASE_NOTES_v1.0.1.md
+            cat .github/RELEASE_NOTES_v1.0.2.md
             echo ""
             echo "--- diagnostics ---"
             echo "apk outputs:"
@@ -130,11 +130,11 @@ jobs:
           git commit -m "ci: build failure log" || echo "nothing to commit"
           git push -f origin ci-failure-log || echo "push failed"
 
-      - name: Create GitHub Release v1.0.1
+      - name: Create GitHub Release v1.0.2
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.1
-          name: 微图相册 v1.0.1
+          tag_name: v1.0.2
+          name: 微图相册 v1.0.2
           body_path: release_body.md
           files: build/app/outputs/apk/**/*.apk
         env:
