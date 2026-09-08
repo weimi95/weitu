@@ -459,7 +459,18 @@ class EntrySetActionDelegate with FeedbackMixin, PermissionAwareMixin, SizeAware
         })
         .nonNulls
         .toList();
-    final bounds = LatLngBounds.fromPoints(waypoints.map((v) => LatLng(v.lat!, v.lon!)).toList());
+    final points = waypoints.map((v) => LatLng(v.lat!, v.lon!)).toList();
+    var minLat = 0.0, maxLat = 0.0, minLon = 0.0, maxLon = 0.0;
+    if (points.isNotEmpty) {
+      minLat = maxLat = points.first.latitude;
+      minLon = maxLon = points.first.longitude;
+      for (final p in points.skip(1)) {
+        if (p.latitude < minLat) minLat = p.latitude;
+        if (p.latitude > maxLat) maxLat = p.latitude;
+        if (p.longitude < minLon) minLon = p.longitude;
+        if (p.longitude > maxLon) maxLon = p.longitude;
+      }
+    }
 
     final gpxDate = DateTime.now();
     final gpx = Gpx()
@@ -471,10 +482,10 @@ class EntrySetActionDelegate with FeedbackMixin, PermissionAwareMixin, SizeAware
         ),
         time: gpxDate,
         bounds: Bounds(
-          minlat: bounds.southWest.latitude,
-          minlon: bounds.southWest.longitude,
-          maxlat: bounds.northEast.latitude,
-          maxlon: bounds.northEast.longitude,
+          minlat: minLat,
+          minlon: minLon,
+          maxlat: maxLat,
+          maxlon: maxLon,
         ),
       )
       ..wpts = waypoints

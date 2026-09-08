@@ -3,8 +3,6 @@ export 'src/actions/chip_set.dart';
 export 'src/actions/entry.dart';
 export 'src/actions/entry_set.dart';
 export 'src/actions/explorer.dart';
-export 'src/actions/map.dart';
-export 'src/actions/map_cluster.dart';
 export 'src/actions/move_type.dart';
 export 'src/actions/settings.dart';
 export 'src/actions/share.dart';

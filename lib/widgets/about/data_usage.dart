@@ -10,7 +10,6 @@ import 'package:aves/widgets/common/extensions/build_context.dart';
 import 'package:aves/widgets/common/identity/aves_donut.dart';
 import 'package:aves/widgets/common/identity/buttons/outlined_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:provider/provider.dart';
 
 class AboutDataUsage extends StatefulWidget {
@@ -92,8 +91,6 @@ class _AboutDataUsageState extends State<AboutDataUsage> with FeedbackMixin {
                         await storageService.deleteExternalCache();
                         // Glide cache by default in `cache/image_manager_disk_cache/`
                         await mediaFetchService.clearImageDiskCache();
-                        // flutter_map cache in `cache/fm_cache/`
-                        await BuiltInMapCachingProvider.getOrCreateInstance().destroy(deleteCache: true);
                         imageCache.clear();
                         _reload();
                         setState(() {});

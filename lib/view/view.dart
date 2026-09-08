@@ -3,8 +3,6 @@ export 'src/actions/chip_set.dart';
 export 'src/actions/entry.dart';
 export 'src/actions/entry_set.dart';
 export 'src/actions/explorer.dart';
-export 'src/actions/map.dart';
-export 'src/actions/map_cluster.dart';
 export 'src/actions/share.dart';
 export 'src/actions/slideshow.dart';
 export 'src/editor/enums.dart';

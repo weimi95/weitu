@@ -779,7 +779,6 @@ class _CollectionAppBarState extends State<CollectionAppBar> with RouteAware, Si
       case .addShortcut:
       case .setHome:
       // browsing or selecting
-      case .map:
       case .slideshow:
       case .stats:
       case .rescan:
