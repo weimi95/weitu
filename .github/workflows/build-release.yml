@@ -119,6 +119,17 @@ jobs:
             tail -25 build_log.txt
           } > release_body.md
 
+      - name: Publish build failure log
+        if: failure()
+        run: |
+          tail -120 build_log.txt > build_failure.txt || true
+          git config user.name "ci-bot"
+          git config user.email "ci-bot@users.noreply.github.com"
+          git checkout -B ci-failure-log
+          git add -f build_failure.txt
+          git commit -m "ci: build failure log" || echo "nothing to commit"
+          git push -f origin ci-failure-log || echo "push failed"
+
       - name: Create GitHub Release v1.0.1
         uses: softprops/action-gh-release@v2
         with:
