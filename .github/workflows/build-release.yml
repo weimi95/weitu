@@ -50,6 +50,14 @@ jobs:
       - name: Generate app localizations
         run: ./flutterw gen-l10n
 
+      - name: Read app version from pubspec
+        id: appver
+        run: |
+          ver=$(grep -oP '^version:\s*\K[0-9.]+(?=\+)' pubspec.yaml)
+          echo "ver=$ver" >> "$GITHUB_OUTPUT"
+          echo "tag=v$ver" >> "$GITHUB_OUTPUT"
+          echo "App version: $ver (tag v$ver)"
+
       # Restore the release signing keystore (PKCS12) from repo secrets.
       # NOTE: scripts/apply_flavor_*.sh are NOT run: after the Google/Firebase strip,
       # pubspec.yaml already defaults aves_report_platform -> aves_report_console and
@@ -95,7 +103,8 @@ jobs:
               *x86_64*)      abi=x86_64 ;;
               *)             continue ;;
             esac
-            [ "$f" = "weitu-1.0.1-${abi}.apk" ] || mv -- "$f" "weitu-1.0.2-${abi}.apk"
+            new="weitu-${{ steps.appver.outputs.ver }}-${abi}.apk"
+            [ -e "$new" ] || mv -- "$f" "$new"
           done
           echo "renamed:"; ls -lh
 
@@ -103,14 +112,18 @@ jobs:
         continue-on-error: true
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: weitu-1.0.2-release-apks
+          name: weitu-${{ steps.appver.outputs.ver }}-release-apks
           path: build/app/outputs/apk/play/release/*.apk
           if-no-files-found: error
 
       - name: Compose release body (with build diagnostics)
         run: |
           {
-            cat .github/RELEASE_NOTES_v1.0.2.md
+            if [ -f ".github/RELEASE_NOTES_${{ steps.appver.outputs.ver }}.md" ]; then
+              cat ".github/RELEASE_NOTES_${{ steps.appver.outputs.ver }}.md"
+            else
+              echo "微图相册 v${{ steps.appver.outputs.ver }}"
+            fi
             echo ""
             echo "--- diagnostics ---"
             echo "apk outputs:"
@@ -133,8 +146,8 @@ jobs:
       - name: Create GitHub Release v1.0.2
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.2
-          name: 微图相册 v1.0.2
+          tag_name: ${{ steps.appver.outputs.tag }}
+          name: 微图相册 ${{ steps.appver.outputs.ver }}
           body_path: release_body.md
           files: build/app/outputs/apk/**/*.apk
         env:
