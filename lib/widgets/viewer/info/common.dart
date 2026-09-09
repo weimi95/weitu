@@ -88,6 +88,10 @@ class InfoRowGroup extends StatefulWidget {
             text: value,
             color: linkColor,
             textStyle: InfoRowGroup.valueStyle,
+            // let the chip text wrap within the width available for the value,
+            // so that it stays aligned with the other values
+            softWrap: true,
+            maxLines: null,
             // open link on tap
             onTap: () => onTap(context),
           ),
@@ -161,10 +165,29 @@ class _InfoRowGroupState extends State<InfoRowGroup> {
                   );
                 }
 
+                // constrain widget spans (e.g. link chips) to the width available for the value,
+                // so that they wrap internally and keep the value indentation,
+                // instead of being pushed to a new line starting at the left edge
+                final maxSpanWidth = max(0.0, constraints.maxWidth - (baseValueX + InfoRowGroup.keyValuePadding));
+                final valueSpans = spanBuilder(context, key, value).map((span) {
+                  if (span is WidgetSpan && maxSpanWidth > 0) {
+                    return WidgetSpan(
+                      alignment: span.alignment,
+                      baseline: span.baseline,
+                      style: span.style,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: maxSpanWidth),
+                        child: span.child,
+                      ),
+                    );
+                  }
+                  return span;
+                }).toList();
+
                 return [
                   TextSpan(text: _buildTextValue(key), style: _keyStyle),
                   paddingSpan,
-                  ...spanBuilder(context, key, value),
+                  ...valueSpans,
                   if (key != lastKey) const TextSpan(text: '\n'),
                 ];
               },

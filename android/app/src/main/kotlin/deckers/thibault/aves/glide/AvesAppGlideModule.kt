@@ -56,7 +56,9 @@ class AvesAppGlideModule : AppGlideModule() {
         builder.setArrayPool(LruArrayPool(memorySizeCalculator.arrayPoolSizeInBytes))
         builder.setMemoryCache(LruResourceCache(memorySizeCalculator.memoryCacheSize.toLong()))
 
-        val diskCacheSize = DiskCache.Factory.DEFAULT_DISK_CACHE_SIZE
+        // keep the app cache small: system media provider thumbnails (cf `ThumbnailFetcher`)
+        // are preferred to Glide decoding, so a much smaller Glide disk cache is enough
+        val diskCacheSize = DISK_CACHE_SIZE_BYTES
         val internalCacheDiskCacheFactory = InternalCacheDiskCacheFactory(context, DiskCache.Factory.DEFAULT_DISK_CACHE_DIR, diskCacheSize.toLong())
         builder.setDiskCache(internalCacheDiskCacheFactory)
 
@@ -79,6 +81,7 @@ class AvesAppGlideModule : AppGlideModule() {
 
     companion object {
         private val LOG_TAG = LogUtils.createTag<AvesAppGlideModule>()
+        private const val DISK_CACHE_SIZE_BYTES = 30 * 1024 * 1024 // 30MB
 
         // request a fresh image with the highest quality format
         val uncachedFullImageOptions = RequestOptions()

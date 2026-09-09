@@ -59,7 +59,11 @@ class ThumbnailFetcher internal constructor(
         var exception: Exception? = null
 
         try {
-            if (!customFetch && (width == defaultSize || height == defaultSize) && !isFlipped) {
+            // prefer the system thumbnail (same one as the stock gallery app) whenever possible,
+            // not only for the default size, to keep the app cache small.
+            // we still skip it for flipped entries, and for sizes beyond what the system
+            // media provider caches, as it would yield upscaled/blurry thumbnails.
+            if (!customFetch && !isFlipped && width <= MAX_SYSTEM_THUMBNAIL_SIZE && height <= MAX_SYSTEM_THUMBNAIL_SIZE) {
                 // Fetch low quality thumbnails when size is not specified.
                 // As of Android 11, the Media Store content resolver may return a thumbnail
                 // that is automatically rotated according to EXIF orientation, but not flipped,
@@ -181,6 +185,9 @@ class ThumbnailFetcher internal constructor(
         private val LOG_TAG = LogUtils.createTag<ThumbnailFetcher>()
         private const val BITMAP_SIZE_DANGER_THRESHOLD = 20 * (1 shl 20) // MiB
         private const val DEFAULT_SIZE_DIP: Double = 64.0
+        // beyond this size the system media provider has no suitable cached thumbnail,
+        // so we let Glide decode from the source file instead
+        private const val MAX_SYSTEM_THUMBNAIL_SIZE = 512
         private const val RESCALE_REDUCTION_THRESHOLD: Float = .15f
     }
 }

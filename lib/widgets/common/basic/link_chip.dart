@@ -9,6 +9,8 @@ class LinkChip extends StatelessWidget {
   final Color? color;
   final TextStyle? textStyle;
   final VoidCallback? onTap;
+  final int? maxLines;
+  final bool softWrap;
 
   static const borderRadius = BorderRadius.all(Radius.circular(8));
 
@@ -20,6 +22,8 @@ class LinkChip extends StatelessWidget {
     this.color,
     this.textStyle,
     this.onTap,
+    this.maxLines = 1,
+    this.softWrap = false,
   });
 
   @override
@@ -41,9 +45,9 @@ class LinkChip extends StatelessWidget {
               Flexible(
                 child: Text(
                   text,
-                  softWrap: false,
+                  softWrap: softWrap,
                   overflow: TextOverflow.fade,
-                  maxLines: 1,
+                  maxLines: maxLines,
                 ),
               ),
               const SizedBox(width: 8),
