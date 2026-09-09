@@ -105,16 +105,6 @@ class VideoActionNotification extends EquatableNotification {
 }
 
 @immutable
-class CastNotification extends EquatableNotification {
-  final bool enabled;
-
-  @override
-  List<Object?> get props => [enabled];
-
-  const CastNotification(this.enabled);
-}
-
-@immutable
 class SelectFilterNotification extends EquatableNotification {
   final CollectionFilter filter;
 

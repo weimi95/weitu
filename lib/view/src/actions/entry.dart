@@ -14,7 +14,6 @@ extension ExtraEntryActionView on EntryAction {
       .delete => l10n.entryActionDelete,
       .restore => l10n.entryActionRestore,
       .convert => l10n.entryActionConvert,
-      .print => l10n.entryActionPrint,
       .rename => l10n.entryActionRename,
       .copy => l10n.collectionActionCopy,
       .move => l10n.collectionActionMove,
@@ -51,7 +50,6 @@ extension ExtraEntryActionView on EntryAction {
       .openVideoPlayer => l10n.videoControlsPlayOutside,
       .openMap => l10n.entryActionOpenMap,
       .setAs => l10n.entryActionSetAs,
-      .cast => l10n.entryActionCast,
       // platform
       .rotateScreen => l10n.entryActionRotateScreen,
       // metadata
@@ -92,7 +90,6 @@ extension ExtraEntryActionView on EntryAction {
       .delete => AIcons.delete,
       .restore => AIcons.restore,
       .convert => AIcons.convert,
-      .print => AIcons.print,
       .rename => AIcons.rename,
       .copy => AIcons.copy,
       .move => AIcons.move,
@@ -129,7 +126,6 @@ extension ExtraEntryActionView on EntryAction {
       .openVideoPlayer => AIcons.openOutside,
       .openMap => AIcons.map,
       .setAs => AIcons.setAs,
-      .cast => AIcons.cast,
       // platform
       .rotateScreen => AIcons.rotateScreen,
       // metadata

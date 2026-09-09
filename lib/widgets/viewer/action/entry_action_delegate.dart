@@ -32,7 +32,6 @@ import 'package:aves/widgets/dialogs/convert_entry_dialog.dart';
 import 'package:aves/widgets/dialogs/entry_editors/rename_entry_dialog.dart';
 import 'package:aves/widgets/settings/settings_page.dart';
 import 'package:aves/widgets/viewer/action/entry_info_action_delegate.dart';
-import 'package:aves/widgets/viewer/action/printer.dart';
 import 'package:aves/widgets/viewer/action/single_entry_editor.dart';
 import 'package:aves/widgets/viewer/controls/notifications.dart';
 import 'package:aves/widgets/viewer/debug/debug_page.dart';
@@ -86,8 +85,6 @@ class EntryActionDelegate with FeedbackMixin, PermissionAwareMixin, SizeAwareMix
           return canWrite && targetEntry.canFlip;
         case .convert:
           return canWrite && !targetEntry.isPureVideo;
-        case .print:
-          return !targetEntry.isPureVideo;
         case .openMap:
           return !settings.useTvLayout && targetEntry.hasGps;
         case .viewSource:
@@ -117,7 +114,6 @@ class EntryActionDelegate with FeedbackMixin, PermissionAwareMixin, SizeAwareMix
         case .copyToClipboard:
         case .open:
         case .setAs:
-        case .cast:
           return !settings.useTvLayout;
         case .info:
         case .share:
@@ -203,8 +199,6 @@ class EntryActionDelegate with FeedbackMixin, PermissionAwareMixin, SizeAwareMix
         _move(context, targetEntry, moveType: MoveType.fromBin);
       case .convert:
         _convert(context, targetEntry);
-      case .print:
-        EntryPrinter(targetEntry).print(context);
       case .rename:
         _rename(context, targetEntry);
       case .copy:
@@ -273,8 +267,6 @@ class EntryActionDelegate with FeedbackMixin, PermissionAwareMixin, SizeAwareMix
         appService.setAs(targetEntry.uri, targetEntry.mimeType).then((success) {
           if (!success) showNoMatchingAppDialog(context);
         });
-      case .cast:
-        const CastNotification(true).dispatch(context);
       // platform
       case .rotateScreen:
         _rotateScreen(context);

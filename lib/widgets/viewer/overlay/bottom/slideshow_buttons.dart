@@ -73,7 +73,6 @@ class _SlideshowButtonsState extends State<SlideshowButtons> {
   static const List<SlideshowAction> _actions = [
     SlideshowAction.resume,
     SlideshowAction.showInCollection,
-    SlideshowAction.cast,
     SlideshowAction.settings,
   ];
   static const double _padding = ViewerButtonRowContent.padding;
@@ -201,8 +200,6 @@ class _SlideshowButtonsState extends State<SlideshowButtons> {
 
   void _onAction(BuildContext context, SlideshowAction action) {
     switch (action) {
-      case .cast:
-        const CastNotification(true).dispatch(context);
       default:
         SlideshowActionNotification(action).dispatch(context);
     }

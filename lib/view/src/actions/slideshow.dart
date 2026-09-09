@@ -9,7 +9,6 @@ extension ExtraSlideshowActionView on SlideshowAction {
     return switch (this) {
       .resume => l10n.slideshowActionResume,
       .showInCollection => l10n.slideshowActionShowInCollection,
-      .cast => l10n.entryActionCast,
       .settings => l10n.viewerActionSettings,
     };
   }
@@ -20,7 +19,6 @@ extension ExtraSlideshowActionView on SlideshowAction {
     return switch (this) {
       .resume => AIcons.play,
       .showInCollection => AIcons.allCollection,
-      .cast => AIcons.cast,
       .settings => AIcons.settings,
     };
   }

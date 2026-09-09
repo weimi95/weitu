@@ -5,7 +5,6 @@ enum EntryAction {
   delete,
   restore,
   convert,
-  print,
   rename,
   copy,
   move,
@@ -36,7 +35,6 @@ enum EntryAction {
   openVideoPlayer,
   openMap,
   setAs,
-  cast,
   // platform
   rotateScreen,
   // metadata
@@ -79,14 +77,12 @@ class EntryActions {
     .convert,
     .addShortcut,
     .copyToClipboard,
-    .print,
   ];
 
   static const exportExternal = <EntryAction>[
     .open,
     .openMap,
     .setAs,
-    .cast,
   ];
 
   static const pageActions = <EntryAction>{

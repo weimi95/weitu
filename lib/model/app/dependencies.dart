@@ -90,11 +90,6 @@ class Dependencies {
       sourceUrl: 'https://github.com/media-kit/media-kit',
     ),
     Dependency(
-      name: 'Network Info Plus',
-      license: bsd3,
-      sourceUrl: 'https://github.com/fluttercommunity/plus_plugins/tree/main/packages/network_info_plus',
-    ),
-    Dependency(
       name: 'Package Info Plus',
       license: bsd3,
       sourceUrl: 'https://github.com/fluttercommunity/plus_plugins/tree/main/packages/package_info_plus',
@@ -103,11 +98,6 @@ class Dependencies {
       name: 'Permission Handler',
       license: mit,
       sourceUrl: 'https://github.com/Baseflow/flutter-permission-handler',
-    ),
-    Dependency(
-      name: 'Printing',
-      license: apache2,
-      sourceUrl: 'https://github.com/DavBfr/dart_pdf',
     ),
     Dependency(
       name: 'Screen Brightness',
@@ -306,11 +296,6 @@ class Dependencies {
       sourceUrl: 'https://github.com/close2/csv',
     ),
     Dependency(
-      name: 'DLNA Dart',
-      license: bsd3,
-      sourceUrl: 'https://github.com/suconghou/dlna-dart',
-    ),
-    Dependency(
       name: 'Equatable',
       license: mit,
       sourceUrl: 'https://github.com/felangel/equatable',
@@ -376,11 +361,6 @@ class Dependencies {
       sourceUrl: 'https://github.com/dart-lang/path',
     ),
     Dependency(
-      name: 'PDF for Dart and Flutter',
-      license: apache2,
-      sourceUrl: 'https://github.com/DavBfr/dart_pdf',
-    ),
-    Dependency(
       name: 'Proj4dart',
       license: mit,
       sourceUrl: 'https://github.com/maRci002/proj4dart',
@@ -389,11 +369,6 @@ class Dependencies {
       name: 'Shamsi Date',
       license: bsd3,
       sourceUrl: 'https://github.com/FatulM/shamsi_date',
-    ),
-    Dependency(
-      name: 'Shelf',
-      license: bsd3,
-      sourceUrl: 'https://github.com/dart-lang/shelf',
     ),
     Dependency(
       name: 'Stack Trace',

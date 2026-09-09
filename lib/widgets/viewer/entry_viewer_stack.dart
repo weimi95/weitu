@@ -560,8 +560,6 @@ class _EntryViewerStackState extends State<EntryViewerStack> with EntryViewContr
   bool _handleNotification(Notification notification) {
     if (notification is SelectFilterNotification) {
       _goToCollection(notification.filter);
-    } else if (notification is CastNotification) {
-      _cast(notification.enabled);
     } else if (notification is FullImageLoadedNotification) {
       // microtask so that listeners do not trigger during build
       scheduleMicrotask(() {
@@ -634,21 +632,6 @@ class _EntryViewerStackState extends State<EntryViewerStack> with EntryViewContr
       return false;
     }
     return true;
-  }
-
-  Future<void> _cast(bool enabled) async {
-    if (enabled) {
-      final entries = collection?.sortedEntries;
-      if (entries != null) {
-        await viewerController.initCast(context, entries);
-        final entry = entryNotifier.value;
-        if (entry != null) {
-          await viewerController.castEntry(entry);
-        }
-      }
-    } else {
-      await viewerController.stopCast();
-    }
   }
 
   Future<void> _onVideoAction({
@@ -838,12 +821,6 @@ class _EntryViewerStackState extends State<EntryViewerStack> with EntryViewContr
     await pauseVideoControllers();
     await initEntryControllers(newEntry);
 
-    if (viewerController.isCasting) {
-      final entry = entryNotifier.value;
-      if (entry != null) {
-        await viewerController.castEntry(entry);
-      }
-    }
   }
 
   void _onPopInvoked() {
@@ -902,7 +879,6 @@ class _EntryViewerStackState extends State<EntryViewerStack> with EntryViewContr
   }
 
   Future<void> _onLeave() async {
-    await viewerController.stopCast();
 
     try {
       switch (settings.maxBrightness) {

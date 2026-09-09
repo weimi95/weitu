@@ -77,7 +77,6 @@ dependencies:
   csv:
   decorated_icon:
   device_info_plus:
-  dlna_dart:
   dynamic_color:
   equatable:
   event_bus:
@@ -112,7 +111,6 @@ dependencies:
   material_color_utilities:
   flutter_material_design_icons:
   material_symbols_icons:
-  network_info_plus:
   overlay_support:
     git:
       url: https://github.com/deckerst/overlay_support.git
@@ -124,20 +122,17 @@ dependencies:
       ref: aves
   path:
   pattern_lock:
-  pdf:
   percent_indicator:
     git:
       url: https://github.com/deckerst/flutter_percent_indicator.git
       ref: aves
   permission_handler:
   pin_code_fields:
-  printing:
   proj4dart:
   provider:
   screen_brightness:
   shamsi_date:
   shared_preferences:
-  shelf:
   smooth_page_indicator:
   sqflite:
   stack_trace:
