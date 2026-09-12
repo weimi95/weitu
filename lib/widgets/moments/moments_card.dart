@@ -136,7 +136,7 @@ class MomentsCard extends StatelessWidget {
               height: h,
               child: ThumbnailImage(
                 entry: e,
-                extent: (max(w, h) * dpr).round(),
+                extent: max(w, h) * dpr,
                 devicePixelRatio: dpr,
                 fit: BoxFit.contain,
               ),
@@ -160,7 +160,7 @@ class MomentsCard extends StatelessWidget {
             children: [
               ThumbnailImage(
                 entry: e,
-                extent: (120 * dpr).round(),
+                extent: 120 * dpr,
                 devicePixelRatio: dpr,
                 fit: BoxFit.cover,
               ),
