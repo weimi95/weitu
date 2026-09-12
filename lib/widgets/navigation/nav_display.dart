@@ -13,6 +13,7 @@ import 'package:aves/widgets/filter_grids/countries_page.dart';
 import 'package:aves/widgets/filter_grids/places_page.dart';
 import 'package:aves/widgets/filter_grids/tags_page.dart';
 import 'package:aves/widgets/home/home_page.dart';
+import 'package:aves/widgets/moments/moments_page.dart';
 import 'package:aves/widgets/settings/settings_page.dart';
 import 'package:flutter/material.dart';
 
@@ -45,6 +46,8 @@ class NavigationDisplay {
         return l10n.drawerPlacePage;
       case TagListPage.routeName:
         return l10n.drawerTagPage;
+      case MomentsPage.routeName:
+        return '图记';
       case AboutPage.routeName:
         return l10n.aboutPageTitle;
       case AppDebugPage.routeName:
@@ -72,6 +75,8 @@ class NavigationDisplay {
         return AIcons.place;
       case TagListPage.routeName:
         return AIcons.tag;
+      case MomentsPage.routeName:
+        return AIcons.description;
       case AboutPage.routeName:
         return AIcons.info;
       case AppDebugPage.routeName:

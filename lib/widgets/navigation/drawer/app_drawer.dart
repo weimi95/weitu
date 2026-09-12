@@ -31,7 +31,6 @@ import 'package:aves/widgets/navigation/drawer/collection_nav_tile.dart';
 import 'package:aves/widgets/navigation/drawer/page_nav_tile.dart';
 import 'package:aves/widgets/navigation/drawer/tile.dart';
 import 'package:aves/widgets/navigation/nav_item.dart';
-import 'package:aves/widgets/moments/moments_page.dart';
 import 'package:aves/widgets/settings/settings_page.dart';
 import 'package:aves_model/aves_model.dart';
 import 'package:collection/collection.dart';
@@ -126,8 +125,6 @@ class _AppDrawerState extends State<AppDrawer> with WidgetsBindingObserver {
       _buildHeader(context),
       _buildHomeLink(),
       ..._buildTypeLinks(),
-      const Divider(),
-      _buildMomentsLink(),
       _buildAlbumLinks(context),
       ..._buildPageLinks(context),
       if (settings.enableBin) ...[
@@ -409,23 +406,6 @@ class _AppDrawerState extends State<AppDrawer> with WidgetsBindingObserver {
         );
       }),
     ];
-  }
-
-  Widget _buildMomentsLink() {
-    return ListTile(
-      leading: const Icon(Icons.notes),
-      title: const Text('图记'),
-      onTap: () async {
-        Navigator.maybeOf(context)?.pop();
-        await Future.delayed(ADurations.drawerTransitionLoose);
-        await Navigator.maybeOf(context)?.push(
-          MaterialPageRoute(
-            settings: const RouteSettings(name: MomentsPage.routeName),
-            builder: (_) => const MomentsPage(),
-          ),
-        );
-      },
-    );
   }
 
   Widget binTile(BuildContext context) {

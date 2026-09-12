@@ -2,7 +2,9 @@ import 'package:aves/app_mode.dart';
 import 'package:aves/model/entry/entry.dart';
 import 'package:aves/model/settings/settings.dart';
 import 'package:aves/theme/format.dart';
+import 'package:aves/theme/text.dart';
 import 'package:aves/utils/file_utils.dart';
+import 'package:aves/utils/mime_utils.dart';
 import 'package:aves/model/selection.dart';
 import 'package:aves/model/source/collection_lens.dart';
 import 'package:aves/services/intent_service.dart';
@@ -23,9 +25,8 @@ class InteractiveTile extends StatelessWidget {
   final AvesEntry entry;
   final double thumbnailExtent;
   final TileLayout tileLayout;
-  final int infoLevel;
+  final int columnCount;
   final double? cellHeight;
-  final double? maxInfoHeight;
   final ValueNotifier<bool>? isScrollingNotifier;
 
   const InteractiveTile({
@@ -34,9 +35,8 @@ class InteractiveTile extends StatelessWidget {
     required this.entry,
     required this.thumbnailExtent,
     required this.tileLayout,
-    this.infoLevel = 0,
+    this.columnCount = 2,
     this.cellHeight,
-    this.maxInfoHeight,
     this.isScrollingNotifier,
   });
 
@@ -71,9 +71,8 @@ class InteractiveTile extends StatelessWidget {
           entry: entry,
           thumbnailExtent: thumbnailExtent,
           tileLayout: tileLayout,
-          infoLevel: infoLevel,
+          columnCount: columnCount,
           cellHeight: cellHeight,
-          maxInfoHeight: maxInfoHeight,
           selectable: true,
           highlightable: true,
           isScrollingNotifier: isScrollingNotifier,
@@ -88,21 +87,22 @@ class Tile extends StatelessWidget {
   final AvesEntry entry;
   final double thumbnailExtent;
   final TileLayout tileLayout;
-  final int infoLevel;
+  final int columnCount;
   final double? cellHeight;
-  final double? maxInfoHeight;
   final bool selectable, highlightable;
   final ValueNotifier<bool>? isScrollingNotifier;
   final Object? Function()? heroTagger;
+
+  // height reserved under the thumbnail for the entry details in a single column
+  static const double singleColumnInfoHeight = 52;
 
   const Tile({
     super.key,
     required this.entry,
     required this.thumbnailExtent,
     required this.tileLayout,
-    this.infoLevel = 0,
+    this.columnCount = 2,
     this.cellHeight,
-    this.maxInfoHeight,
     this.selectable = false,
     this.highlightable = false,
     this.isScrollingNotifier,
@@ -111,7 +111,7 @@ class Tile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (infoLevel >= 1) return _buildCard(context);
+    if (columnCount == 1 && tileLayout == TileLayout.grid) return _buildSingleColumnCard(context);
 
     switch (tileLayout) {
       case .mosaic:
@@ -135,21 +135,10 @@ class Tile extends StatelessWidget {
     }
   }
 
-  // info card layout: image on top (scaled to leave room for text), details below
-  // level 1: 2-column card with title (large) + description (small)
-  // level 2: 1-column card with title + description + tags + format + date-time + file size
-  Widget _buildCard(BuildContext context) {
-    final isLarge = infoLevel == 2;
-    final cellHeight = this.cellHeight ?? thumbnailExtent;
-    final maxInfoHeight = this.maxInfoHeight ?? (isLarge ? cellHeight * 0.3 : thumbnailExtent * 0.3);
-    final description = entry.catalogMetadata?.xmpDescription?.isNotEmpty == true ? entry.catalogMetadata!.xmpDescription : null;
-    // estimate the metadata height from how many lines of text it needs, so a card with
-    // little text stays short and the picture takes the rest of the cell
-    final tags = entry.tags;
-    final infoLineCount = 2 + (description != null ? 1 : 0) + (tags?.isNotEmpty == true ? 1 : 0);
-    final estimatedInfoHeight = 8 + infoLineCount * 20.0;
-    final infoHeight = estimatedInfoHeight > maxInfoHeight ? maxInfoHeight : estimatedInfoHeight;
-    final estimatedImageHeight = cellHeight - infoHeight;
+  // single column layout: thumbnail on top, entry details underneath
+  Widget _buildSingleColumnCard(BuildContext context) {
+    final cellHeight = this.cellHeight ?? (thumbnailExtent + singleColumnInfoHeight);
+    final imageHeight = cellHeight - singleColumnInfoHeight;
     return SizedBox(
       height: cellHeight,
       child: Column(
@@ -158,7 +147,7 @@ class Tile extends StatelessWidget {
           Expanded(
             child: DecoratedThumbnail(
               entry: entry,
-              tileExtent: estimatedImageHeight,
+              tileExtent: imageHeight,
               fitWidth: thumbnailExtent,
               isMosaic: false,
               fit: BoxFit.contain,
@@ -170,101 +159,53 @@ class Tile extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: infoHeight,
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: _buildCardInfo(context, isLarge, description),
-            ),
+            height: singleColumnInfoHeight,
+            child: _buildSingleColumnInfo(context),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildCardInfo(BuildContext context, bool isLarge, String? description) {
-    final baseStyle = DefaultTextStyle.of(context).style;
-    final titleStyle = baseStyle.copyWith(
-      fontSize: isLarge ? 15 : 13,
-      fontWeight: FontWeight.w600,
-    );
-    final descStyle = baseStyle.copyWith(
-      fontSize: isLarge ? 13 : 11,
-      color: Theme.of(context).hintColor,
-    );
-
-    return Column(
-      crossAxisAlignment: .start,
-      mainAxisSize: .min,
-      children: [
-        Text(
-          entry.bestTitle ?? '',
-          style: titleStyle,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        if (description != null) ...[
-          const SizedBox(height: 2),
-          Text(
-            description,
-            style: descStyle,
-            maxLines: isLarge ? 1 : 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-        if (isLarge) ..._buildLargeMeta(context),
-      ],
-    );
-  }
-
-  List<Widget> _buildLargeMeta(BuildContext context) {
+  // title (falling back to the file name), then date-time, file size and format
+  Widget _buildSingleColumnInfo(BuildContext context) {
     final theme = Theme.of(context);
-    final captionStyle = theme.textTheme.bodySmall!.copyWith(color: theme.hintColor);
-    final widgets = <Widget>[];
-
-    final tags = entry.tags;
-    if (tags?.isNotEmpty == true) {
-      widgets.add(
-        Padding(
-          padding: const EdgeInsets.only(top: 2),
-          child: Wrap(
-            spacing: 4,
-            runSpacing: 2,
-            children: [
-              for (final tag in tags!.take(3))
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-                  decoration: BoxDecoration(
-                    color: theme.dividerColor.withValues(alpha: .18),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(tag, style: captionStyle),
-                ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    final metaRows = <String>[];
-    if (entry.mimeType != null) metaRows.add(entry.mimeType!);
+    final baseStyle = DefaultTextStyle.of(context).style;
+    final metaStyle = theme.textTheme.bodySmall?.copyWith(color: theme.hintColor);
     final date = entry.bestDate;
-    if (date != null) metaRows.add(formatDateTime(date, settings.avesLocale, MediaQuery.alwaysUse24HourFormatOf(context)));
     final size = entry.sizeBytes;
-    if (size != null) metaRows.add(formatFileSize(settings.avesLocale, size));
-    if (metaRows.isNotEmpty) {
-      widgets.add(
-        Padding(
-          padding: const EdgeInsets.only(top: 2),
-          child: Text(
-            metaRows.join('  •  '),
-            style: captionStyle,
+    final meta = [
+      if (date != null) formatDateTime(date, settings.avesLocale, MediaQuery.alwaysUse24HourFormatOf(context)),
+      if (size != null) formatFileSize(settings.avesLocale, size),
+      MimeUtils.displayType(entry.mimeType),
+    ].join(AText.separator);
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      // the info block is clipped rather than scrolled when the text does not fit
+      physics: const NeverScrollableScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: .start,
+        mainAxisSize: .min,
+        children: [
+          Text(
+            entry.bestTitle ?? '',
+            style: baseStyle.copyWith(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-        ),
-      );
-    }
-    return widgets;
+          const SizedBox(height: 2),
+          Text(
+            meta,
+            style: metaStyle,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildThumbnail() => DecoratedThumbnail(

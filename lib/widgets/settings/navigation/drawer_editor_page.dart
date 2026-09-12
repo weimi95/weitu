@@ -13,6 +13,7 @@ import 'package:aves/widgets/filter_grids/albums_page.dart';
 import 'package:aves/widgets/filter_grids/countries_page.dart';
 import 'package:aves/widgets/filter_grids/places_page.dart';
 import 'package:aves/widgets/filter_grids/tags_page.dart';
+import 'package:aves/widgets/moments/moments_page.dart';
 import 'package:aves/widgets/navigation/drawer/app_drawer.dart';
 import 'package:aves/widgets/navigation/drawer/tile.dart';
 import 'package:aves/widgets/search/collection_search_delegate.dart';
@@ -42,6 +43,7 @@ class NavigationDrawerEditorPage extends StatefulWidget {
     CountryListPage.routeName,
     PlaceListPage.routeName,
     TagListPage.routeName,
+    MomentsPage.routeName,
     ExplorerPage.routeName,
     SearchPage.routeName,
   ];

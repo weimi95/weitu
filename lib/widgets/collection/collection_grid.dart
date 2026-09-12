@@ -145,16 +145,14 @@ class _CollectionGridContentState extends State<_CollectionGridContent> {
           valueListenable: context.select<TileExtentController, ValueNotifier<double>>((controller) => controller.extentNotifier),
           builder: (context, thumbnailExtent, child) {
             assert(thumbnailExtent > 0);
-            return Selector<TileExtentController, (Size, int, double, double, int)>(
-              selector: (context, c) => (c.viewportSize, c.columnCount, c.spacing, c.horizontalPadding, c.infoLevel),
+            return Selector<TileExtentController, (Size, int, double, double)>(
+              selector: (context, c) => (c.viewportSize, c.columnCount, c.spacing, c.horizontalPadding),
               builder: (context, c, child) {
-                final (viewportSize, columnCount, tileSpacing, horizontalPadding, infoLevel) = c;
+                final (viewportSize, columnCount, tileSpacing, horizontalPadding) = c;
                 final scrollableWidth = viewportSize.width;
-                // level 2 (1-column card): use the mosaic layout so each card height follows
-                // the image aspect ratio. A cell is at most one screen tall: the picture
-                // takes up to 70% of the viewport and the metadata block up to 30%.
-                final maxInfoHeight = viewportSize.height * 0.3;
-                final tileHeight = infoLevel == 2 ? thumbnailExtent + maxInfoHeight : thumbnailExtent;
+                // in a single column, a cell also hosts the entry details underneath the thumbnail
+                final isSingleColumnCard = columnCount == 1 && tileLayout == TileLayout.grid;
+                final tileHeight = isSingleColumnCard ? thumbnailExtent + Tile.singleColumnInfoHeight : thumbnailExtent;
                 final source = collection.source;
                 return GridTheme(
                   extent: thumbnailExtent,
@@ -183,13 +181,12 @@ class _CollectionGridContentState extends State<_CollectionGridContent> {
                               collection: collection,
                               selectable: selectable,
                               scrollableWidth: scrollableWidth,
-                              tileLayout: infoLevel == 2 ? TileLayout.mosaic : tileLayout,
+                              tileLayout: tileLayout,
                               columnCount: columnCount,
                               spacing: tileSpacing,
                               horizontalPadding: horizontalPadding,
                               tileExtent: thumbnailExtent,
                               tileHeight: tileHeight,
-                              maxTileHeight: infoLevel == 2 ? viewportSize.height * 0.7 : null,
                               tileBuilder: (entry, tileSize) {
                                 final extent = tileSize.shortestSide;
                                 return ListenableBuilder(
@@ -201,9 +198,8 @@ class _CollectionGridContentState extends State<_CollectionGridContent> {
                                       entry: entry,
                                       thumbnailExtent: extent,
                                       tileLayout: tileLayout,
-                                      infoLevel: infoLevel,
+                                      columnCount: columnCount,
                                       cellHeight: tileSize.height,
-                                      maxInfoHeight: infoLevel == 2 ? maxInfoHeight : null,
                                       isScrollingNotifier: _isScrollingNotifier,
                                     );
                                     if (!settings.useTvLayout) return tile;

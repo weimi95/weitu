@@ -7,6 +7,7 @@ import 'package:aves/widgets/explorer/explorer_page.dart';
 import 'package:aves/widgets/filter_grids/albums_page.dart';
 import 'package:aves/widgets/filter_grids/countries_page.dart';
 import 'package:aves/widgets/filter_grids/tags_page.dart';
+import 'package:aves/widgets/moments/moments_page.dart';
 import 'package:aves/widgets/navigation/nav_item.dart';
 import 'package:aves_model/aves_model.dart';
 
@@ -49,6 +50,7 @@ class SettingsDefaults {
     const AvesNavItem(route: CollectionPage.routeName),
     const AvesNavItem(route: AlbumListPage.routeName),
     const AvesNavItem(route: TagListPage.routeName),
+    const AvesNavItem(route: MomentsPage.routeName),
   ];
 
   // collection

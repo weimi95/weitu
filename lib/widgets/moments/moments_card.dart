@@ -4,6 +4,7 @@ import 'package:aves/model/settings/settings.dart';
 import 'package:aves/model/source/collection_lens.dart';
 import 'package:aves/model/source/collection_source.dart';
 import 'package:aves/theme/format.dart';
+import 'package:aves/utils/mime_utils.dart';
 import 'package:aves/widgets/common/thumbnail/image.dart';
 import 'package:aves/widgets/viewer/entry_viewer_page.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class MomentsCard extends StatelessWidget {
     final title = first.catalogMetadata?.xmpTitle?.trim() ?? '';
     final description = _mergeDescriptions(entries);
     final theme = Theme.of(context);
-    final badge = _formatBadge(first);
+    final badge = _formatBadge(entries);
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 6),
@@ -89,25 +90,34 @@ class MomentsCard extends StatelessWidget {
 
   Widget _buildImageArea(BuildContext context) {
     final dpr = MediaQuery.devicePixelRatioOf(context);
-    if (entries.length == 1) {
-      return _buildSingle(entries.first, dpr);
-    }
-    if (entries.length == 2) {
-      return Row(
-        children: [
-          Expanded(child: _buildCell(context, entries[0], dpr)),
-          const SizedBox(width: 6),
-          Expanded(child: _buildCell(context, entries[1], dpr)),
-        ],
-      );
-    }
-    return GridView.count(
-      crossAxisCount: 3,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 6,
-      crossAxisSpacing: 6,
-      children: entries.map((e) => _buildCell(context, e, dpr)).toList(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // `ThumbnailImage.extent` is in logical pixels (it is forwarded as `widthDip`/`heightDip`),
+        // so the cell size is passed as-is and the device pixel ratio is passed separately
+        final areaWidth = constraints.maxWidth;
+        if (entries.length == 1) {
+          return _buildSingle(entries.first, dpr);
+        }
+        if (entries.length == 2) {
+          final cellExtent = (areaWidth - 6) / 2;
+          return Row(
+            children: [
+              Expanded(child: _buildCell(context, entries[0], cellExtent, dpr)),
+              const SizedBox(width: 6),
+              Expanded(child: _buildCell(context, entries[1], cellExtent, dpr)),
+            ],
+          );
+        }
+        final cellExtent = (areaWidth - 12) / 3;
+        return GridView.count(
+          crossAxisCount: 3,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          mainAxisSpacing: 6,
+          crossAxisSpacing: 6,
+          children: entries.map((e) => _buildCell(context, e, cellExtent, dpr)).toList(),
+        );
+      },
     );
   }
 
@@ -138,7 +148,7 @@ class MomentsCard extends StatelessWidget {
               height: h,
               child: ThumbnailImage(
                 entry: e,
-                extent: math.max(w, h) * dpr,
+                extent: math.max(w, h),
                 devicePixelRatio: dpr,
                 fit: BoxFit.contain,
               ),
@@ -150,7 +160,7 @@ class MomentsCard extends StatelessWidget {
   }
 
   // grid cell: square, cover crop; tap opens the viewer for the whole group
-  Widget _buildCell(BuildContext context, AvesEntry e, double dpr) {
+  Widget _buildCell(BuildContext context, AvesEntry e, double cellExtent, double dpr) {
     return GestureDetector(
       onTap: () => _openViewer(context, e),
       child: ClipRRect(
@@ -162,7 +172,7 @@ class MomentsCard extends StatelessWidget {
             children: [
               ThumbnailImage(
                 entry: e,
-                extent: 120 * dpr,
+                extent: cellExtent,
                 devicePixelRatio: dpr,
                 fit: BoxFit.cover,
               ),
@@ -204,25 +214,14 @@ class MomentsCard extends StatelessWidget {
     return parts.join('\n');
   }
 
-  String _formatBadge(AvesEntry e) {
-    final mime = e.mimeType.toLowerCase();
-    const map = {
-      'image/jpeg': 'JPG',
-      'image/jpg': 'JPG',
-      'image/heic': 'HEIC',
-      'image/heif': 'HEIF',
-      'image/png': 'PNG',
-      'image/webp': 'WEBP',
-      'image/gif': 'GIF',
-      'image/bmp': 'BMP',
-      'image/avif': 'AVIF',
-      'video/mp4': 'MP4',
-      'video/m4v': 'MP4',
-      'video/mov': 'MOV',
-      'video/3gp': '3GP',
-      'video/webm': 'WEBM',
-    };
-    return map[mime] ?? mime.split('/').last.toUpperCase();
+  // a card may mix several formats: list the distinct ones (up to 3), then fold the rest into `+N`
+  String _formatBadge(List<AvesEntry> entries) {
+    final labels = <String>{};
+    for (final e in entries) {
+      labels.add(MimeUtils.displayType(e.mimeType));
+    }
+    if (labels.length <= 3) return labels.join('+');
+    return '${labels.take(3).join('+')}+${labels.length - 3}';
   }
 
   String _formatTime(BuildContext context, AvesEntry e) {

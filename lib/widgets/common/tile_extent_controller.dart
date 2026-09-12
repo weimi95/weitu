@@ -13,10 +13,6 @@ class TileExtentController {
   final double extentMin, extentMax, spacing, horizontalPadding;
   late final ValueNotifier<double> extentNotifier;
 
-  // info card zoom level: 0 = plain grid, 1 = 2-column card (title+description), 2 = 1-column card (full info)
-  int infoLevel = 0;
-  late final ValueNotifier<int> infoLevelNotifier;
-
   late double userPreferredExtent;
   Size _viewportSize = Size.zero;
   final Set<StreamSubscription> _subscriptions = {};
@@ -41,7 +37,6 @@ class TileExtentController {
     }
     // initialize extent to 0, so that it will be dynamically sized on first launch
     extentNotifier = ValueNotifier(0);
-    infoLevelNotifier = ValueNotifier(0);
     userPreferredExtent = settings.getTileExtent(settingsRouteKey);
     _subscriptions.add(settings.updateTileExtentStream.listen((_) => _onSettingsChanged()));
   }
@@ -51,7 +46,6 @@ class TileExtentController {
       LeakTracking.dispatchObjectDisposed(object: this);
     }
     extentNotifier.dispose();
-    infoLevelNotifier.dispose();
     _subscriptions
       ..forEach((sub) => sub.cancel())
       ..clear();
@@ -79,18 +73,6 @@ class TileExtentController {
 
   double setUserPreferredExtent(double extent) => _update(userPreferredExtent: extent.roundToDouble());
 
-  // switch between plain grid (0), 2-column card (1) and 1-column card (2)
-  // adjusting the column count boundary accordingly so the layout snaps to the right column count
-  void setInfoLevel(int level) {
-    level = level.clamp(0, 2);
-    if (infoLevel == level) return;
-    infoLevel = level;
-    infoLevelNotifier.value = level;
-    final targetColumn = level >= 2 ? 1 : 2;
-    final targetExtent = _extentForColumnCount(targetColumn).clamp(effectiveExtentMin, effectiveExtentMax);
-    _update(userPreferredExtent: targetExtent);
-  }
-
   double _update({double? userPreferredExtent}) {
     final preferredExtent = userPreferredExtent ?? settings.getTileExtent(settingsRouteKey);
     final targetExtent = preferredExtent > 0 ? preferredExtent : extentNotifier.value;
@@ -108,22 +90,18 @@ class TileExtentController {
     return newExtent;
   }
 
-  // minimum number of columns allowed for the current info level
-  // level 0/1 keep at least 2 columns (so the 2-column card still fits 2 per row),
-  // level 2 allows a single column (1-column card)
-  int get columnCountMinForLevel => infoLevel >= 2 ? 1 : 2;
-
+  // the largest extent allowed is the one that fits the fewest allowed columns:
+  // `columnCountMin` is 1 in the collection grid, so the user can pinch in until a
+  // single tile fills the screen width (that tile then shows its details underneath)
   double _extentMax() {
-    final levelMax = (viewportSize.shortestSide - (horizontalPadding * 2) - spacing * (columnCountMinForLevel - 1)) / columnCountMinForLevel;
-    // level 2 needs a 1-column extent, which can exceed the normal grid extentMax
-    return infoLevel >= 2 ? levelMax : min(extentMax, levelMax);
+    return (viewportSize.shortestSide - (horizontalPadding * 2) - spacing * (columnCountMin - 1)) / columnCountMin;
   }
 
   double _columnCountForExtent(double extent) => (viewportSize.width - (horizontalPadding * 2) + spacing) / (extent + spacing);
 
   double _extentForColumnCount(int columnCount) => (viewportSize.width - (horizontalPadding * 2) - spacing * (columnCount - 1)) / columnCount;
 
-  int _effectiveColumnCountMin() => max(columnCountMinForLevel, _columnCountForExtent(_extentMax()).ceil());
+  int _effectiveColumnCountMin() => max(columnCountMin, _columnCountForExtent(_extentMax()).ceil());
 
   int _effectiveColumnCountMax() => max(columnCountMin, _columnCountForExtent(extentMin).floor());
 
