@@ -15,6 +15,7 @@ import 'package:aves/model/filters/date.dart';
 import 'package:aves/model/filters/favourite.dart';
 import 'package:aves/model/filters/mime.dart';
 import 'package:aves/model/filters/missing.dart';
+import 'package:aves/model/filters/titled.dart';
 import 'package:aves/model/filters/path.dart';
 import 'package:aves/model/filters/placeholder.dart';
 import 'package:aves/model/filters/query.dart';
@@ -53,6 +54,7 @@ abstract class CollectionFilter extends Equatable implements Comparable<Collecti
     TagFilter.type,
     AspectRatioFilter.type,
     MissingFilter.type,
+    TitledFilter.type,
     PathFilter.type,
   ];
 

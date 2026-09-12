@@ -31,6 +31,7 @@ import 'package:aves/widgets/common/extensions/build_context.dart';
 import 'package:aves/widgets/common/identity/aves_filter_chip.dart';
 import 'package:aves/widgets/viewer/action/entry_info_action_delegate.dart';
 import 'package:aves/widgets/viewer/info/common.dart';
+import 'package:aves/widgets/moments/moments_page.dart';
 import 'package:aves_model/aves_model.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
@@ -113,7 +114,7 @@ class _BasicSectionState extends State<BasicSection> with AutomaticKeepAliveClie
               child: _buildChips(context),
             ),
             _buildEditButtons(context),
-            _buildTitleDescriptionChips(context),
+            _buildMomentsChip(context),
           ],
         );
       },
@@ -211,42 +212,26 @@ class _BasicSectionState extends State<BasicSection> with AutomaticKeepAliveClie
           );
   }
 
-  Widget _buildTitleDescriptionChips(BuildContext context) {
+  Widget _buildMomentsChip(BuildContext context) {
     final entry = widget.entry;
-    final title = entry.catalogMetadata?.xmpTitle;
-    final description = entry.catalogMetadata?.xmpDescription;
-    final hasTitle = title?.isNotEmpty ?? false;
-    final hasDescription = description?.isNotEmpty ?? false;
+    final hasTitle = entry.catalogMetadata?.xmpTitle?.trim().isNotEmpty ?? false;
+    final hasDescription = entry.catalogMetadata?.xmpDescription?.trim().isNotEmpty ?? false;
     if (!hasTitle && !hasDescription) return const SizedBox();
 
-    final theme = Theme.of(context);
-    final onContainer = theme.colorScheme.onSecondaryContainer;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AvesFilterChip.outlineWidth / 2) + const EdgeInsets.only(top: 8),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.secondaryContainer,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          crossAxisAlignment: .start,
-          children: [
-            if (hasTitle)
-              Text(
-                title!,
-                style: theme.textTheme.titleMedium?.copyWith(color: onContainer),
-              ),
-            if (hasDescription) ...[
-              if (hasTitle) const SizedBox(height: 4),
-              Text(
-                description!,
-                style: theme.textTheme.bodyMedium?.copyWith(color: onContainer),
-              ),
-            ],
-          ],
-        ),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          ActionChip(
+            avatar: const Icon(Icons.notes, size: 18),
+            label: const Text('查看图记'),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const MomentsPage()),
+            ),
+          ),
+        ],
       ),
     );
   }
