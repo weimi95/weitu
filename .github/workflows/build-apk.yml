@@ -13,7 +13,7 @@ concurrency:
 # Minimal permissions: read for checkout, write for artifact upload & CodeQL upload.
 # (was `read-all`, which broke `Upload APK` because upload-artifact v7 needs `actions: write`)
 permissions:
-  contents: read
+  contents: write
   actions: write
   security-events: write
 
@@ -85,7 +85,7 @@ jobs:
       - name: Publish build failure log
         if: failure()
         run: |
-          tail -120 build_log.txt > build_failure.txt || true
+          cp build_log.txt build_failure.txt || true
           git config user.name "ci-bot"
           git config user.email "ci-bot@users.noreply.github.com"
           git checkout -B ci-failure-log
