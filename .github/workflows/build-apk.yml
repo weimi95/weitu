@@ -84,10 +84,11 @@ jobs:
 
       - name: Publish build failure log
         if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           tail -c 60000 build_log.txt > build_failure.txt || true
-                    jq -Rs '{body: .}' < build_failure.txt > payload.json
-          curl -s -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github+json" -H "Content-Type: application/json" --data-binary @payload.json "https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/comments"
+          python3 -c "import json,os,urllib.request; tok=os.environ['GH_TOKEN']; repo=os.environ['GITHUB_REPOSITORY']; sha=os.environ['GITHUB_SHA']; body=open('build_failure.txt',encoding='utf-8',errors='replace').read(); data=json.dumps({'body':body}).encode(); req=urllib.request.Request(f'https://api.github.com/repos/{repo}/commits/{sha}/comments',data=data,headers={'Authorization':f'Bearer {tok}','Accept':'application/vnd.github+json','Content-Type':'application/json'},method='POST'); print(urllib.request.urlopen(req).status)"
 
       - name: Upload APK
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
