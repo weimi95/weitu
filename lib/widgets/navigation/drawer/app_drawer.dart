@@ -126,6 +126,8 @@ class _AppDrawerState extends State<AppDrawer> with WidgetsBindingObserver {
       _buildHeader(context),
       _buildHomeLink(),
       ..._buildTypeLinks(),
+      const Divider(),
+      _buildMomentsLink(),
       _buildAlbumLinks(context),
       ..._buildPageLinks(context),
       if (settings.enableBin) ...[

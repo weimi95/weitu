@@ -6,6 +6,7 @@ import 'package:aves/theme/format.dart';
 import 'package:aves/widgets/common/thumbnail/image.dart';
 import 'package:aves/widgets/viewer/entry_viewer_page.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 class MomentsCard extends StatelessWidget {
   final List<AvesEntry> entries;
@@ -136,7 +137,7 @@ class MomentsCard extends StatelessWidget {
               height: h,
               child: ThumbnailImage(
                 entry: e,
-                extent: max(w, h) * dpr,
+                extent: math.max(w, h) * dpr,
                 devicePixelRatio: dpr,
                 fit: BoxFit.contain,
               ),
