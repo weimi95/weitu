@@ -79,6 +79,11 @@ class _TabSwipeDetectorState extends State<TabSwipeDetector> with SingleTickerPr
       onPointerMove: _onPointerMove,
       onPointerUp: _onPointerUp,
       onPointerCancel: _onPointerCancel,
+      // translucent so the listener also receives events over empty areas:
+      // with the default deferToChild, an empty page (e.g. the moments page
+      // placeholder text, which does not hit-test itself) never hits this
+      // listener at all and swiping silently does nothing.
+      behavior: HitTestBehavior.translucent,
       child: ValueListenableBuilder<double>(
         valueListenable: _dragOffset,
         builder: (context, dx, child) => Transform.translate(
