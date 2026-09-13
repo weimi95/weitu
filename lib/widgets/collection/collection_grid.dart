@@ -152,7 +152,17 @@ class _CollectionGridContentState extends State<_CollectionGridContent> {
                 final scrollableWidth = viewportSize.width;
                 // in a single column, a cell also hosts the entry details underneath the thumbnail
                 final isSingleColumnCard = columnCount == 1 && tileLayout == TileLayout.grid;
-                final tileHeight = isSingleColumnCard ? thumbnailExtent + Tile.singleColumnInfoHeight : thumbnailExtent;
+                double tileHeight = isSingleColumnCard ? thumbnailExtent + Tile.singleColumnInfoHeight : thumbnailExtent;
+                if (isSingleColumnCard) {
+                  // cap the card height so that a portrait thumbnail and its info bar
+                  // fit within one screen, without having to scroll
+                  final showBottomNav = context.select<Settings, bool>((v) => v.enableBottomNavigationBar);
+                  final mq = MediaQuery.of(context);
+                  final maxCellHeight = mq.size.height - mq.padding.top - kToolbarHeight - (showBottomNav ? AppBottomNavBar.height : 0.0) - mq.padding.bottom;
+                  if (maxCellHeight > 0 && tileHeight > maxCellHeight) {
+                    tileHeight = maxCellHeight;
+                  }
+                }
                 final source = collection.source;
                 return GridTheme(
                   extent: thumbnailExtent,
