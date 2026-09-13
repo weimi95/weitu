@@ -90,7 +90,7 @@ class _MomentsPageState extends State<MomentsPage> {
   Widget _buildList(BuildContext context, bool showBottomNavigationBar) {
     final bottomPadding = showBottomNavigationBar
         ? AppBottomNavBar.height + MediaQuery.paddingOf(context).bottom
-        : 0;
+        : 0.0;
     return ListenableBuilder(
       listenable: Listenable.merge([_collection, _queryNotifier]),
       builder: (context, _) {
