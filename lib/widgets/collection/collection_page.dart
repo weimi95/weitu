@@ -26,6 +26,7 @@ import 'package:aves/widgets/common/providers/query_provider.dart';
 import 'package:aves/widgets/common/providers/selection_provider.dart';
 import 'package:aves/widgets/navigation/drawer/app_drawer.dart';
 import 'package:aves/widgets/navigation/nav_bar/nav_bar.dart';
+import 'package:aves/widgets/navigation/nav_bar/tab_swipe.dart';
 import 'package:aves/widgets/navigation/tv_rail.dart';
 import 'package:aves_model/aves_model.dart';
 import 'package:collection/collection.dart';
@@ -152,7 +153,7 @@ class _CollectionPageState extends State<CollectionPage> {
                     return false;
                   },
                   child: AvesScaffold(
-                    body: body,
+                    body: TabSwipeDetector(child: body),
                     floatingActionButton: _buildFab(context, isSelecting, selectedItemCount),
                     drawer: canNavigate ? AppDrawer(currentCollection: _collection) : null,
                     bottomNavigationBar: showBottomNavigationBar

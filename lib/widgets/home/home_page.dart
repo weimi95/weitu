@@ -216,10 +216,18 @@ class _HomePageState extends State<HomePage> {
           unawaited(AnalysisService.registerCallback());
           final source = context.read<CollectionSource>();
           if (source.loadedScope != CollectionSource.fullScope) {
-            await reportService.log('Initialize source to start app with mode=$appMode, loaded scope=${source.loadedScope}');
             final loadTopEntriesFirst = settings.homeNavItem.route == CollectionPage.routeName && settings.homeCustomCollection.isEmpty;
             source.canAnalyze = true;
-            await source.init(scope: CollectionSource.fullScope, loadTopEntriesFirst: loadTopEntriesFirst);
+            // Weitu: do not await the full library scan, so the home page is pushed
+            // as soon as the first frame is ready and the system splash dismisses early.
+            // Pages listen to `source.stateNotifier` and show their loading state meanwhile.
+            unawaited(source.init(scope: CollectionSource.fullScope, loadTopEntriesFirst: loadTopEntriesFirst).then<void>(
+              (_) {},
+              onError: (error, stack) {
+                debugPrint('background source init failed: $error');
+                unawaited(reportService.log('background source init failed: $error'));
+              },
+            ));
           }
         case .screenSaver:
           await reportService.log('Initialize source to start screen saver');

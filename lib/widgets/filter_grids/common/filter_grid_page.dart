@@ -43,6 +43,7 @@ import 'package:aves/widgets/filter_grids/common/section_keys.dart';
 import 'package:aves/widgets/filter_grids/common/section_layout.dart';
 import 'package:aves/widgets/navigation/drawer/app_drawer.dart';
 import 'package:aves/widgets/navigation/nav_bar/nav_bar.dart';
+import 'package:aves/widgets/navigation/nav_bar/tab_swipe.dart';
 import 'package:aves/widgets/navigation/tv_rail.dart';
 import 'package:aves_model/aves_model.dart';
 import 'package:collection/collection.dart';
@@ -153,7 +154,7 @@ class FilterGridPage<T extends CollectionFilter> extends StatelessWidget {
               return false;
             },
             child: AvesScaffold(
-              body: body,
+              body: TabSwipeDetector(child: body),
               floatingActionButton: floatingActionButton,
               drawer: canNavigate ? const AppDrawer() : null,
               bottomNavigationBar: showBottomNavigationBar
