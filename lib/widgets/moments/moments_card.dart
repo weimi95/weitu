@@ -3,11 +3,15 @@ import 'package:aves/model/entry/extensions/props.dart';
 import 'package:aves/model/settings/settings.dart';
 import 'package:aves/model/source/collection_lens.dart';
 import 'package:aves/model/source/collection_source.dart';
+import 'package:aves/theme/durations.dart';
 import 'package:aves/theme/format.dart';
 import 'package:aves/utils/mime_utils.dart';
+import 'package:aves/widgets/common/behaviour/routes.dart';
+import 'package:aves/widgets/common/providers/viewer_entry_provider.dart';
 import 'package:aves/widgets/common/thumbnail/image.dart';
 import 'package:aves/widgets/viewer/entry_viewer_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'dart:math' as math;
 
 class MomentsCard extends StatelessWidget {
@@ -143,14 +147,17 @@ class MomentsCard extends StatelessWidget {
         return Center(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: SizedBox(
-              width: w,
-              height: h,
-              child: ThumbnailImage(
-                entry: e,
-                extent: math.max(w, h),
-                devicePixelRatio: dpr,
-                fit: BoxFit.contain,
+            child: GestureDetector(
+              onTap: () => _openViewer(context, e),
+              child: SizedBox(
+                width: w,
+                height: h,
+                child: ThumbnailImage(
+                  entry: e,
+                  extent: math.max(w, h),
+                  devicePixelRatio: dpr,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
           ),
@@ -187,19 +194,34 @@ class MomentsCard extends StatelessWidget {
     );
   }
 
-  void _openViewer(BuildContext context, AvesEntry entry) {
+  Future<void> _openViewer(BuildContext context, AvesEntry entry) async {
+    // track viewer entry for dynamic hero placeholder (cf collection_grid._goToViewer)
+    final viewerEntryNotifier = context.read<ViewerEntryNotifier>();
+
+    // prevent navigating again to the same entry until fully back,
+    // as a workaround for the hero pop/push diversion animation issue
+    if (viewerEntryNotifier.value == entry) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) => viewerEntryNotifier.value = entry);
+
     final lens = CollectionLens(
       source: source,
       fixedSelection: List.of(entries),
     );
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => EntryViewerPage(
-          collection: lens,
+    await Navigator.maybeOf(context)?.push(
+      TransparentMaterialPageRoute(
+        settings: const RouteSettings(name: EntryViewerPage.routeName),
+        pageBuilder: (context, a, sa) => EntryViewerPage(
+          collection: lens.copyWith(listenToSource: false),
           initialEntry: entry,
         ),
       ),
     );
+
+    // reset track viewer entry
+    if (settings.animate) {
+      await Future.delayed(ADurations.pageTransitionExact);
+    }
+    viewerEntryNotifier.value = null;
   }
 
   String _mergeDescriptions(List<AvesEntry> entries) {
