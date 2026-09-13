@@ -26,7 +26,7 @@ class InteractiveTile extends StatelessWidget {
   final double thumbnailExtent;
   final TileLayout tileLayout;
   final int columnCount;
-  final double? cellHeight;
+  final double? cellHeight, cellWidth;
   final ValueNotifier<bool>? isScrollingNotifier;
 
   const InteractiveTile({
@@ -37,6 +37,7 @@ class InteractiveTile extends StatelessWidget {
     required this.tileLayout,
     this.columnCount = 2,
     this.cellHeight,
+    this.cellWidth,
     this.isScrollingNotifier,
   });
 
@@ -73,6 +74,7 @@ class InteractiveTile extends StatelessWidget {
           tileLayout: tileLayout,
           columnCount: columnCount,
           cellHeight: cellHeight,
+          cellWidth: cellWidth,
           selectable: true,
           highlightable: true,
           isScrollingNotifier: isScrollingNotifier,
@@ -88,7 +90,7 @@ class Tile extends StatelessWidget {
   final double thumbnailExtent;
   final TileLayout tileLayout;
   final int columnCount;
-  final double? cellHeight;
+  final double? cellHeight, cellWidth;
   final bool selectable, highlightable;
   final ValueNotifier<bool>? isScrollingNotifier;
   final Object? Function()? heroTagger;
@@ -103,6 +105,7 @@ class Tile extends StatelessWidget {
     required this.tileLayout,
     this.columnCount = 2,
     this.cellHeight,
+    this.cellWidth,
     this.selectable = false,
     this.highlightable = false,
     this.isScrollingNotifier,
@@ -148,7 +151,7 @@ class Tile extends StatelessWidget {
             child: DecoratedThumbnail(
               entry: entry,
               tileExtent: imageHeight,
-              fitWidth: thumbnailExtent,
+              fitWidth: cellWidth ?? thumbnailExtent,
               isMosaic: false,
               fit: BoxFit.contain,
               selectable: selectable,

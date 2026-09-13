@@ -152,16 +152,22 @@ class _CollectionGridContentState extends State<_CollectionGridContent> {
                 final scrollableWidth = viewportSize.width;
                 // in a single column, a cell also hosts the entry details underneath the thumbnail
                 final isSingleColumnCard = columnCount == 1 && tileLayout == TileLayout.grid;
-                double tileHeight = isSingleColumnCard ? thumbnailExtent + Tile.singleColumnInfoHeight : thumbnailExtent;
+                final tileHeight = isSingleColumnCard ? thumbnailExtent + Tile.singleColumnInfoHeight : thumbnailExtent;
+                // in a single column, cards adapt their height to the entry aspect ratio,
+                // so that a portrait thumbnail fills the screen while a landscape one keeps a short cell
+                double? maxCellHeight;
+                double Function(AvesEntry)? itemExtentResolver;
                 if (isSingleColumnCard) {
-                  // cap the card height so that a portrait thumbnail and its info bar
-                  // fit within one screen, without having to scroll
                   final showBottomNav = context.select<Settings, bool>((v) => v.enableBottomNavigationBar);
                   final mq = MediaQuery.of(context);
-                  final maxCellHeight = mq.size.height - mq.padding.top - kToolbarHeight - (showBottomNav ? AppBottomNavBar.height : 0.0) - mq.padding.bottom;
-                  if (maxCellHeight > 0 && tileHeight > maxCellHeight) {
-                    tileHeight = maxCellHeight;
-                  }
+                  maxCellHeight = mq.size.height - mq.padding.top - kToolbarHeight - (showBottomNav ? AppBottomNavBar.height : 0.0) - mq.padding.bottom;
+                  final minCardHeight = Tile.singleColumnInfoHeight + 96;
+                  if (maxCellHeight < minCardHeight + 48) maxCellHeight = minCardHeight + 48;
+                  itemExtentResolver = (entry) {
+                    var aspect = entry.displayAspectRatio;
+                    if (!aspect.isFinite || aspect <= 0) aspect = 1;
+                    return thumbnailExtent / aspect + Tile.singleColumnInfoHeight;
+                  };
                 }
                 final source = collection.source;
                 return GridTheme(
@@ -197,6 +203,9 @@ class _CollectionGridContentState extends State<_CollectionGridContent> {
                               horizontalPadding: horizontalPadding,
                               tileExtent: thumbnailExtent,
                               tileHeight: tileHeight,
+                              itemExtentResolver: itemExtentResolver,
+                              minItemExtent: isSingleColumnCard ? Tile.singleColumnInfoHeight + 96 : null,
+                              maxItemExtent: maxCellHeight,
                               tileBuilder: (entry, tileSize) {
                                 final extent = tileSize.shortestSide;
                                 return ListenableBuilder(
@@ -210,6 +219,7 @@ class _CollectionGridContentState extends State<_CollectionGridContent> {
                                       tileLayout: tileLayout,
                                       columnCount: columnCount,
                                       cellHeight: tileSize.height,
+                                      cellWidth: tileSize.width,
                                       isScrollingNotifier: _isScrollingNotifier,
                                     );
                                     if (!settings.useTvLayout) return tile;

@@ -3,6 +3,7 @@ import 'package:aves/widgets/common/grid/sections/fixed/section_layout_builder.d
 import 'package:aves/widgets/common/grid/sections/list_layout.dart';
 import 'package:aves/widgets/common/grid/sections/mosaic/section_layout_builder.dart';
 import 'package:aves/widgets/common/grid/sections/section_layout_builder.dart';
+import 'package:aves/widgets/common/grid/sections/varied/section_layout_builder.dart';
 import 'package:aves_model/aves_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -19,6 +20,10 @@ abstract class SectionedListLayoutProvider<T> extends StatelessWidget {
   final TileBuilder<T> tileBuilder;
   final Duration tileAnimationDelay;
   final CoverRatioResolver<T> coverRatioResolver;
+  // when set, and the layout is a single column grid, row extents are
+  // resolved per item and clamped between [minItemExtent] and [maxItemExtent]
+  final double Function(T item)? itemExtentResolver;
+  final double? minItemExtent, maxItemExtent;
   final Widget child;
 
   const SectionedListLayoutProvider({
@@ -34,6 +39,9 @@ abstract class SectionedListLayoutProvider<T> extends StatelessWidget {
     required this.tileBuilder,
     required this.tileAnimationDelay,
     required this.coverRatioResolver,
+    this.itemExtentResolver,
+    this.minItemExtent,
+    this.maxItemExtent,
     required this.child,
   }) : assert(scrollableWidth != 0),
        columnCount = tileLayout == TileLayout.list ? 1 : columnCount,
@@ -64,6 +72,26 @@ abstract class SectionedListLayoutProvider<T> extends StatelessWidget {
             ).updateLayouts(context);
           case .grid:
           case .list:
+            if (tileLayout == TileLayout.grid && columnCount == 1 && itemExtentResolver != null && minItemExtent != null && maxItemExtent != null) {
+              return VariedExtentSectionLayoutBuilder<T>(
+                sections: sections,
+                showHeaders: showHeaders,
+                getHeaderExtent: getHeaderExtent,
+                buildHeader: buildHeader,
+                scrollableWidth: scrollableWidth,
+                tileLayout: tileLayout,
+                columnCount: columnCount,
+                spacing: spacing,
+                horizontalPadding: horizontalPadding,
+                tileWidth: tileWidth,
+                tileHeight: tileHeight,
+                tileBuilder: tileBuilder,
+                tileAnimationDelay: tileAnimationDelay,
+                itemExtentResolver: itemExtentResolver!,
+                minItemExtent: minItemExtent!,
+                maxItemExtent: maxItemExtent!,
+              ).updateLayouts(context);
+            }
             return FixedExtentSectionLayoutBuilder<T>(
               sections: sections,
               showHeaders: showHeaders,
