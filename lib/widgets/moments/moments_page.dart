@@ -151,7 +151,7 @@ class _MomentsPageState extends State<MomentsPage> {
                   value: action,
                   child: Row(
                     children: [
-                      Icon(action.getIcon(), size: 20),
+                      action.getIcon(),
                       const SizedBox(width: 12),
                       Text(action.getText(context)),
                     ],
