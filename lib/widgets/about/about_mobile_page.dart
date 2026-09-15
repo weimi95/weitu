@@ -30,6 +30,8 @@ class AboutMobilePage extends StatelessWidget {
                       const Divider(),
                       const AboutDataUsage(),
                       const Divider(),
+                      const AboutGuide(),
+                      const Divider(),
                       const AboutAntiLoss(),
                       const Divider(),
                     ],
@@ -41,6 +43,31 @@ class AboutMobilePage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class AboutGuide extends StatelessWidget {
+  const AboutGuide({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final titleStyle = Theme.of(context).textTheme.titleMedium;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Text('帮助', style: titleStyle),
+          ),
+          LinkChip(
+            text: '使用说明及常见问题',
+            urlString: 'https://acn5o4gy5nep.feishu.cn/docx/KJPNduo42oerllx4IoScD02Dnwg',
+          ),
+        ],
       ),
     );
   }

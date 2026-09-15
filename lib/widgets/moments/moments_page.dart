@@ -3,16 +3,21 @@ import 'dart:async';
 import 'package:aves/app_mode.dart';
 import 'package:aves/model/entry/entry.dart';
 import 'package:aves/model/filters/titled.dart';
+import 'package:aves/model/selection.dart';
 import 'package:aves/model/settings/settings.dart';
 import 'package:aves/model/source/collection_lens.dart';
 import 'package:aves/model/source/collection_source.dart';
+import 'package:aves/widgets/collection/entry_set_action_delegate.dart';
 import 'package:aves/widgets/common/basic/draggable_scrollbar/notifications.dart';
 import 'package:aves/widgets/common/basic/query_bar.dart';
 import 'package:aves/widgets/common/basic/scaffold.dart';
+import 'package:aves/widgets/common/behaviour/pop/scope.dart';
+import 'package:aves/widgets/common/providers/selection_provider.dart';
 import 'package:aves/widgets/moments/moments_card.dart';
 import 'package:aves/widgets/navigation/drawer/app_drawer.dart';
 import 'package:aves/widgets/navigation/nav_bar/nav_bar.dart';
 import 'package:aves/widgets/navigation/nav_bar/tab_swipe.dart';
+import 'package:aves_model/aves_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +34,21 @@ class _MomentsPageState extends State<MomentsPage> {
   late final CollectionLens _collection;
   final ValueNotifier<String> _queryNotifier = ValueNotifier('');
   final StreamController<DraggableScrollbarEvent> _scrollEvents = StreamController.broadcast();
+
+  // selection actions offered in the app bar menu while selecting
+  static const _selectionActions = <EntrySetAction>[
+    .share,
+    .delete,
+    .copy,
+    .move,
+    .rename,
+    .toggleFavourite,
+    .slideshow,
+    .editTitleDescription,
+    .editTags,
+    .selectAll,
+    .selectNone,
+  ];
 
   @override
   void initState() {
@@ -50,40 +70,96 @@ class _MomentsPageState extends State<MomentsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<Settings, bool>(
-      selector: (context, s) => s.enableBottomNavigationBar,
-      builder: (context, enableBottomNavigationBar, child) {
-        final canNavigate = context.select<ValueNotifier<AppMode>, bool>((v) => v.value.canNavigate);
-        final showBottomNavigationBar = canNavigate && enableBottomNavigationBar;
+    return SelectionProvider<AvesEntry>(
+      toSelectableItems: (entry) => entry.toSelectableItems(),
+      child: Selector<Selection<AvesEntry>, (bool, int)>(
+        selector: (context, selection) => (selection.isSelecting, selection.selectedItemCount),
+        builder: (context, selectionResult, child) {
+          final (isSelecting, selectedItemCount) = selectionResult;
+          return Selector<Settings, bool>(
+            selector: (context, s) => s.enableBottomNavigationBar,
+            builder: (context, enableBottomNavigationBar, child) {
+              final canNavigate = context.select<ValueNotifier<AppMode>, bool>((v) => v.value.canNavigate);
+              final showBottomNavigationBar = canNavigate && enableBottomNavigationBar;
 
-        return AvesScaffold(
-          appBar: AppBar(title: const Text('图记')),
-          body: TabSwipeDetector(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: QueryBar.getPreferredHeight(MediaQuery.textScalerOf(context)),
-                  child: QueryBar(
-                    queryNotifier: _queryNotifier,
-                    hintText: '搜索图记标题',
+              return AvesScaffold(
+                appBar: isSelecting ? _buildSelectionAppBar(context, selectedItemCount) : AppBar(title: const Text('图记')),
+                body: AvesPopScope(
+                  handlers: [
+                    APopHandler(
+                      canPop: (context) => context.select<Selection<AvesEntry>, bool>((v) => !v.isSelecting),
+                      onPopBlocked: (context) => context.read<Selection<AvesEntry>>().browse(),
+                    ),
+                  ],
+                  child: TabSwipeDetector(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: QueryBar.getPreferredHeight(MediaQuery.textScalerOf(context)),
+                          child: QueryBar(
+                            queryNotifier: _queryNotifier,
+                            hintText: '搜索图记标题',
+                          ),
+                        ),
+                        Expanded(
+                          child: _buildList(context, showBottomNavigationBar),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                Expanded(
-                  child: _buildList(context, showBottomNavigationBar),
+                drawer: canNavigate && !isSelecting ? const AppDrawer() : null,
+                bottomNavigationBar: showBottomNavigationBar && !isSelecting
+                    ? AppBottomNavBar(
+                        events: _scrollEvents.stream,
+                      )
+                    : null,
+                resizeToAvoidBottomInset: false,
+                extendBody: true,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildSelectionAppBar(BuildContext context, int selectedItemCount) {
+    final selection = context.read<Selection<AvesEntry>>();
+    final actionDelegate = EntrySetActionDelegate();
+    return AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.close),
+        onPressed: selection.browse,
+      ),
+      title: Text(selectedItemCount > 0 ? '已选择 $selectedItemCount 项' : '选择照片'),
+      actions: [
+        PopupMenuButton<EntrySetAction>(
+          icon: const Icon(Icons.more_vert),
+          itemBuilder: (context) => [
+            for (final action in _selectionActions)
+              if (actionDelegate.isVisible(
+                action,
+                appMode: .main,
+                isSelecting: true,
+                itemCount: _collection.entryCount,
+                selectedItemCount: selectedItemCount,
+                isTrash: false,
+              ))
+                PopupMenuItem(
+                  value: action,
+                  child: Row(
+                    children: [
+                      Icon(action.getIcon(), size: 20),
+                      const SizedBox(width: 12),
+                      Text(action.getText(context)),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
-          drawer: canNavigate ? const AppDrawer() : null,
-          bottomNavigationBar: showBottomNavigationBar
-              ? AppBottomNavBar(
-                  events: _scrollEvents.stream,
-                )
-              : null,
-          resizeToAvoidBottomInset: false,
-          extendBody: true,
-        );
-      },
+          ],
+          onSelected: (action) => actionDelegate.onActionSelected(context, action),
+        ),
+      ],
     );
   }
 

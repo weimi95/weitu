@@ -12,6 +12,7 @@ import 'package:aves/widgets/viewer/info/embedded/notifications.dart';
 import 'package:aves/widgets/viewer/info/metadata/geotiff.dart';
 import 'package:aves/widgets/viewer/info/metadata/metadata_dir.dart';
 import 'package:aves/widgets/viewer/info/metadata/metadata_thumbnail.dart';
+import 'package:aves/widgets/viewer/info/metadata/metadata_zh.dart';
 import 'package:aves/widgets/viewer/info/metadata/xmp_tile.dart';
 import 'package:aves/widgets/viewer/source_viewer_page.dart';
 import 'package:flutter/foundation.dart';
@@ -41,7 +42,7 @@ class MetadataDirTile extends StatelessWidget {
     if (tags.isEmpty) return const SizedBox();
 
     return AvesExpansionTile(
-      title: title,
+      title: metadataDirNameZh(title),
       highlightColor: getTitleColor(context, dir),
       expandedNotifier: expandedDirectoryNotifier,
       initiallyExpanded: initiallyExpanded,
@@ -128,7 +129,7 @@ class MetadataDirTileBody extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
           child: InfoRowGroup(
-            info: tags,
+            info: SplayTreeMap<String, String>.from(tags.map((name, value) => MapEntry(metadataTagNameZh(name), value))),
             spanBuilders: linkHandlers,
           ),
         ),

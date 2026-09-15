@@ -1,5 +1,6 @@
 import 'package:aves/model/entry/entry.dart';
 import 'package:aves/model/entry/extensions/props.dart';
+import 'package:aves/model/selection.dart';
 import 'package:aves/model/settings/settings.dart';
 import 'package:aves/model/source/collection_lens.dart';
 import 'package:aves/model/source/collection_source.dart';
@@ -148,16 +149,22 @@ class MomentsCard extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: GestureDetector(
-              onTap: () => _openViewer(context, e),
-              child: SizedBox(
-                width: w,
-                height: h,
-                child: ThumbnailImage(
-                  entry: e,
-                  extent: math.max(w, h),
-                  devicePixelRatio: dpr,
-                  fit: BoxFit.contain,
-                ),
+              onTap: () => _onTap(context, e),
+              onLongPress: () => _toggleSelect(context, e),
+              child: Stack(
+                children: [
+                  SizedBox(
+                    width: w,
+                    height: h,
+                    child: ThumbnailImage(
+                      entry: e,
+                      extent: math.max(w, h),
+                      devicePixelRatio: dpr,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  _selectionOverlay(context, e),
+                ],
               ),
             ),
           ),
@@ -169,7 +176,8 @@ class MomentsCard extends StatelessWidget {
   // grid cell: square, cover crop; tap opens the viewer for the whole group
   Widget _buildCell(BuildContext context, AvesEntry e, double cellExtent, double dpr) {
     return GestureDetector(
-      onTap: () => _openViewer(context, e),
+      onTap: () => _onTap(context, e),
+      onLongPress: () => _toggleSelect(context, e),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
         child: AspectRatio(
@@ -187,9 +195,47 @@ class MomentsCard extends StatelessWidget {
                 const Center(
                   child: Icon(Icons.play_circle_fill, color: Colors.white70, size: 40),
                 ),
+              _selectionOverlay(context, e),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  // while selecting, tap toggles the entry selection instead of opening the viewer
+  void _onTap(BuildContext context, AvesEntry e) {
+    final selection = context.read<Selection<AvesEntry>>();
+    if (selection.isSelecting) {
+      selection.toggleSelection(e);
+    } else {
+      _openViewer(context, e);
+    }
+  }
+
+  // long-press enters selection mode (if needed) and toggles the entry
+  void _toggleSelect(BuildContext context, AvesEntry e) {
+    context.read<Selection<AvesEntry>>().toggleSelection(e);
+  }
+
+  Widget _selectionOverlay(BuildContext context, AvesEntry e) {
+    final theme = Theme.of(context);
+    return Positioned.fill(
+      child: Selector<Selection<AvesEntry>, bool>(
+        selector: (context, selection) => selection.isSelecting && selection.isSelected([e]),
+        builder: (context, selected, child) {
+          if (!selected) return const SizedBox.shrink();
+          return Container(
+            color: theme.colorScheme.primary.withValues(alpha: 0.4),
+            alignment: Alignment.topRight,
+            padding: const EdgeInsets.all(6),
+            child: Icon(
+              Icons.check_circle,
+              size: 22,
+              color: theme.colorScheme.onPrimary,
+            ),
+          );
+        },
       ),
     );
   }
