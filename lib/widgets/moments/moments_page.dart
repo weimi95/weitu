@@ -7,6 +7,7 @@ import 'package:aves/model/selection.dart';
 import 'package:aves/model/settings/settings.dart';
 import 'package:aves/model/source/collection_lens.dart';
 import 'package:aves/model/source/collection_source.dart';
+import 'package:aves/view/view.dart';
 import 'package:aves/widgets/collection/entry_set_action_delegate.dart';
 import 'package:aves/widgets/common/basic/draggable_scrollbar/notifications.dart';
 import 'package:aves/widgets/common/basic/query_bar.dart';
