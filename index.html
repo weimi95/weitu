@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>微图相册 · 轻量隐私友好的 Android 相册管家</title>
+<style>
+  :root{
+    --accent:#0F6E56;
+    --accent-soft:#E1F5EE;
+    --text:#1f2937;
+    --text-2:#6b7280;
+    --text-3:#9ca3af;
+    --border:#ecedef;
+    --bg-2:#f7f8f9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+    color:var(--text);
+    line-height:1.65;
+    background:#fff;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px;}
+  a{color:inherit;text-decoration:none;}
+
+  /* nav */
+  nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid var(--border);}
+  .brand{font-size:17px;font-weight:600;letter-spacing:1px;}
+  .nav-link{color:var(--accent);font-size:14px;}
+
+  /* hero */
+  .hero{text-align:center;padding:72px 0 60px;}
+  .hero h1{font-size:42px;font-weight:600;letter-spacing:3px;}
+  .hero p{margin-top:16px;color:var(--text-2);font-size:16px;}
+  .hero .cta{margin-top:32px;}
+  .btn{
+    display:inline-block;background:var(--accent);color:#fff;
+    padding:12px 28px;border-radius:8px;font-size:15px;transition:opacity .15s;
+  }
+  .btn:hover{opacity:.9;}
+
+  /* section title */
+  .sec{padding:48px 0;border-top:1px solid var(--border);}
+  .sec-title{font-size:20px;font-weight:600;margin-bottom:24px;text-align:center;}
+
+  /* features */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .card{border:1px solid var(--border);border-radius:12px;padding:20px;}
+  .card h3{font-size:16px;font-weight:600;margin-bottom:8px;}
+  .card p{color:var(--text-2);font-size:14px;}
+
+  /* screenshots */
+  .shots{display:flex;gap:14px;flex-wrap:wrap;}
+  .shot{flex:1;min-width:150px;}
+  .shot img{width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:10px;}
+
+  /* download */
+  .download{background:var(--bg-2);border-radius:14px;padding:40px 24px;text-align:center;}
+  .download h2{font-size:20px;font-weight:600;}
+  .download p{color:var(--text-2);font-size:14px;margin-top:10px;}
+  .download .btn{margin-top:24px;}
+
+  /* footer */
+  footer{text-align:center;color:var(--text-3);font-size:13px;padding:28px 0;border-top:1px solid var(--border);}
+  footer a{color:var(--text-2);margin:0 8px;}
+
+  @media(max-width:560px){
+    .hero h1{font-size:32px;}
+    .grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <nav>
+      <div class="brand">微图相册</div>
+      <a class="nav-link" href="https://acn5o4gy5nep.feishu.cn/docx/KJPNduo42oerllx4IoScD02Dnwg">使用说明 ›</a>
+    </nav>
+
+    <section class="hero">
+      <h1>微图相册</h1>
+      <p>轻量、隐私友好的 Android 相册管家</p>
+      <div class="cta">
+        <a class="btn" href="https://pan.quark.cn/s/5f6f85a93267">立即下载</a>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-title">主要功能</div>
+      <div class="grid">
+        <div class="card">
+          <h3>标签墙</h3>
+          <p>给照片打标签，按标签快速归集与浏览，找图不再翻到底。</p>
+        </div>
+        <div class="card">
+          <h3>图记</h3>
+          <p>为照片记录背后的故事与感想，让相册不只是图片堆叠。</p>
+        </div>
+        <div class="card">
+          <h3>Exif 中文化</h3>
+          <p>拍摄参数、时间、地点等名目母语呈现，一眼看懂。</p>
+        </div>
+        <div class="card">
+          <h3>本地优先</h3>
+          <p>数据存在你自己的手机，不上云、不窥探，隐私自己掌握。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-title">界面截图</div>
+      <div class="shots">
+        <div class="shot"><img src="img/home3.jpg" alt="媒体集视图"></div>
+        <div class="shot"><img src="img/tags-wall.jpg" alt="标签墙"></div>
+        <div class="shot"><img src="img/moments.jpg" alt="图记"></div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="download">
+        <h2>下载安装</h2>
+        <p>提供 arm64-v8a 与 armeabi-v7a 双架构 APK，覆盖绝大多数安卓机型。</p>
+        <a class="btn" href="https://pan.quark.cn/s/5f6f85a93267">夸克网盘下载</a>
+      </div>
+    </section>
+
+    <footer>
+      <a href="https://acn5o4gy5nep.feishu.cn/docx/KJPNduo42oerllx4IoScD02Dnwg">使用说明</a>·
+      <a href="https://pan.quark.cn/s/5f6f85a93267">夸克网盘</a>
+      <div style="margin-top:10px;">© 2026 微图相册</div>
+    </footer>
+  </div>
+</body>
+</html>
